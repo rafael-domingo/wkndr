@@ -97,7 +97,7 @@ export default function LargeMapList({ list }) {
                 itemWidth={300}
                 sliderHeight={800}
                 itemHeight={600}
-                onSnapToItem={(index) => setActiveSlide(index)}
+                onSnapToItem={(index) => setActiveSlide(index)}              
             />
             <Pagination
                 dotsLength={array.length}
@@ -130,8 +130,8 @@ export default function LargeMapList({ list }) {
 
 const styles = StyleSheet.create({
     container: {        
-        flex: 0.75,
-        justifyContent: 'flex-start',
+        flex: 1,
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     map: {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         borderRadius: 20,
         width: Dimensions.get('window').width - 100,
-        height: Dimensions.get('window').height - 300,
+        height: Dimensions.get('window').height - 250,
     },
     text: {
         color: 'white',
