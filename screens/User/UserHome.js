@@ -1,11 +1,11 @@
 import React from 'react';
 import LargeMapList from './LargeMapList';
-import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 export default function UserHome() {
 
     return (
-        <View style={styles.container}>   
+        <SafeAreaView style={styles.container}>   
             <View style={styles.header}>  
                 <Pressable 
                     style={({ pressed }) => pressed ? styles.headerNewTripPressed : styles.headerNewTrip}
@@ -24,7 +24,7 @@ export default function UserHome() {
             <View style={{flex: 0.9}}>
                 <LargeMapList />        
             </View>            
-        </View>        
+        </SafeAreaView>        
     )
 }
 

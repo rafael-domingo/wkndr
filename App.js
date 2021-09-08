@@ -2,15 +2,20 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, SafeAreaView } from 'react-native';
 import Welcome from './screens/Login/Welcome';
+import TripView from './screens/Trip/TripView';
 import UserHome from './screens/User/UserHome';
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
+    // <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="inverted" />
       {/* <Welcome /> */}
-      <UserHome />
-    </SafeAreaView>
+      {/* <UserHome /> */}
+      <TripView />
+    </View>
+     
+    // </SafeAreaView>
     
   );
 }
