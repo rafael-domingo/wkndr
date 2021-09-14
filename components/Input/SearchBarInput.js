@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
+// import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 
 
 export default function SearchBarInput() {
@@ -12,7 +12,7 @@ export default function SearchBarInput() {
 
     return (
         <View style={styles.container}>
-            <SearchBar     
+            {/* <SearchBar     
                 inputContainerStyle={{height: 50}}         
                 placeholder="Search"
                 onChangeText={text => updateSearch(text)}
@@ -21,7 +21,7 @@ export default function SearchBarInput() {
                     disabled: true,
                     buttonDisabledStyle: {display: 'none'}
                 }}
-            />
+            /> */}
         </View>
         
     )

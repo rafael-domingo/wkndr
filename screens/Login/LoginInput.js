@@ -5,7 +5,7 @@ import EmailInput from '../../components/Input/EmailInput';
 import PhoneInput from '../../components/Input/PhoneInput';
 import LoginLoading from '../../components/Misc/LoginLoading';
 
-export default function LoginInput({ handleSignup }) {
+export default function LoginInput({ handleSignup, navigation }) {
     const [inputType, setInputType] = React.useState('phone')
     const [loading, setLoading] = React.useState(false);
 
@@ -15,7 +15,8 @@ export default function LoginInput({ handleSignup }) {
 
 
     const handleLoading = () => {
-        setLoading(!loading)        
+        setLoading(!loading)       
+        navigation.navigate('User') 
     }
 
     return (

@@ -2,7 +2,7 @@ import React from 'react';
 import LargeMapList from './LargeMapList';
 import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-export default function UserHome() {
+export default function UserHome({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>   
@@ -21,8 +21,8 @@ export default function UserHome() {
                     onPress={() => console.log('pressed')}
                 />
             </View>                   
-            <View style={{flex: 0.9}}>
-                <LargeMapList />        
+            <View style={{flex: 1}}>
+                <LargeMapList navigation={navigation}/>        
             </View>            
         </SafeAreaView>        
     )
@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: 'black'     
+
     },
     header: {
         flex: 0.1,        

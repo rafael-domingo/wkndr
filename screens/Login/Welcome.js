@@ -6,7 +6,7 @@ import Hero from '../../components/Misc/Hero';
 import Logo from '../../components/Misc/Logo';
 import LoginInput from './LoginInput';
 
-export default function Welcome() {
+export default function Welcome({ navigation }) {
     const [login, setLogin] = React.useState(false);
     const handleLogin = () => {
         setLogin(true);
@@ -17,10 +17,10 @@ export default function Welcome() {
     }
 
     return (
-        <KeyboardAvoidingView 
-            styles={{flex: 1}}
-            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        >
+        // <KeyboardAvoidingView 
+        //     styles={{flex: 1}}
+        //     behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        // >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <View style={styles.header}>
@@ -38,13 +38,13 @@ export default function Welcome() {
                     {
                         login && (
                             <View style={styles.input}>                   
-                                <LoginInput handleSignup={handleSignup} />
+                                <LoginInput handleSignup={handleSignup} navigation={navigation}/>
                             </View>
                         )
                     }
                 </View>
             </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+        // </KeyboardAvoidingView>
        
       
     )
@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',     
+        backgroundColor: 'black'     
     },
     header: {
         flex: 0.5,

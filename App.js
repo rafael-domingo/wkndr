@@ -4,29 +4,30 @@ import { StyleSheet, Text, View, Dimensions, SafeAreaView } from 'react-native';
 import Welcome from './screens/Login/Welcome';
 import TripView from './screens/Trip/TripView';
 import UserHome from './screens/User/UserHome';
-
+import { NavigationContainer} from '@react-navigation/native'
+import {  createNativeStackNavigator} from "@react-navigation/native-stack";
 export default function App() {
+  const Stack = createNativeStackNavigator();
   return (
-    // <SafeAreaView style={styles.container}>
     <View style={styles.container}>
-      <StatusBar style="inverted" />
-      {/* <Welcome /> */}
-      {/* <UserHome /> */}
-      <TripView />
-    </View>
-     
-    // </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Welcome}/>
+        <Stack.Screen name='User' component={UserHome}/>
+        <Stack.Screen name="Trip" component={TripView}/>
+        </Stack.Navigator>
     
+    </NavigationContainer>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgb(24,28,47)'
+    flex: 1,    
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: 'rgb(24,28,47)',    
   },
   
 });

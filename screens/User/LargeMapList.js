@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button } from 'react-native';
 import MapView from 'react-native-maps';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import MapCard from '../../components/Cards/MapCard';
 
-export default function LargeMapList({ list }) {
+export default function LargeMapList({ navigation }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
     const array = [
         {
@@ -67,21 +68,7 @@ export default function LargeMapList({ list }) {
     const renderItem = ({item, index}) => {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>
-                    {item.name}
-                </Text>
-                <MapView 
-                    style={styles.map}
-                    scrollEnabled={false}
-                    zoomTapEnabled={false}
-                    zoomEnabled={false}
-                    initialRegion={{
-                        latitude: item.location.latitude,
-                        longitude: item.location.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                />
+                <MapCard location={item} navigation={navigation}/>           
             </View>
         )
     }
@@ -94,9 +81,9 @@ export default function LargeMapList({ list }) {
                 renderItem={renderItem}
                 layout={'default'}
                 sliderWidth={600}
-                itemWidth={300}
-                sliderHeight={800}
-                itemHeight={600}
+                itemWidth={Dimensions.get('window').width - 100}
+                sliderHeight={Dimensions.get('window').height - 350}
+                itemHeight={Dimensions.get('window').height - 350}
                 onSnapToItem={(index) => setActiveSlide(index)}              
             />
             <Pagination
@@ -138,8 +125,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         borderRadius: 20,
+        // flex: 1,
         width: Dimensions.get('window').width - 100,
-        height: Dimensions.get('window').height - 250,
+        height: Dimensions.get('window').height - 300,
     },
     text: {
         color: 'white',
@@ -147,6 +135,7 @@ const styles = StyleSheet.create({
         fontFamily: 'System'
     },
     paginationText: {
-        color: 'white'
+        color: 'white',
+        flex: 1
     }
 })
