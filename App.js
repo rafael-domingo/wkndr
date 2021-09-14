@@ -11,12 +11,14 @@ export default function App() {
   return (
     <View style={styles.container}>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Welcome}/>
-        <Stack.Screen name='User' component={UserHome}/>
-        <Stack.Screen name="Trip" component={TripView}/>
-        </Stack.Navigator>
-    
+      
+      <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+        <Stack.Group>
+          <Stack.Screen name="Home" component={Welcome}/>
+          <Stack.Screen name='User' component={UserHome} options={{animation: 'fade'}}/>
+          <Stack.Screen name="Trip" component={TripView} options={{presentation: 'modal'}}/>
+        </Stack.Group>
+      </Stack.Navigator>
     </NavigationContainer>
     </View>
   );
