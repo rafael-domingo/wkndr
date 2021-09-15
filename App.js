@@ -6,6 +6,7 @@ import TripView from './screens/Trip/TripView';
 import UserHome from './screens/User/UserHome';
 import { NavigationContainer} from '@react-navigation/native'
 import {  createNativeStackNavigator} from "@react-navigation/native-stack";
+import BuildTrip from './screens/Build/BuildTrip';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Stack.Screen name="Home" component={Welcome}/>
           <Stack.Screen name='User' component={UserHome} options={{animation: 'fade'}}/>
           <Stack.Screen name="Trip" component={TripView} options={{presentation: 'modal'}}/>
+          <Stack.Screen name="Build" component={BuildTrip} options={{presentation: 'fullScreenModal'}}/>
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

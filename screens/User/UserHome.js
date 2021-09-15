@@ -9,6 +9,7 @@ export default function UserHome({ navigation }) {
             <View style={styles.header}>  
                 <Pressable 
                     style={({ pressed }) => pressed ? styles.headerNewTripPressed : styles.headerNewTrip}
+                    onPress={() => navigation.navigate('Build')}
                 >
                     <Ionicons name="ios-add-circle-outline" size={24} color="white" />
                     <Text style={styles.text}>New Trip</Text>
