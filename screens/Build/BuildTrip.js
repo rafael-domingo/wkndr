@@ -1,30 +1,92 @@
 import React from 'react';
 import { View, StyleSheet, Text, SafeAreaView, Pressable, Dimensions } from 'react-native';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 import BuildTripActivity from './BuildTripActivity';
 import BuildTripSearch from './BuildTripSearch';
 import BuildTripTime from './BuildTripTime';
 import BuildTripTransport from './BuildTripTransport';
-import { Entypo } from '@expo/vector-icons'; 
-import { Ionicons } from '@expo/vector-icons'; 
 import BuildTripLoading from './BuildTripLoading';
+import NextButton from '../../components/Buttons/NextButton';
+import BackButton from '../../components/Buttons/BackButton';
+import CancelButton from '../../components/Buttons/CancelButton';
 
 export default function BuildTrip({ navigation }) {
     const [step, setStep] = React.useState(0);
+    const [trip, setTrip] = React.useState({
+        city: '',
+        time: {
+            morning: false,
+            afternoon: false,
+            evening: false,
+        },
+        transportation: '',
+        activities: {
+            coffee: false,
+            food: false,
+            shop: false, 
+            drink: false, 
+            thrifting: false, 
+            landmarks: false, 
+            zoos: false, 
+            museums: false,
+            hiking: false
+        }
+    })
+
+    React.useEffect(() => {
+        console.log('useeffect')
+    })
+    const handleTime = (key) => {
+        setTrip(prevState => ({
+            ...prevState,
+            time: {
+                ...prevState.time,
+                [key]: !trip.time[key]
+            }
+        }))
+    }
+
+    const handleTransport = (value) => {
+        setTrip(prevState => ({
+            ...prevState,
+            transportation: value
+        }))
+    }
+
+    const handleActivity = (key) => {
+        setTrip(prevState => ({
+            ...prevState,
+            activities: {
+                ...prevState.activities,
+                [key]: !trip.activities[key]
+            }
+        }))
+    }
+
+    const handleStepClick = (operation) => {
+        console.log(trip)
+        switch (operation) {
+            case 'next':
+                setStep(step + 1);
+                break;
+            case 'back':
+                setStep(step - 1);
+                break;
+            case 'skip':
+                setStep(4);
+                break;
+            default:
+                break;
+        }
+    
+    }
+
+    const handleCancelClick = () => {
+        navigation.navigate('User')
+    }
 
     return (
         <SafeAreaView style={styles.container}> 
-            <Pressable 
-                onPress={() => navigation.navigate('User')} 
-                style={({ pressed }) => [
-                    {
-                        opacity: pressed ? 0.5 : 1
-                    },
-                    styles.cancelButton
-                ]}
-            >
-                <Ionicons name="close-sharp" size={36} color="white" />
-            </Pressable>
+            <CancelButton handleClick={handleCancelClick}/>
             <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>           
                 <Text style={styles.header}>Create a Trip</Text>
             </View>
@@ -32,33 +94,9 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 0 && (
                         <View style={styles.subContainer}>
-                            <BuildTripSearch/>
+                            <BuildTripSearch />
                             <View style={styles.buttonContainer}>
-                                <Pressable
-                                    style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.5 : 1
-                                        },
-                                        styles.nextButton
-                                    ]}
-                                    onPress={() => setStep(step + 1)}
-
-                                >
-                                    <Text style={styles.nextButtonText}>Next</Text>
-                                    <Entypo name="arrow-right" size={24} color="white" />
-                                </Pressable>
-                                <Pressable 
-                                    style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.5 : 1
-                                        },
-                                        styles.button
-                                    ]}
-                                    onPress={() => setStep(3)}
-                                >
-                                    {/* <Text style={styles.buttonText}>Skip this step</Text>
-                                    <Text style={styles.buttonSubText}>I already have an intinerary in mind</Text> */}
-                                </Pressable>
+                                <NextButton handleClick={() => handleStepClick('next')}/>                                                     
                             </View>
                         </View>
                     )
@@ -66,36 +104,12 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 1 && (
                         <View style={styles.subContainer}>
-                            <BuildTripTime/>
+                            <BuildTripTime trip={trip} handleClick={handleTime}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
-                                    <Pressable
-                                        style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.5 : 1
-                                            },
-                                            styles.nextButton
-                                        ]}
-                                        onPress={() => setStep(step + 1)}
-                                    >
-                                        <Text style={styles.nextButtonText}>Next</Text>
-                                        <Entypo name="arrow-right" size={24} color="white" />
-                                    </Pressable>
+                                    <NextButton handleClick={() => handleStepClick('next')}/>
                                 </View>
-                                <Pressable 
-                                    style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.5 : 1
-                                        },
-                                        styles.button
-                                    ]}
-                                    onPress={() => setStep(3)}
-                                >
-                                    {/* <Text style={styles.buttonText}>Back</Text>
-                                    <Text style={styles.buttonSubText}>to Where do you want to go?</Text> */}
-                                    <Text style={styles.buttonText}>Skip this step</Text>
-                                    <Text style={styles.buttonSubText}>I already have an intinerary in mind</Text>
-                                </Pressable>
+                                <BackButton handleClick={() => handleStepClick('skip')} buttonText="Skip this step" text="I already have an itinerary in mind"/>
                             </View>
                         </View>
                     )
@@ -103,34 +117,12 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 2 && (
                         <View style={styles.subContainer}>
-                            <BuildTripTransport/>
+                            <BuildTripTransport trip={trip} handleClick={handleTransport}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
-                                    <Pressable
-                                        style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.5 : 1
-                                            },
-                                            styles.nextButton
-                                        ]}
-                                        onPress={() => setStep(step + 1)}
-                                    >
-                                        <Text style={styles.nextButtonText}>Next</Text>
-                                        <Entypo name="arrow-right" size={24} color="white" />
-                                    </Pressable>
+                                   <NextButton handleClick={() => handleStepClick('next')}/>
                                 </View>
-                                <Pressable 
-                                    style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.5 : 1
-                                        },
-                                        styles.button
-                                    ]}
-                                    onPress={() => setStep(step - 1)}
-                                >
-                                    <Text style={styles.buttonText}>Back</Text>
-                                    <Text style={styles.buttonSubText}>to When are you visiting?</Text>
-                                </Pressable>
+                                <BackButton handleClick={() => handleStepClick('back')} text="When are you visiting?"/>
                             </View>
                         </View>
                     )
@@ -138,34 +130,12 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 3 && (
                         <View style={styles.subContainer}>
-                            <BuildTripActivity/>
+                            <BuildTripActivity trip={trip} handleClick={handleActivity}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
-                                    <Pressable
-                                        style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.5 : 1
-                                            },
-                                            styles.nextButton
-                                        ]}
-                                        onPress={() => setStep(step + 1)}
-                                    >
-                                        <Text style={styles.nextButtonText}>Next</Text>
-                                        <Entypo name="arrow-right" size={24} color="white" />
-                                    </Pressable>
+                                    <NextButton handleClick={() => handleStepClick('next')}/>                                
                                 </View>
-                                <Pressable 
-                                    style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.5 : 1
-                                        },
-                                        styles.button
-                                    ]}
-                                    onPress={() => setStep(step - 1)}
-                                >
-                                    <Text style={styles.buttonText}>Back</Text>
-                                    <Text style={styles.buttonSubText}>to How are you getting around?</Text>
-                                </Pressable>
+                                <BackButton handleClick={() => handleStepClick('back')} text="How are you getting around?"/>
                             </View>
                         </View>
                     )
@@ -186,7 +156,7 @@ export default function BuildTrip({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'rgb(24, 28, 47)',
+        backgroundColor: 'rgba(24, 28, 47, 1)',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -205,38 +175,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         flex: 1
     },  
-    button: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     nextButtonContainer: {
         marginTop: 40,
         marginRight: 20,
         flexDirection: 'row',
-        justifyContent: 'flex-end',       
-        
+        justifyContent: 'flex-end',               
     },  
-    nextButton: {
-        flexDirection: 'row'
-    },  
-    nextButtonText: {
-        color: 'white',
-        fontSize: 24,
-        marginRight: 10
-    },  
-    buttonText: {
-        color: 'white',
-        fontSize: 24,
-        fontWeight: '300'
-    },
-    buttonSubText: {
-        color: 'white',
-        fontSize: 20,
-        fontWeight: '100'
-    },
-    cancelButton: {
-        position: 'absolute', 
-        left: 36, 
-        top: 72
-    }
+
 })

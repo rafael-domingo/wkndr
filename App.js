@@ -17,7 +17,7 @@ export default function App() {
         <Stack.Group>
           <Stack.Screen name="Home" component={Welcome}/>
           <Stack.Screen name='User' component={UserHome} options={{animation: 'fade'}}/>
-          <Stack.Screen name="Trip" component={TripView} options={{presentation: 'modal'}}/>
+          <Stack.Screen name="Trip" component={TripView} options={{presentation: 'fade'}}/>
           <Stack.Screen name="Build" component={BuildTrip} options={{presentation: 'fullScreenModal'}}/>
         </Stack.Group>
       </Stack.Navigator>

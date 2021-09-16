@@ -2,19 +2,15 @@ import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import TransportButton from '../../components/Buttons/TransportButton';
 
-export default function BuildTripTransport() {
-    const [selected, setSelected] = React.useState('');
-    
-    const handleClick = (state) => {
-        setSelected(state)
-    }
+export default function BuildTripTransport({ trip, handleClick }) {
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>How are you getting around?</Text>
             <View style={styles.subContainer}>
-                <TransportButton icon="directions-car" text="Driving" selected={selected} handleClick={handleClick}/>
-                <TransportButton icon="directions-bike" text="Biking" selected={selected} handleClick={handleClick}/>
-                <TransportButton icon="directions-walk" text="Walking" selected={selected} handleClick={handleClick}/>
+                <TransportButton icon="directions-car" text="Driving" selected={trip.transportation === 'Driving'} handleClick={() => handleClick('Driving')}/>
+                <TransportButton icon="directions-bike" text="Biking" selected={trip.transportation === 'Biking'} handleClick={() => handleClick('Biking')}/>
+                <TransportButton icon="directions-walk" text="Walking" selected={trip.transportation === 'Walking'} handleClick={() => handleClick('Walking')}/>
             </View>
             
         </View>

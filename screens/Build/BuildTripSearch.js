@@ -6,7 +6,7 @@ export default function BuildTripSearch() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Where do you want to go?</Text>
-            <BuildTripSearchInput />
+            <BuildTripSearchInput/>
         </View>
     )
 }

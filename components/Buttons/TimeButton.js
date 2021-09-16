@@ -3,17 +3,16 @@ import { Dimensions, StyleSheet, Text, Pressable, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 
-export default function TimeButton({ icon, text, subText, handleClick}) {
-    const [selected, setSelected] = React.useState(false);
+export default function TimeButton({ icon, text, subText, handleClick, state}) {
 
     return (
         <Pressable 
             style={styles.container}
-            onPress={() => setSelected(!selected)}
+            onPress={() => handleClick()}
         >
             <View
                 style={{
-                    backgroundColor: selected ? 'white' : null,
+                    backgroundColor: state ? 'white' : null,
                     borderRadius: 48,
                     borderColor: 'white',
                     borderWidth: 1,
@@ -25,7 +24,7 @@ export default function TimeButton({ icon, text, subText, handleClick}) {
                 <Feather 
                     name={icon} 
                     size={36} 
-                    color={selected ? 'black' : 'white'}            
+                    color={state ? 'black' : 'white'}            
                 />
             </View>
             <View style={styles.subContainer}>

@@ -3,16 +3,15 @@ import { Dimensions, StyleSheet, Text, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 export default function TransportButton({ icon, text, selected, handleClick}) {
-    // const [selected, setSelected] = React.useState(se);
-
+    console.log(selected)
     return (
         <Pressable 
             style={styles.container}
-            onPress={() => handleClick(text)}
+            onPress={() => handleClick()}
         >
             <View
                 style={{
-                    backgroundColor: selected === text ? 'white' : null,
+                    backgroundColor: selected ? 'white' : null,
                     borderRadius: 20,
                     borderColor: 'white',
                     borderWidth: 1,
@@ -25,7 +24,7 @@ export default function TransportButton({ icon, text, selected, handleClick}) {
                 <MaterialIcons 
                     name={icon} 
                     size={36} 
-                    color={selected === text ? 'black' : 'white'}
+                    color={selected ? 'black' : 'white'}
                 />
             </View>
             <Text style={styles.text}>{text}</Text>
