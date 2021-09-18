@@ -1,7 +1,14 @@
 import React from 'react';
 import { Text, ActivityIndicator, View, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { setTripBuilder } from '../../redux/tripBuilder';
+export default function BuildTripLoading({ tripState }) {
+    const dispatch = useDispatch()
 
-export default function BuildTripLoading() {
+    React.useEffect(() => {
+        dispatch(setTripBuilder(tripState))
+    }, [])
+    
 
     return (
         <View style={styles.container}>

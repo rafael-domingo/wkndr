@@ -8,29 +8,14 @@ import BuildTripLoading from './BuildTripLoading';
 import NextButton from '../../components/Buttons/NextButton';
 import BackButton from '../../components/Buttons/BackButton';
 import CancelButton from '../../components/Buttons/CancelButton';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetTripBuilder } from '../../redux/tripBuilder';
 
 export default function BuildTrip({ navigation }) {
     const [step, setStep] = React.useState(0);
-    const [trip, setTrip] = React.useState({
-        city: '',
-        time: {
-            morning: false,
-            afternoon: false,
-            evening: false,
-        },
-        transportation: '',
-        activities: {
-            coffee: false,
-            food: false,
-            shop: false, 
-            drink: false, 
-            thrifting: false, 
-            landmarks: false, 
-            zoos: false, 
-            museums: false,
-            hiking: false
-        }
-    })
+    const tripBuilderState = useSelector(state => state.tripBuilder)
+    const dispatch = useDispatch()
+    const [trip, setTrip] = React.useState(tripBuilderState)
 
     React.useEffect(() => {
         console.log('useeffect')
@@ -82,6 +67,8 @@ export default function BuildTrip({ navigation }) {
 
     const handleCancelClick = () => {
         navigation.navigate('User')
+        dispatch(resetTripBuilder())
+
     }
 
     return (
@@ -143,7 +130,7 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 4 && (
                         <View>
-                            <BuildTripLoading/>
+                            <BuildTripLoading tripState={trip}/>
                         </View>
                     )
                 }           

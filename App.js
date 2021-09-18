@@ -9,9 +9,15 @@ import {  createNativeStackNavigator} from "@react-navigation/native-stack";
 import BuildTrip from './screens/Build/BuildTrip';
 import TripList from './screens/TripSettings/TripList';
 import TripConfigurator from './screens/TripSettings/TripConfigurator';
+import { Provider } from 'react-redux'
+import store from './redux/store';
+
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
+    <Provider store={store}>
+
+    
     <View style={styles.container}>
     <NavigationContainer>
       
@@ -27,6 +33,7 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
     </View>
+    </Provider>
   );
 }
 
