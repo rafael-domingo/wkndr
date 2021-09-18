@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, Pressable, View, Dimensions } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
-export default function ActivityButton({ icon, text, handleClick, state}) {
+
+export default function TimeButtonAlt({ icon, text, subText, handleClick, state}) {
 
     return (
         <Pressable
@@ -12,7 +13,7 @@ export default function ActivityButton({ icon, text, handleClick, state}) {
             <View
                 style={{
                     backgroundColor: state ? 'white' : null,
-                    borderRadius: 20,
+                    borderRadius: Dimensions.get('window').width / 8,
                     borderColor: 'white',
                     borderWidth: 1,
                     padding: 15,
@@ -22,22 +23,21 @@ export default function ActivityButton({ icon, text, handleClick, state}) {
                     width: Dimensions.get('window').width / 4
                 }}
             >
-                <FontAwesome5 
-                    name={icon} 
-                    size={36} 
-                    color={state ? "black" : 'white'} 
-                /> 
+                <Feather
+                    name={icon}
+                    size={36}
+                    color={state ? 'black' : 'white'}
+                />
                 <Text
-                style={{
-                    fontSize: 17,
-                    color: state ? 'black' : 'white',
-                    marginTop: 10
-                }}
-            >
-                {text}
-            </Text>           
+                    style={{
+                        fontSize: 17,
+                        color: state ? 'black' : 'white',
+                        marginTop: 10
+                    }}
+                >
+                    {text}
+                </Text>
             </View>
-            
         </Pressable>
     )
 }
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 5
+        margin: 5,
     },
+
 })

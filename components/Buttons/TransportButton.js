@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; 
 
 export default function TransportButton({ icon, text, selected, handleClick}) {
-    console.log(selected)
+
     return (
         <Pressable 
             style={styles.container}
@@ -17,8 +17,9 @@ export default function TransportButton({ icon, text, selected, handleClick}) {
                     borderWidth: 1,
                     padding: 15,
                     justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 20
+                    alignItems: 'center',                    
+                    height: Dimensions.get('window').width / 4,
+                    width: Dimensions.get('window').width / 4
                 }}
             >                
                 <MaterialIcons 
@@ -26,20 +27,27 @@ export default function TransportButton({ icon, text, selected, handleClick}) {
                     size={36} 
                     color={selected ? 'black' : 'white'}
                 />
+                <Text 
+                    style={{
+                        fontSize: 17, 
+                        color: selected ? 'black' : 'white',
+                        marginTop: 10
+                    }}
+                >
+                    {text}
+                </Text>
             </View>
-            <Text style={styles.text}>{text}</Text>
+            
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        margin: 5,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
-    text: {
-        fontSize: 24,
-        color: 'white'        
-    }
+
 })
