@@ -18,7 +18,6 @@ export default function BuildTrip({ navigation }) {
     const [trip, setTrip] = React.useState(tripBuilderState)
 
     const handleCity = (value) => {
-        console.log('logged')
         setTrip(prevState => ({
             ...prevState,
             cityName: value.cityName,
