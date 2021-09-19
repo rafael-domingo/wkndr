@@ -6,7 +6,8 @@ import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsBut
 import LocationCard from '../../components/Cards/LocationCard';
 import SearchBarInput from '../../components/Input/SearchBarInput';
 
-export default function TripView({ navigation }) {
+export default function TripView({ route, navigation }) {
+    const {location} = route.params
     const [carouselHeight, setCarouselHeight] = React.useState(new Animated.Value(Dimensions.get('window').height))
     const scale = React.useRef(new Animated.Value(1)).current
     const pan = useRef(new Animated.ValueXY()).current
@@ -152,15 +153,15 @@ export default function TripView({ navigation }) {
                     zoomTapEnabled={false}
                     zoomEnabled={false}
                     initialRegion={{
-                        latitude: 34.0203996,
-                        longitude: -118.5518137,
+                        latitude: location.coordinates.lat,
+                        longitude: location.coordinates.lng,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
                 />           
                 <SafeAreaView style={{position: 'absolute', top: 0, flex: 1, zIndex: 10}}>
                     <SearchBarInput/>
-                    <TripViewSettingsButton navigation={navigation}/>                                     
+                    <TripViewSettingsButton navigation={navigation} location={location}/>                                     
                 </SafeAreaView>
                 <Animated.View 
                     style={{ transform: [{translateY: 0}], height: 800, bottom: 0, position: 'absolute', alignItems: 'flex-end', justifyContent: 'flex-start', }}

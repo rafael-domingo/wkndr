@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    city: '',
+    cityName: '',
+    coordinates: {
+        lat: '',
+        lng: ''
+    },
     autoBuild: false,
     time: {
         morning: false,

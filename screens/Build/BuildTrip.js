@@ -17,9 +17,19 @@ export default function BuildTrip({ navigation }) {
     const dispatch = useDispatch()
     const [trip, setTrip] = React.useState(tripBuilderState)
 
-    React.useEffect(() => {
-        console.log('useeffect')
-    })
+    const handleCity = (value) => {
+        console.log('logged')
+        setTrip(prevState => ({
+            ...prevState,
+            cityName: value.cityName,
+            coordinates: {
+                ...prevState.coordinates,
+                lat: value.coordinates.lat,
+                lng: value.coordinates.lng
+            }
+        }))
+    }
+
     const handleTime = (key) => {
         setTrip(prevState => ({
             ...prevState,
@@ -48,7 +58,6 @@ export default function BuildTrip({ navigation }) {
     }
 
     const handleStepClick = (operation) => {
-        console.log(trip)
         switch (operation) {
             case 'next':
                 setStep(step + 1);
@@ -81,9 +90,9 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 0 && (
                         <View style={styles.subContainer}>
-                            <BuildTripSearch />
+                            <BuildTripSearch handleInput={handleCity} handleClick={handleStepClick}/>
                             <View style={styles.buttonContainer}>
-                                <NextButton handleClick={() => handleStepClick('next')}/>                                                     
+                                {/* <NextButton handleClick={() => handleStepClick('next')}/>                                                      */}
                             </View>
                         </View>
                     )

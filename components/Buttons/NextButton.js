@@ -12,7 +12,7 @@ export default function NextButton({handleClick}) {
                 },
                 styles.nextButton
             ]}
-            onPress={() => handleClick()}
+            onPress={() => handleClick('next')}
         >
             <Text style={styles.nextButtonText}>Next</Text>
             <Entypo name="arrow-right" size={24} color="white" />

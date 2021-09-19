@@ -2,14 +2,14 @@ import React from 'react';
 import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 
-export default function TripViewSettingsButton({ navigation }) {
+export default function TripViewSettingsButton({ navigation, location }) {
 
     return (
         <View style={styles.container}>
             <Pressable
                 style={({ pressed }) => pressed ? styles.buttonPressed : styles.button }
                 onPress={() => {
-                    navigation.navigate('TripConfigurator')
+                    navigation.navigate('TripConfigurator', {location: location})
                 }}
             >
                 <Ionicons name="ios-build-outline" size={30} color="white" />
@@ -17,7 +17,7 @@ export default function TripViewSettingsButton({ navigation }) {
             <Pressable 
                 style={({ pressed }) => pressed ? styles.buttonPressed : styles.button }
                 onPress={() => {
-                    navigation.navigate('TripList')
+                    navigation.navigate('TripList', {location: location})
                 }}
             >
                 <Ionicons name="ios-list-sharp" size={30} color="white" />

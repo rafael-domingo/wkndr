@@ -3,10 +3,10 @@ import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import CancelButton from '../../components/Buttons/CancelButton';
 import TripListCard from '../../components/Cards/TripListCard';
 
-export default function TripList({ navigation }) {
-
+export default function TripList({ route, navigation }) {
+    const {location} = route.params
     const handleCancelClick = () => {
-        navigation.navigate('Trip')
+        navigation.navigate('Trip', {location: location})
     }
 
     return (

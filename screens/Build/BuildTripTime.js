@@ -5,9 +5,6 @@ import TimeButton from '../../components/Buttons/TimeButton';
 
 export default function BuildTripTime({ trip, handleClick }) {
 
-    // const handleClick = (time) => {
-    //     console.log(time)
-    // }
     return (
         <View style={styles.container}>
             <Text style={styles.text}>When are you visiting?</Text>

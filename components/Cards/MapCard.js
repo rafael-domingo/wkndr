@@ -7,23 +7,22 @@ export default function MapCard({ location, navigation }) {
     return (
         <>
         <Text style={styles.text}>
-        {location.name}
+        {location.cityName}
         </Text>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Trip')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Trip', {location: location})}>
         <MapView 
         style={styles.map}
         scrollEnabled={false}
         zoomTapEnabled={false}
         zoomEnabled={false}
         initialRegion={{
-            latitude: location.location.latitude,
-            longitude: location.location.longitude,
+            latitude: location.coordinates.lat,
+            longitude: location.coordinates.lng,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
         }}
     />  
         </TouchableWithoutFeedback>
-        <Button onPress={() => navigation.navigate('Trip')} title="Open"/>
         </>
     )
 }

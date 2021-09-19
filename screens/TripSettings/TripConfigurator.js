@@ -7,41 +7,30 @@ import TripBuilder from './TripBuilder';
 import TripBuilderConfirm from './TripBuilderConfirm';
 import TripBuilderEnable from './TripBuilderEnable';
 
-export default function TripConfigurator({ navigation }) {
-    const [builderEnabled, setBuilderEnabled] = React.useState(false);
+export default function TripConfigurator({ route, navigation }) {
+    const {location} = route.params
+    const [locationState, setLocationState] = React.useState(location)    
     const [confirmation, setConfirmation] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [trip, setTrip] = React.useState({
-        city: '',
-        time: {
-            morning: false,
-            afternoon: false,
-            evening: false,
-        },
-        transportation: '',
-        activities: {
-            coffee: false,
-            food: false,
-            shop: false, 
-            drink: false, 
-            thrifting: false, 
-            landmarks: false, 
-            zoos: false, 
-            museums: false,
-            hiking: false
-        }
-    })
+    const [trip, setTrip] = React.useState(location.tripBuilder)
 
     const handleCancelClick = () => {
-        navigation.navigate('Trip')
+        navigation.navigate('Trip', {location: locationState})
     }
 
     const handleEnableClick = () => {
-        setBuilderEnabled(true)
+        setTrip(prevState => ({
+            ...prevState,
+            autoBuild: true
+        }))
     }
 
     const handleNextClick = () => {
         setConfirmation(true)
+        setLocationState(prevState => ({
+            ...prevState,
+            tripBuilder: trip
+        }))
     }
 
     const handleConfirmClick = () => {
@@ -83,12 +72,12 @@ export default function TripConfigurator({ navigation }) {
             </View>
             <View style={{flex: 0.9}}>
                 {
-                    !builderEnabled && (
+                    !trip.autoBuild && (
                         <TripBuilderEnable handleClick={handleEnableClick}/>
                     )
                 }
                 {
-                    builderEnabled && !confirmation && !loading && (
+                    trip.autoBuild && !confirmation && !loading && (
                         <View>
                             <TripBuilder trip={trip} handleActivity={handleActivity} handleTransport={handleTransport} handleTime={handleTime}/>
                             <NextButton handleClick={() => handleNextClick()}/>
@@ -97,12 +86,12 @@ export default function TripConfigurator({ navigation }) {
                     )
                 }
                 {
-                    builderEnabled && confirmation && !loading && (
+                    trip.autoBuild && confirmation && !loading && (
                         <TripBuilderConfirm handleClick={() => handleConfirmClick()} handleCancel={() => handleCancelClick()}/>
                     )
                 }
                 {
-                    builderEnabled && confirmation && loading && (
+                    trip.autoBuild && confirmation && loading && (
                         <BuildTripLoading />
                     )
                 }

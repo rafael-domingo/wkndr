@@ -2,8 +2,10 @@ import React from 'react';
 import LargeMapList from './LargeMapList';
 import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 export default function UserHome({ navigation }) {
-
+    const userState = useSelector(state => state.user)
+    const [userProfile, setUserProfile] = React.useState(userState)
     return (
         <SafeAreaView style={styles.container}>   
             <View style={styles.header}>  
@@ -23,7 +25,7 @@ export default function UserHome({ navigation }) {
                 />
             </View>                   
             <View style={{flex: 1}}>
-                <LargeMapList navigation={navigation}/>        
+                <LargeMapList navigation={navigation} userTrips={userProfile.tripList}/>        
             </View>            
         </SafeAreaView>        
     )
