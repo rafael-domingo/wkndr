@@ -72,7 +72,7 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
                     handleSelect(data, details)
                 }}
                 query={{
-                    key: 'AIzaSyAxcJj0TolkzAhY0cT-a6ejr8dJs3QGKb8',
+                    key: 'apikey',
                     language: 'en',
                     types: '(cities)'
                 }}
