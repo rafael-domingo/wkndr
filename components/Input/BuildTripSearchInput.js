@@ -19,6 +19,8 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
     }
 
     const handleSelect = (data, details) => {
+        console.log(data)
+        console.log(details)
         handleClick('next')    
         handleInput({
             cityName: details.formatted_address,
@@ -72,7 +74,7 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
                     handleSelect(data, details)
                 }}
                 query={{
-                    key: 'apikey',
+                    key: 'AIzaSyAxcJj0TolkzAhY0cT-a6ejr8dJs3QGKb8',
                     language: 'en',
                     types: '(cities)'
                 }}

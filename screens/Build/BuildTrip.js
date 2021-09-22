@@ -16,7 +16,7 @@ export default function BuildTrip({ navigation }) {
     const tripBuilderState = useSelector(state => state.tripBuilder)
     const dispatch = useDispatch()
     const [trip, setTrip] = React.useState(tripBuilderState)
-
+    
     const handleCity = (value) => {
         setTrip(prevState => ({
             ...prevState,

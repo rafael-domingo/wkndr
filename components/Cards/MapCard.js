@@ -13,6 +13,18 @@ export default function MapCard({ location, navigation }) {
         <MapView 
         style={styles.map}
         scrollEnabled={false}
+        userInterfaceStyle={"dark"}
+        camera={{
+            center: {
+                latitude: location.coordinates.lat,
+                longitude: location.coordinates.lng,
+            },
+            pitch: 0,
+            heading: 0,
+            altitude: 100000,
+            zoom: 12
+        }}
+        // mapType={'mutedStandard'}
         zoomTapEnabled={false}
         zoomEnabled={false}
         initialRegion={{

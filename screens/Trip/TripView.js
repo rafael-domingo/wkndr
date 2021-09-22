@@ -152,6 +152,7 @@ export default function TripView({ route, navigation }) {
                     scrollEnabled={false}
                     zoomTapEnabled={false}
                     zoomEnabled={false}
+                    userInterfaceStyle={'dark'}            
                     initialRegion={{
                         latitude: location.coordinates.lat,
                         longitude: location.coordinates.lng,

@@ -6,6 +6,7 @@ export default function LargeMap() {
     return (
         <MapView
             style={styles.map}
+            userInterfaceStyle={'dark'}
             initialRegion={{
                 latitude: 37.78825,
                 longitude: -122.4324,
