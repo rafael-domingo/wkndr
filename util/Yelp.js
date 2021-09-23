@@ -30,5 +30,39 @@ export const Yelp = {
             console.log(data)  
         })
         .catch(error => console.log(error))
+    },
+
+    autoComplete(term) {
+        return fetch('https://us-central1-wkndr-326514.cloudfunctions.net/yelpAutoComplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                term: term
+            })
+        }).then(response => response.json())
+        .then(data => data)
+        .catch(error => console.log(error))
+
+    },
+
+    search(term, lat, lng) {
+        return fetch('https://us-central1-wkndr-326514.cloudfunctions.net/yelpSearch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                term: term,
+                lat: lat,
+                lng: lng
+            })
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => console.log(error))
+
     }
 }

@@ -160,8 +160,8 @@ export default function TripView({ route, navigation }) {
                         longitudeDelta: 0.0421,
                     }}
                 />           
-                <SafeAreaView style={{position: 'absolute', top: 0, flex: 1, zIndex: 10}}>
-                    <SearchBarInput/>
+                <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>
+                    <SearchBarInput location={location}/>
                     <TripViewSettingsButton navigation={navigation} location={location}/>                                     
                 </SafeAreaView>
                 <Animated.View 
