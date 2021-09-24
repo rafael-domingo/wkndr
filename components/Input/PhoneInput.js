@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, TextInput, Text, Button } from 'react-native';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
-
+import { MaskedTextInput } from 'react-native-mask-text';
 export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInput }) {
     const recaptchaVerifier = React.useRef(null);
     const [phoneInput, setPhoneInput] = React.useState();
 
     const firebaseConfig = {
-       // firebaseConfig
+        // firebase config
       };
 
     return (
@@ -17,19 +17,29 @@ export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInpu
                 firebaseConfig={firebaseConfig}
                 attemptInvisibleVerification={true}
             />    
-            <TextInput
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>      
+            <Text style={{color: 'white', fontSize: 50, fontWeight: '100'}}>
+                +1
+            </Text>
+            <MaskedTextInput
                 style={styles.input}
-                placeholder="+1 (---) --- ----"
+                placeholder='(---) --- ----'
+                mask='(999) 999-9999'
                 placeholderTextColor="white"
                 autoCorrect={false}
-                value={phoneInput}
+                // value={phoneInput}
                 autoCompleteType="tel"
                 textContentType="telephoneNumber"
-                // autoFocus={true}
+                autoFocus={true}
                 keyboardAppearance="dark"
                 keyboardType="number-pad"
-                onChangeText={phoneNumber => setPhoneInput(phoneNumber)}
-            />       
+                onChangeText={(text, rawText) =>{
+                    console.log(rawText)
+                    setPhoneInput(text)
+                }}
+            />            
+            </View>
+      
             <View
                 style={styles.submit}
             >
@@ -48,7 +58,7 @@ export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInpu
                     title="next"
                     color="white"
                     onPress={() => {
-                        handlePhoneInput('+1 (650) 555-1234', recaptchaVerifier.current)                     
+                        handlePhoneInput(`+1 ${phoneInput}`, recaptchaVerifier.current)                     
                     }}
                 >
 
@@ -73,13 +83,14 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,        
-        width: 300,
+        width: '70%',
         color: 'white',
-        borderBottomColor: 'white',
-        borderBottomWidth: 1,
-        fontSize: 30,
+        // borderBottomColor: 'white',
+        // borderBottomWidth: 1,
+        fontSize: 50,
         fontWeight: '100',
-        margin: 10
+        paddingLeft: 10
+ 
     },
     button: {
         color: 'white'

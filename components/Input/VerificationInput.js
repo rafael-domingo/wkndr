@@ -1,21 +1,25 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, TextInput, Text, Button } from 'react-native';
-import { phoneVerificationCode } from '../../util/Firebase';
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function VerificationInput({ toggleInput, toggleLoading, handleVerificationInput }) {
     const [verificationInput, setVerificationInput] = React.useState();
+    const [verificationCode, setVerificationCode] = React.useState();
     return (
         <View style={styles.container}>         
-            <TextInput
+            <MaskedTextInput
                 style={styles.input}
-                placeholder="- - - - - -"
+                placeholder=" - - - - - "
                 placeholderTextColor="white"
+                mask='9-9-9-9-9-9'
                 autoCorrect={false}
-                value={verificationInput}                                
-                // autoFocus={true}
+                autoFocus={true}
                 keyboardAppearance="dark"
                 keyboardType="number-pad"
-                onChangeText={verificationCode => setVerificationInput(verificationCode)}
+                onChangeText={(text, rawText) => {
+                    setVerificationInput(text)
+                    setVerificationCode(rawText)
+                }}
             />       
             <View
                 style={styles.submit}
@@ -35,7 +39,7 @@ export default function VerificationInput({ toggleInput, toggleLoading, handleVe
                     title="next"
                     color="white"
                     onPress={() => {
-                        handleVerificationInput('123456')
+                        handleVerificationInput(verificationCode)
                     }}
                 >
                 </Button>
@@ -61,11 +65,12 @@ const styles = StyleSheet.create({
         height: 50,        
         width: 300,
         color: 'white',
-        borderBottomColor: 'white',
-        borderBottomWidth: 1,
-        fontSize: 30,
-        fontWeight: '100',
-        margin: 10
+        // borderBottomColor: 'white',
+        // borderBottomWidth: 1,
+        fontSize: 50,
+        fontWeight: '300',
+        paddingLeft: 10,
+        textAlign: 'center'
     },
     button: {
         color: 'white'

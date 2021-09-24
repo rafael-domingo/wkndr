@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import 'firebase/auth'
 const firebaseConfig = {
-    // firebaseConfig
+    // firebase config
   };
 
 try {
