@@ -142,7 +142,6 @@ export default function TripView({ route, navigation }) {
     }
 
     return (
-        // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View 
                 style={styles.container}
                
@@ -164,12 +163,12 @@ export default function TripView({ route, navigation }) {
                     <SearchBarInput location={location}/>
                     <TripViewSettingsButton navigation={navigation} location={location}/>                                     
                 </SafeAreaView>
-                <Animated.View 
+                {/* <Animated.View 
                     style={{ transform: [{translateY: 0}], height: 800, bottom: 0, position: 'absolute', alignItems: 'flex-end', justifyContent: 'flex-start', }}
                     // style={{flex: 1}}
                     
                 >
-                    {/* <Carousel
+                    <Carousel
                         data={array}
                         renderItem={renderItem}
                         directionalLockEnabled={false}
@@ -182,7 +181,7 @@ export default function TripView({ route, navigation }) {
                        
                         
       
-                    />          */}
+                    />         
                     <AnimatedFlatView
                         data={array}
                         horizontal={true}
@@ -193,10 +192,8 @@ export default function TripView({ route, navigation }) {
                         {...panResponder.panHandlers}
                         
                     />
-                </Animated.View>                      
+                </Animated.View>                       */}
             </View>
-        // </TouchableWithoutFeedback>
-
     )
 }
 

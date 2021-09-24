@@ -1,34 +1,21 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, TextInput, Text, Button } from 'react-native';
-import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { phoneVerificationCode } from '../../util/Firebase';
 
-export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInput }) {
-    const recaptchaVerifier = React.useRef(null);
-    const [phoneInput, setPhoneInput] = React.useState();
-
-    const firebaseConfig = {
-       // firebaseConfig
-      };
-
+export default function VerificationInput({ toggleInput, toggleLoading, handleVerificationInput }) {
+    const [verificationInput, setVerificationInput] = React.useState();
     return (
-        <View style={styles.container}>     
-            <FirebaseRecaptchaVerifierModal
-                ref={recaptchaVerifier}
-                firebaseConfig={firebaseConfig}
-                attemptInvisibleVerification={true}
-            />    
+        <View style={styles.container}>         
             <TextInput
                 style={styles.input}
-                placeholder="+1 (---) --- ----"
+                placeholder="- - - - - -"
                 placeholderTextColor="white"
                 autoCorrect={false}
-                value={phoneInput}
-                autoCompleteType="tel"
-                textContentType="telephoneNumber"
+                value={verificationInput}                                
                 // autoFocus={true}
                 keyboardAppearance="dark"
                 keyboardType="number-pad"
-                onChangeText={phoneNumber => setPhoneInput(phoneNumber)}
+                onChangeText={verificationCode => setVerificationInput(verificationCode)}
             />       
             <View
                 style={styles.submit}
@@ -48,10 +35,9 @@ export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInpu
                     title="next"
                     color="white"
                     onPress={() => {
-                        handlePhoneInput('+1 (650) 555-1234', recaptchaVerifier.current)                     
+                        handleVerificationInput('123456')
                     }}
                 >
-
                 </Button>
             </View>          
         </View>
