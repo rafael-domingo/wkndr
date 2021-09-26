@@ -21,14 +21,18 @@ export const userSlice = createSlice({
             state.tripList = action.payload
         },
         addTrip: (state, action) => {
-            const { cityName, coordinates, destinations, tripBuilder } = action.payload
+            const { tripId, cityName, coordinates, destinations, tripBuilder } = action.payload
             state.tripList.push({
+                tripId, tripId,
                 cityName: cityName,
                 coordinates: coordinates,
                 destinations: destinations,
                 tripBuilder: tripBuilder                
             })
             updateFirestore(state.tripList, state.user.uid)
+        },
+        deleteDestinations: (state, action) => {
+            const { tripId, }
         },
         resetUserState: () => initialState
     }
