@@ -5,9 +5,11 @@ import Carousel from 'react-native-snap-carousel';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
 import LocationCard from '../../components/Cards/LocationCard';
 import SearchBarInput from '../../components/Input/SearchBarInput';
+import SearchCarousel from './SearchCarousel';
 
 export default function TripView({ route, navigation }) {
     const {location} = route.params
+    const [searchResults, setSearchResults] = React.useState([])
     const [carouselHeight, setCarouselHeight] = React.useState(new Animated.Value(Dimensions.get('window').height))
     const scale = React.useRef(new Animated.Value(1)).current
     const pan = useRef(new Animated.ValueXY()).current
@@ -103,6 +105,11 @@ export default function TripView({ route, navigation }) {
         // }
        
     }
+
+    const handleSearch = (searchResults) => {
+        setSearchResults(searchResults)
+    }
+
     const renderItem = ({item, index}) => {
         return (
             <LocationCard handlePress={handlePress} name={item.name}/>    
@@ -160,8 +167,15 @@ export default function TripView({ route, navigation }) {
                     }}
                 />           
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>
-                    <SearchBarInput location={location}/>
-                    <TripViewSettingsButton navigation={navigation} location={location}/>                                     
+                    <SearchBarInput location={location} handleSearch={handleSearch}/>
+                    <TripViewSettingsButton navigation={navigation} location={location}/>
+                    {
+                        searchResults.length > 0 && (
+                            <SearchCarousel searchResults={searchResults}/>
+                        )
+                    }
+                    
+
                 </SafeAreaView>
                 {/* <Animated.View 
                     style={{ transform: [{translateY: 0}], height: 800, bottom: 0, position: 'absolute', alignItems: 'flex-end', justifyContent: 'flex-start', }}

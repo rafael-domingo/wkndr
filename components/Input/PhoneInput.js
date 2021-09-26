@@ -7,7 +7,7 @@ export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInpu
     const [phoneInput, setPhoneInput] = React.useState();
 
     const firebaseConfig = {
-        //firebaseConfig
+        // firebaseConfig
       };
 
     return (

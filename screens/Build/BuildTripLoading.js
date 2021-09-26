@@ -12,15 +12,34 @@ export default function BuildTripLoading({ tripState }) {
     React.useEffect(() => {
         dispatch(setTripBuilder(tripState))
         Yelp.tripBuilder(tripState).then(response => {            
-            console.log(response)
+            // Assign unique Id to help with handling deletion later on
+            const morning = response[0].map(object => {
+                for (var key in object) {
+                    object[key].wkndrId = uuidv4()
+                }
+                return object
+            })
+            const afternoon = response[1].map(object => {
+                for (var key in object) {
+                    object[key].wkndrId = uuidv4()
+                }
+                return object
+            })
+            const evening = response[2].map(object => {
+                for (var key in object) {
+                    object[key].wkndrId = uuidv4()
+                }
+                return object
+            })
+            
             dispatch(addTrip({
                 tripId: uuidv4(),
                 cityName: tripState.cityName,
                 coordinates: tripState.coordinates,
                 destinations: {
-                    morning: response[0],
-                    afternoon: response[1],
-                    evening: response[2]
+                    morning: morning,
+                    afternoon: afternoon,
+                    evening: evening
                 },
                 tripBuilder: tripState
             }))

@@ -1,13 +1,31 @@
 import React from 'react';
 import { SafeAreaView, View, StyleSheet, Text, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import CancelButton from '../../components/Buttons/CancelButton';
 import TripListCard from '../../components/Cards/TripListCard';
+import { deleteDestination } from '../../redux/user';
 
 export default function TripList({ route, navigation }) {
+    // figure out what the tripId is to pull from state
     const {location} = route.params
+    const findTrip = (trip) => {
+        return trip.tripId === location.tripId
+    }
+    // pull from state
+    const locationState = useSelector(state => state.user.tripList.find(findTrip))
+    console.log(locationState)
+    const dispatch = useDispatch()
     console.log(location)
     const handleCancelClick = () => {
         navigation.navigate('Trip', {location: location})
+    }
+
+    const handleDelete = (wkndrId, time) => {
+        dispatch(deleteDestination({
+            tripId: location.tripId, 
+            wkndrId: wkndrId,
+            time: time
+        }))
     }
 
     return (
@@ -18,13 +36,13 @@ export default function TripList({ route, navigation }) {
             </View>
             <ScrollView style={{flex: 0.9}}>
                 {
-                 location.destinations.morning.map(destination => <TripListCard destination={destination}/>)   
+                 locationState.destinations.morning.map((destination, index) => <TripListCard destination={destination} time={'morning'} handleDelete={handleDelete} key={`morning${index}`}/>)   
                 }
                 {
-                 location.destinations.afternoon.map(destination => <TripListCard destination={destination}/>)   
+                 locationState.destinations.afternoon.map((destination, index) => <TripListCard destination={destination} time={'afternoon'} handleDelete={handleDelete} key={`afternoon${index}`}/>)   
                 }
                 {
-                 location.destinations.evening.map(destination => <TripListCard destination={destination}/>)   
+                 locationState.destinations.evening.map((destination, index) => <TripListCard destination={destination} time={'evening'}  handleDelete={handleDelete} key={`evening${index}`}/>)   
                 }
             </ScrollView>
         </SafeAreaView>

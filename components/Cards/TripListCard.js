@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
-import Picture from '../../assets/broad.jpeg';
 
-export default function TripListCard({ destination }) {
+export default function TripListCard({ destination, time, handleDelete }) {
 
     // for loop to extract key from object
     for (var key in destination) {        
@@ -19,9 +18,14 @@ export default function TripListCard({ destination }) {
                     <Text style={styles.locationName}>{destination[key].name}</Text>
                     <Text style={styles.address}>{destination[key].location.display_address[0]}</Text>
                 </View>
-                <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                    style={styles.buttonContainer}
+                    onPress={() => {
+                        handleDelete(destination[key].wkndrId, time)
+                    }}
+                >
                     <FontAwesome5 name="trash" size={24} color="white" />
-                </View>
+                </TouchableOpacity>
             </View>
         )
     }
