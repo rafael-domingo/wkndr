@@ -2,10 +2,13 @@ import React from 'react';
 import LargeMapList from './LargeMapList';
 import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetUserState } from '../../redux/user';
+
 export default function UserHome({ navigation }) {
     const userState = useSelector(state => state.user)
-    const [userProfile, setUserProfile] = React.useState(userState)
+    const dispatch = useDispatch();
+
     return (
         <SafeAreaView style={styles.container}>   
             <View style={styles.header}>  
@@ -21,11 +24,15 @@ export default function UserHome({ navigation }) {
                     name="ios-settings-outline" 
                     size={24} 
                     color="white" 
-                    onPress={() => console.log('pressed')}
+                    onPress={() => {
+                        console.log('pressed')
+                        dispatch(resetUserState())
+                        navigation.navigate('Home')
+                    }}
                 />
             </View>                   
             <View style={{flex: 1}}>
-                <LargeMapList navigation={navigation} userTrips={userProfile.tripList}/>        
+                <LargeMapList navigation={navigation} userTrips={userState.tripList}/>        
             </View>            
         </SafeAreaView>        
     )

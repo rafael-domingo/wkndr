@@ -25,7 +25,8 @@ export default function BuildTrip({ navigation }) {
                 ...prevState.coordinates,
                 lat: value.coordinates.lat,
                 lng: value.coordinates.lng
-            }
+            },
+            utcOffset: value.utcOffset
         }))
     }
 

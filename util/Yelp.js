@@ -23,11 +23,13 @@ export const Yelp = {
                 landmarks: tripState.activities.landmarks,
                 zoos: tripState.activities.zoos,
                 museums: tripState.activities.museums,
-                hiking: tripState.activities.hiking
+                hiking: tripState.activities.hiking,
+                utcOffset: tripState.utcOffset
             })
         }).then(response => response.json())
         .then(data => {
-            console.log(data)  
+            console.log(data)
+            return data
         })
         .catch(error => console.log(error))
     },

@@ -6,6 +6,7 @@ const initialState = {
         lat: '',
         lng: ''
     },
+    utcOffset: '',
     autoBuild: false,
     time: {
         morning: false,

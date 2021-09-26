@@ -24,7 +24,8 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
         handleClick('next')    
         handleInput({
             cityName: details.formatted_address,
-            coordinates: details.geometry.location
+            coordinates: details.geometry.location,
+            utcOffset: details.utc_offset
         })
     }
 

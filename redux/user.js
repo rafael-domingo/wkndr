@@ -1,119 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { updateFirestore } from '../util/Firestore';
 
 const initialState = {
-    userName: '',
-    userPicture: '',
-    userId: '',
-    tripList: [
-        {
-            cityName: 'Los Angeles, CA, USA',                
-            coordinates: {
-                lat: 34.0522,
-                lng: -118.2437
-            },
-            autoBuild: {
-
-            },
-            destinations: {
-
-            },
-            tripBuilder: {
-                cityName: '',
-                coordinates: {
-                    lat: '',
-                    lng: ''
-                },
-                autoBuild: false,
-                time: {
-                    morning: false,
-                    afternoon: false,
-                    evening: false,
-                },
-                transportation: '',
-                activities: {
-                    coffee: false,
-                    food: false,
-                    shop: false, 
-                    drink: false, 
-                    thrifting: false, 
-                    landmarks: false, 
-                    zoos: false, 
-                    museums: false,
-                    hiking: false
-                }
-            }
-        },
-        {
-            cityName: 'New York City, NY, USA',
-            coordinates: {
-                lat: 40.7128,
-                lng: -74.0060
-            },
-            destinations: {
-
-            },
-            tripBuilder: {
-                cityName: '',
-                coordinates: {
-                    lat: '',
-                    lng: ''
-                },
-                autoBuild: false,
-                time: {
-                    morning: false,
-                    afternoon: false,
-                    evening: false,
-                },
-                transportation: '',
-                activities: {
-                    coffee: false,
-                    food: false,
-                    shop: false, 
-                    drink: false, 
-                    thrifting: false, 
-                    landmarks: false, 
-                    zoos: false, 
-                    museums: false,
-                    hiking: false
-                }
-            }
-        },
-        {
-            cityName: 'Austin, TX, USA',
-            coordinates: {
-                lat: 30.2672,
-                lng: -97.7431
-            },
-            destinations: {
-
-            },
-            tripBuilder: {
-                cityName: '',
-                coordinates: {
-                    lat: '',
-                    lng: ''
-                },
-                autoBuild: false,
-                time: {
-                    morning: false,
-                    afternoon: false,
-                    evening: false,
-                },
-                transportation: '',
-                activities: {
-                    coffee: false,
-                    food: false,
-                    shop: false, 
-                    drink: false, 
-                    thrifting: false, 
-                    landmarks: false, 
-                    zoos: false, 
-                    museums: false,
-                    hiking: false
-                }
-            }
-        }
-    ]
+    user: {},
+    tripList: []
 }
 
 export const userSlice = createSlice({
@@ -124,13 +14,32 @@ export const userSlice = createSlice({
             state = {...action.payload}
             return state
         },
+        setUser: (state, action) => {
+            state.user = action.payload
+        },
+        setTripList: (state, action) => {
+            state.tripList = action.payload
+        },
+        addTrip: (state, action) => {
+            const { cityName, coordinates, destinations, tripBuilder } = action.payload
+            state.tripList.push({
+                cityName: cityName,
+                coordinates: coordinates,
+                destinations: destinations,
+                tripBuilder: tripBuilder                
+            })
+            updateFirestore(state.tripList, state.user.uid)
+        },
         resetUserState: () => initialState
     }
 })
 
 export const {
     setUserState,
-    resetUserState
+    resetUserState,
+    setUser,
+    setTripList,
+    addTrip
 } = userSlice.actions;
 
 export default userSlice.reducer

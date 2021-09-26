@@ -1,17 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, Button } from 'react-native';
+import { useDispatch } from 'react-redux';
 import SignupButton from '../../components/Buttons/SignupButton';
 import EmailInput from '../../components/Input/EmailInput';
 import PhoneInput from '../../components/Input/PhoneInput';
 import VerificationInput from '../../components/Input/VerificationInput';
 import LoginLoading from '../../components/Misc/LoginLoading';
+import { setTripList, setUser } from '../../redux/user';
 import { phoneSignIn, phoneVerificationCode } from '../../util/Auth';
+import { getFirestore } from '../../util/Firestore';
 
 export default function LoginInput({ handleSignup, navigation }) {
     const [inputType, setInputType] = React.useState('phone')
     const [loading, setLoading] = React.useState(false);
     const [verificationId, setVerificationId] = React.useState();
-
+    const dispatch = useDispatch();
     const handleToggle = (inputType) => {
         setInputType(inputType)
     }
@@ -44,7 +47,24 @@ export default function LoginInput({ handleSignup, navigation }) {
                 console.log('error')
                 return
             } else {
-                console.log(response)
+                const userObject = {
+                    displayName: response.user.displayName,
+                    email: response.user.email,
+                    phoneNumber: response.user.phoneNumber,
+                    uid: response.user.uid,
+                    photoURL: response.user.photoURL
+                }
+                dispatch(setUser(userObject))              
+                getFirestore(response.user.uid).then(response => {
+                    console.log(response)
+                    if (response !== 'new user') {
+                        dispatch(setTripList(response.tripList))
+                        navigation.navigate('User')
+                    } else {                        
+                        navigation.navigate('User')
+                    }                    
+                    
+                }).catch(error => console.log(error))  
             }
         })
         .catch(error => console.log(error))
