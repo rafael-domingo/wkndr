@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { setTripBuilder } from '../../redux/tripBuilder';
 import { addTrip } from '../../redux/user';
 import { Yelp } from '../../util/Yelp';
+import { v4 as uuidv4 } from 'uuid';
+
 export default function BuildTripLoading({ tripState }) {
     const dispatch = useDispatch()
 
@@ -12,6 +14,7 @@ export default function BuildTripLoading({ tripState }) {
         Yelp.tripBuilder(tripState).then(response => {            
             console.log(response)
             dispatch(addTrip({
+                tripId: uuidv4(),
                 cityName: tripState.cityName,
                 coordinates: tripState.coordinates,
                 destinations: {

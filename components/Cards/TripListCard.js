@@ -3,25 +3,29 @@ import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import Picture from '../../assets/broad.jpeg';
 
-export default function TripListCard() {
+export default function TripListCard({ destination }) {
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.image}
-                    source={Picture}
-                />
+    // for loop to extract key from object
+    for (var key in destination) {        
+        return (
+            <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        style={styles.image}
+                        source={{uri: destination[key].image_url}}
+                    />
+                </View>
+                <View style={styles.textContainer}>
+                    <Text style={styles.locationName}>{destination[key].name}</Text>
+                    <Text style={styles.address}>{destination[key].location.display_address[0]}</Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <FontAwesome5 name="trash" size={24} color="white" />
+                </View>
             </View>
-            <View style={styles.textContainer}>
-                <Text style={styles.locationName}>Poppy + Rose</Text>
-                <Text style={styles.address}>221 S Grand Ave</Text>
-            </View>
-            <View style={styles.buttonContainer}>
-                <FontAwesome5 name="trash" size={24} color="white" />
-            </View>
-        </View>
-    )
+        )
+    }
+  
 }
 
 const styles = StyleSheet.create({

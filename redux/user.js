@@ -31,9 +31,6 @@ export const userSlice = createSlice({
             })
             updateFirestore(state.tripList, state.user.uid)
         },
-        deleteDestinations: (state, action) => {
-            const { tripId, }
-        },
         resetUserState: () => initialState
     }
 })

@@ -7,7 +7,7 @@ const initialState = {
         lng: ''
     },
     utcOffset: '',
-    autoBuild: false,
+    autoBuild: true,
     time: {
         morning: false,
         afternoon: false,

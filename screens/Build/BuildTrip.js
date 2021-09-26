@@ -57,6 +57,13 @@ export default function BuildTrip({ navigation }) {
         }))
     }
 
+    const handleAutoBuild = (value) => {
+        setTrip(prevState => ({
+            ...prevState,
+            autoBuild: value
+        }))
+    }
+
     const handleStepClick = (operation) => {
         switch (operation) {
             case 'next':
@@ -66,6 +73,7 @@ export default function BuildTrip({ navigation }) {
                 setStep(step - 1);
                 break;
             case 'skip':
+                handleAutoBuild(false) // turn off autobuild if skipping step
                 setStep(4);
                 break;
             default:
