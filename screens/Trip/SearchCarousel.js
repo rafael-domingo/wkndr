@@ -3,12 +3,12 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import SearchCard from '../../components/Cards/SearchCard';
 
-export default function SearchCarousel({ searchResults }) {
+export default function SearchCarousel({ searchResults, handleAddLocation, handleDeleteLocation }) {
 
     const renderItem = ({ item, index}) => {
         return (
             <View style={{height: Dimensions.get('window').height/2}}>
-                <SearchCard location={item}/>
+                <SearchCard location={item} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
             </View>
         )
     }

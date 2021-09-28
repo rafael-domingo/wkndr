@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
-export default function TripListCard({ destination, time, handleDelete }) {
+export default function TripListCard({ destination, handleDelete }) {
 
     // for loop to extract key from object
     for (var key in destination) {        
@@ -21,7 +21,7 @@ export default function TripListCard({ destination, time, handleDelete }) {
                 <TouchableOpacity 
                     style={styles.buttonContainer}
                     onPress={() => {
-                        handleDelete(destination[key].wkndrId, time)
+                        handleDelete(destination[key].wkndrId)
                     }}
                 >
                     <FontAwesome5 name="trash" size={24} color="white" />

@@ -1,5 +1,16 @@
 import firebase from './Firebase';
 
+// Signout
+export const signOut = async () => {
+    try {
+        const result = await firebase.auth().signOut()
+        return result
+    } catch (error) {
+        console.log(error)
+        return 'error'
+    }
+}
+
 
 // PHONE AUTH
 export const phoneSignIn = async (phoneNumber, recaptchaVerifier) => {

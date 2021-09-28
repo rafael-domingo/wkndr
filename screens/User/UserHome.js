@@ -4,6 +4,7 @@ import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetUserState } from '../../redux/user';
+import { signOut } from '../../util/Auth';
 
 export default function UserHome({ navigation }) {
     const userState = useSelector(state => state.user)
@@ -27,6 +28,7 @@ export default function UserHome({ navigation }) {
                     onPress={() => {
                         console.log('pressed')
                         dispatch(resetUserState())
+                        signOut()
                         navigation.navigate('Home')
                     }}
                 />

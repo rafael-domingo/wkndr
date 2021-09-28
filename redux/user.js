@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { updateFirestore } from '../util/Firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     user: {},
@@ -32,13 +33,13 @@ export const userSlice = createSlice({
             updateFirestore(state.tripList, state.user.uid)
         },
         deleteDestination: (state, action) => {
-            const { tripId, wkndrId, time } = action.payload 
+            const { tripId, wkndrId } = action.payload             
             const tripListArray = state.tripList.map(trip => {
                 if (trip.tripId !== tripId) {
                     return trip
                 }
                 else {
-                    const updatedDestinations = trip.destinations[time].filter(item => {
+                    const updatedDestinations = trip.destinations.filter(item => {
                         // need to extract the 'activity' key
                         for (var key in item) {
                             if (item[key].wkndrId !== wkndrId) {
@@ -50,10 +51,7 @@ export const userSlice = createSlice({
                     })                    
                     return {
                         ...trip,
-                        destinations: {
-                            ...trip.destinations,
-                            [time]: updatedDestinations
-                        }
+                        destinations: updatedDestinations
                     }
                 }
                 
@@ -63,6 +61,27 @@ export const userSlice = createSlice({
                 ...state,
                 tripList: tripListArray
             }
+        },
+        addDestination: (state, action) => {
+            const { tripId, newDestination } = action.payload  
+            // define new location as user-selected
+            const location = {
+                user: newDestination
+            }            
+            const tripListArray = state.tripList.map(trip => {
+                if (trip.tripId !== tripId) {
+                    return trip
+                }
+                else {
+                    const updatedDestinations = trip.destinations
+                    updatedDestinations.push(location)              
+                    return {
+                        ...trip,  
+                        destinations: updatedDestinations                      
+                    }
+                }
+            })            
+            updateFirestore(tripListArray, state.user.uid)        
         },
         resetUserState: () => initialState
     }
@@ -74,6 +93,7 @@ export const {
     setUser,
     setTripList,
     deleteDestination,
+    addDestination,
     addTrip
 } = userSlice.actions;
 

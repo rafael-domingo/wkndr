@@ -20,11 +20,10 @@ export default function TripList({ route, navigation }) {
         navigation.navigate('Trip', {location: location})
     }
 
-    const handleDelete = (wkndrId, time) => {
+    const handleDelete = (wkndrId) => {
         dispatch(deleteDestination({
             tripId: location.tripId, 
             wkndrId: wkndrId,
-            time: time
         }))
     }
 
@@ -36,13 +35,7 @@ export default function TripList({ route, navigation }) {
             </View>
             <ScrollView style={{flex: 0.9}}>
                 {
-                 locationState.destinations.morning.map((destination, index) => <TripListCard destination={destination} time={'morning'} handleDelete={handleDelete} key={`morning${index}`}/>)   
-                }
-                {
-                 locationState.destinations.afternoon.map((destination, index) => <TripListCard destination={destination} time={'afternoon'} handleDelete={handleDelete} key={`afternoon${index}`}/>)   
-                }
-                {
-                 locationState.destinations.evening.map((destination, index) => <TripListCard destination={destination} time={'evening'}  handleDelete={handleDelete} key={`evening${index}`}/>)   
+                 locationState.destinations.map((destination, index) => <TripListCard destination={destination} handleDelete={handleDelete} key={`morning${index}`}/>)   
                 }
             </ScrollView>
         </SafeAreaView>

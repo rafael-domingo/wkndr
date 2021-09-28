@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const Yelp = {
     async tripBuilder(tripState) {
         console.log(tripState)
@@ -27,9 +29,22 @@ export const Yelp = {
                 utcOffset: tripState.utcOffset
             })
         }).then(response => response.json())
-        .then(data => {
-            console.log(data)
-            return data
+        .then(data => {            
+            // format output from trip builder function into single-dimension array
+            const destinationArray = [];
+            data.map(subArray => {
+                subArray.map(item => {
+                    destinationArray.push(item)
+                })                
+            })
+            // assign unique id to each destination to help with modifying trip later on
+            destinationArray.map(object => {
+                for (var key in object) {
+                    object[key].wkndrId = uuidv4()
+                }
+                return object
+            })
+            return destinationArray
         })
         .catch(error => console.log(error))
     },

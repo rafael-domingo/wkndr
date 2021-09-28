@@ -18,6 +18,7 @@ export const updateFirestore = (tripList, uid) => {
 
 export const getFirestore = async (uid) => {
     console.log('get firestore')
+    console.log(uid)
     try {
         console.log('try get firestore')
         const result = await firebase.firestore().collection('tripList').doc(uid).get().then((doc) => {
