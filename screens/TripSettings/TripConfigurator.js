@@ -6,6 +6,7 @@ import BuildTripLoading from '../Build/BuildTripLoading';
 import TripBuilder from './TripBuilder';
 import TripBuilderConfirm from './TripBuilderConfirm';
 import TripBuilderEnable from './TripBuilderEnable';
+import TripBuilderLoading from './TripBuilderLoading';
 
 export default function TripConfigurator({ route, navigation }) {
     const {location} = route.params
@@ -92,7 +93,7 @@ export default function TripConfigurator({ route, navigation }) {
                 }
                 {
                     trip.autoBuild && confirmation && loading && (
-                        <BuildTripLoading />
+                        <TripBuilderLoading tripState={trip} location={location}/>
                     )
                 }
             </View>

@@ -3,6 +3,8 @@ import { StyleSheet, View, Image, Text, ImageBackground, Pressable } from 'react
 import { LinearGradient } from 'expo-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import { v4 as uuidv4 } from 'uuid';
+import Star from '../Rating/Star';
+import Price from '../Rating/Price';
 
 
 export default function SearchCard({ location, handleAddLocation, handleDeleteLocation }) {
@@ -68,20 +70,7 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                     <View style={{width: '50%'}}>
                         {
                             location.rating !== undefined && (
-                                <StarRating
-                                disabled={true}
-                                maxStars={5}
-                                rating={location.rating}
-                                emptyStarColor={'white'}
-                                fullStarColor={'white'}
-                                fullStar={'ios-star-sharp'}
-                                halfStar={'ios-star-half-sharp'}
-                                emptyStar={'ios-star-outline'}
-                                halfStarColor={'white'}
-                                iconSet={'Ionicons'}
-                                starSize={24}
-                                containerStyle={{flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}
-                            />
+                                <Star rating={location.rating} size={24}/>
                             )
                         }
                         {
@@ -91,21 +80,7 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                         }
                         {
                             location.price !== undefined && (
-                                <StarRating
-                                    disabled={true}
-                                    maxStars={4}
-                                    rating={location.price.length}
-                                    emptyStarColor={'white'}
-                                    fullStarColor={'white'}
-                                    fullStar={'cash-usd'}
-                                    halfStar={'ios-star-half-sharp'}
-                                    emptyStar={'cash-usd-outline'}
-                                    halfStarColor={'white'}
-                                    halfStarEnabled={false}
-                                    iconSet={'MaterialCommunityIcons'}
-                                    starSize={30}
-                                    containerStyle={{flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}
-                                />
+                                <Price rating={location.price} size={30}/>
                             )
                         }
                         {

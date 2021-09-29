@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Easing } from 'react-native';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import { Yelp } from '../../util/Yelp';
 import Autocomplete from '../Misc/Autocomplete';
@@ -8,6 +8,21 @@ export default function SearchBarInput({ location, handleSearch }) {
     const [value, setValue] = React.useState('');
     const [autocomplete, setAutocomplete] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+    const translation = React.useRef(new Animated.Value(0)).current
+
+    React.useEffect(() => {
+        Animated.timing(
+            translation,
+            {
+                toValue: 100,
+                duration: 500,
+                delay: 500,
+                easing: Easing.inOut(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+    }, [translation])
+
     const updateSearch = (search) => {
         handleSearch([])
         setValue(search)
@@ -39,7 +54,18 @@ export default function SearchBarInput({ location, handleSearch }) {
     }
 
     return (
-        <View style={styles.container}>
+        <Animated.View 
+            style={[
+                styles.container, 
+                {
+                    transform: [{translateY: translation}],
+                    opacity: translation.interpolate({
+                        inputRange: [0,100],
+                        outputRange: [0,1]
+                    })
+                }
+            ]}
+        >
             <SearchBar     
                 inputContainerStyle={{height: 50, backgroundColor: 'white'}}         
                 placeholder="Search"
@@ -55,7 +81,7 @@ export default function SearchBarInput({ location, handleSearch }) {
                 }}
             />
             <Autocomplete autocomplete={autocomplete} setValue={setValue} setAutocomplete={setAutocomplete} autoCompleteSearch={autoCompleteSearch}/>
-        </View>
+        </Animated.View>
         
     )
 }
@@ -65,7 +91,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 50,
         borderRadius: 10,
         position: 'relative',
-        top: 0,
+        top: -100,
         justifyContent: 'center',
         alignItems: 'center'
     }

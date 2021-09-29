@@ -1,15 +1,22 @@
 import React from 'react';
 import { Animated, View, StyleSheet, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder } from 'react-native';
 import MapView from 'react-native-maps';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
 import SearchBarInput from '../../components/Input/SearchBarInput';
 import { addDestination, deleteDestination } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
+import TripCarousel from './TripCarousel';
 
 export default function TripView({ route, navigation }) {
     const {location} = route.params
     const [searchResults, setSearchResults] = React.useState([])
+
+    const findTrip = (trip) => {
+        return trip.tripId === location.tripId
+    }
+    const locationState = useSelector(state => state.user.tripList.find(findTrip))
+
     const dispatch = useDispatch()
 
     const handleSearch = (searchResults) => {
@@ -56,10 +63,15 @@ export default function TripView({ route, navigation }) {
                             <SearchCarousel searchResults={searchResults} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
                         )
                     }
-                    
+                   
 
                 </SafeAreaView>
-
+                {
+                        searchResults.length === 0 && (
+                            <TripCarousel tripList={locationState.destinations} handleDeleteLocation={handleDeleteLocation}/>
+                        )
+                    }
+                    
             </View>
     )
 }

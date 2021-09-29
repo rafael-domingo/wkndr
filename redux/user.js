@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { updateFirestore } from '../util/Firestore';
-import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
     user: {},
@@ -31,6 +30,25 @@ export const userSlice = createSlice({
                 tripBuilder: tripBuilder                
             })
             updateFirestore(state.tripList, state.user.uid)
+        },        
+        updateDestinationsList: (state, action) => {
+            const { tripId, newList, tripBuilder } = action.payload
+            const tripListArray = state.tripList.map(trip => {
+                if (trip.tripId !== tripId) {
+                    return trip
+                } else {
+                    return {
+                        ...trip,
+                        destinations: newList,
+                        tripBuilder: tripBuilder
+                    }
+                }
+            })
+            updateFirestore(tripListArray, state.user.uid)
+            return {
+                ...state,
+                tripList: tripListArray
+            }
         },
         deleteDestination: (state, action) => {
             const { tripId, wkndrId } = action.payload             
@@ -92,6 +110,7 @@ export const {
     resetUserState,
     setUser,
     setTripList,
+    updateDestinationsList,
     deleteDestination,
     addDestination,
     addTrip
