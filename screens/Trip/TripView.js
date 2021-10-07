@@ -1,6 +1,6 @@
 import React from 'react';
 import { Animated, View, StyleSheet, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
 import SearchBarInput from '../../components/Input/SearchBarInput';
@@ -12,6 +12,9 @@ export default function TripView({ route, navigation }) {
     const {location} = route.params
     const [searchResults, setSearchResults] = React.useState([])
 
+ 
+
+    const mapRef = React.useRef()
     const findTrip = (trip) => {
         return trip.tripId === location.tripId
     }
@@ -37,12 +40,23 @@ export default function TripView({ route, navigation }) {
         }))
     }
 
+    React.useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
+                for (var key in destination) {
+                    return destination[key].id
+                }
+            }))
+        }
+    })
+
     return (
             <View 
                 style={styles.container}
                
             >            
                 <MapView
+                    ref={mapRef}
                     style={styles.map}
                     scrollEnabled={false}
                     zoomTapEnabled={false}
@@ -54,7 +68,26 @@ export default function TripView({ route, navigation }) {
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
-                />           
+                >           
+                    {
+                        locationState.destinations.map((destination, index) => {
+                            for (var key in destination ) {
+                                return (
+                                    <Marker
+                                        identifier={destination[key].id}
+                                        key={index}
+                                        coordinate={destination[key].coordinates}
+                                        title={destination[key].name}
+
+
+                                    />
+                                )
+                            }
+                            
+                        })
+                    }
+                </MapView>
+
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>
                     <SearchBarInput location={location} handleSearch={handleSearch}/>
                     <TripViewSettingsButton navigation={navigation} location={location}/>
