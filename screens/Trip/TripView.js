@@ -7,13 +7,13 @@ import SearchBarInput from '../../components/Input/SearchBarInput';
 import { addDestination, deleteDestination } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
 import TripCarousel from './TripCarousel';
-
+import TripCard from '../../components/Cards/TripCard';
 export default function TripView({ route, navigation }) {
     const {location} = route.params
     const [searchResults, setSearchResults] = React.useState([])
 
  
-
+    let mapAnimation = new Animated.Value(0)
     const mapRef = React.useRef()
     const findTrip = (trip) => {
         return trip.tripId === location.tripId
@@ -48,6 +48,9 @@ export default function TripView({ route, navigation }) {
                 }
             }))
         }
+        mapAnimation.addListener(({ value }) => {
+            console.log(value)
+        })
     })
 
     return (
@@ -101,7 +104,51 @@ export default function TripView({ route, navigation }) {
                 </SafeAreaView>
                 {
                         searchResults.length === 0 && (
-                            <TripCarousel tripList={locationState.destinations} handleDeleteLocation={handleDeleteLocation}/>
+   
+                            <Animated.ScrollView
+                                style={{ 
+                                    flex: 1,
+                                    position: 'absolute',
+                                    bottom: '-60%'
+                                }}
+                                horizontal
+                                // pagingEnabled
+                                decelerationRate="fast" // fix for paging enabled bug
+                                scrollEventThrottle={1}
+                                snapToInterval={Dimensions.get('window').width * 0.8 + 20}
+                                snapToAlignment="center"
+                                showsHorizontalScrollIndicator={false}    
+                                contentInset={{
+                                    top: 0,
+                                    left: Dimensions.get('window').width * 0.1 -10,
+                                    bottom: 0,
+                                    right: Dimensions.get('window').width * 0.1 -10
+                                  }} 
+                                onScroll={Animated.event(
+                                    [
+                                        {
+                                            nativeEvent: {
+                                                contentOffset: {
+                                                    x: mapAnimation
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    { useNativeDriver: true }
+                                )}
+                            >
+                                {
+                                    locationState.destinations.map((item, index) => {
+                                        return (
+                                            <View key={item.wkndrId} style={{width: Dimensions.get('window').width * 0.8 , height: Dimensions.get('window').height - 100, margin: 10}}>
+                                                <TripCard location={item} handleDeleteLocation={handleDeleteLocation}/>
+                                            </View>
+                                        )
+                                    })
+                                }
+                            </Animated.ScrollView>
+
+                            // <TripCarousel tripList={locationState.destinations} handleDeleteLocation={handleDeleteLocation}/>
                         )
                     }
                     
