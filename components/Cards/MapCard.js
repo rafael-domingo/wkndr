@@ -13,7 +13,7 @@ export default function MapCard({ location, navigation }) {
         <MapView 
         style={styles.map}
         scrollEnabled={false}
-        userInterfaceStyle={"dark"}
+        // userInterfaceSt yle={"dark"}
         camera={{
             center: {
                 latitude: location.coordinates.lat,

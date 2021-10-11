@@ -12,6 +12,7 @@ import TripConfigurator from './screens/TripSettings/TripConfigurator';
 import { Provider, useSelector } from 'react-redux'
 import store from './redux/store';
 import { updateFirestore } from './util/Firestore';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
 
@@ -19,8 +20,10 @@ export default function App() {
   return (
     <Provider store={store}>
 
-    
+
     <View style={styles.container}>
+    <GestureHandlerRootView style={{flex : 1}}>
+  
     <NavigationContainer>
       
       <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
@@ -34,6 +37,8 @@ export default function App() {
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
+    </GestureHandlerRootView>
+
     </View>
     </Provider>
   );
