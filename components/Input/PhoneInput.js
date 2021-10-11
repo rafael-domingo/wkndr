@@ -9,6 +9,7 @@ export default function PhoneInput({ toggleInput, toggleLoading, handlePhoneInpu
     const firebaseConfig = {
         //firebaseConfig
       };
+      
 
     return (
         <View style={styles.container}>     

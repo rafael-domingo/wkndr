@@ -5,6 +5,7 @@ import 'firebase/firestore'
 const firebaseConfig = {
     //firebaseConfig
   };
+  
 
 try {
     firebase.initializeApp(firebaseConfig);      
