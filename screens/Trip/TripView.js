@@ -9,9 +9,6 @@ import SearchCarousel from './SearchCarousel';
 import TripCarousel from './TripCarousel';
 import TripCard from '../../components/Cards/TripCard';
 import { Button } from 'react-native-elements/dist/buttons/Button';
-import { PanGestureHandler } from 'react-native-gesture-handler';
-import { State as GestureState } from 'react-native-gesture-handler'
-import { snapPoint } from 'react-native-redash';
 import { Modalize } from 'react-native-modalize';
 
 export default function TripView({ route, navigation }) {
@@ -20,7 +17,7 @@ export default function TripView({ route, navigation }) {
     const [camera, setCamera] = React.useState(false)
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
-    const mapRef = React.useRef()
+    const mapRef = React.useRef(null)
     const modalizeRef = React.useRef([])
     const findTrip = (trip) => {
         return trip.tripId === location.tripId
@@ -28,90 +25,7 @@ export default function TripView({ route, navigation }) {
     const locationState = useSelector(state => state.user.tripList.find(findTrip))
 
     const dispatch = useDispatch()
-
-
-    const panState = React.useRef(new Animated.Value(0)); 
-    const [docked, setDocked] = React.useState(true);
-    // const [panState, setPanState] = React.useState(pan);
-    // const [dockAnimation, setDockAnimation] = React.useState(
-    //     panState.current.interpolate({
-    //         inputRange: [-240, 0],
-    //         outputRange: [0, 1],                      
-    //         extrapolate: 'clamp'
-    //     })
-    // )
-    const onGestureEvent = Animated.event(
-        [
-            {
-                nativeEvent: {
-                    translationY: panState.current
-                }
-            }
-        ],
-        {
-            useNativeDriver: true
-        }
-    )
-
-    const snapPoints = [0, Dimensions.get('window').height]
-    const onHandlerStateChange = (event) => {
-        // panState.current.extractOffset()
-        console.log(`panState: ${JSON.stringify(panState.current)}`)
-        console.log(`event : ${JSON.stringify(event.nativeEvent.translationY)}`)
-        // if (event.nativeEvent.state == GestureState.BEGAN) {
-        //     event.nativeEvent.y = panState.current
-        // }
-        // if (event.nativeEvent.state == GestureState.ACTIVE) {
-        //     panState.current = event.nativeEvent.y + event.nativeEvent.translationY
-        // }
-        if (event.nativeEvent.state === GestureState.END) {
-            // const snapPointY = snapPoint(event.nativeEvent.translationY, event.nativeEvent.velocityY, snapPoints)
-            // panState.current = snapPointY
-            
-            // let shouldToggle = docked ? (event.nativeEvent.translationY < -80) : (event.nativeEvent.translationY > 80)
-            // console.log(`translationY: ${event.nativeEvent.translationY}`)
-            // console.log(`shouldtoggle: ${shouldToggle}`)
-            // console.log(`panState: ${JSON.stringify(panState.current)}`)
-            // console.log(`docked: ${docked}`)
-            // if (!shouldToggle) {
-            //     Animated.spring(panState.current, {
-            //         toValue: docked ? 0 : 0,
-            //         useNativeDriver: true
-            //     }).start()
-            // } else {
-            //     console.log('else')
-            //     Animated.spring(panState.current, {
-            //         toValue: docked ? (-240) : (240),
-            //         useNativeDriver: true
-            //     }).start(() => {
-               
-
-            //         if (docked) {
-            //             setDockAnimation(
-            //                 panState.current.interpolate({
-            //                 inputRange: [-240, 0],
-            //                 outputRange: [0, 1],
-            //                 extrapolate: 'clamp'
-            //             })
-            //             )
-            //         } 
-            //         else {
-            //             setDockAnimation(
-            //                 panState.current.interpolate({
-            //                     inputRange: [0, 240],
-            //                     outputRange: [0, 1],
-            //                     extrapolate: 'clamp'
-            //                 })
-            //             )
-            //         }
-            //         setDocked(!docked)
-
-            //     })
-            // }
-          
-        }
-       
-    }
+    console.log('logg')
 
     const handleSearch = (searchResults) => {
         setSearchResults(searchResults)
@@ -133,10 +47,16 @@ export default function TripView({ route, navigation }) {
 
     React.useEffect(() => {
         if (camera) {
+            // mapRef.current.fitToCoordinates([{
+            //         longitude: destination[key].coordinates.longitude,
+            //         latitude: destination[key].coordinates.latitude
+            //     }], { edgePadding: {
+            //         bottom: 700
+            //     }}, { animated: true})   
             mapRef.current.animateCamera({
                 pitch: 60,
                 heading: 0,
-                altitude: 750
+                altitude: 1000
             }, {duration: 1000})
         }
         else {
@@ -153,6 +73,7 @@ export default function TripView({ route, navigation }) {
     React.useEffect(() => {
         // fit mapview to markers
         if (mapRef.current) {       
+            
             mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
                 for (var key in destination) {
                     return destination[key].id
@@ -190,17 +111,19 @@ export default function TripView({ route, navigation }) {
                     if (mapIndex !== index) {
                         mapIndex = index
                         const destination = locationState.destinations[mapIndex]
-                        for (var key in destination) {                       
+                        for (var key in destination) {      
+                        
+                          
                             mapRef.current.animateToRegion(
                                 {
                                     longitude: destination[key].coordinates.longitude,
-                                    latitude: destination[key].coordinates.latitude * 0.99992,
+                                    latitude: destination[key].coordinates.latitude,
                                     latitudeDelta: 0.01,
                                     longitudeDelta: 0.001,
                                 },
                                 350
                             )
-                            
+                  
                         }
                     }
                 }
@@ -223,7 +146,11 @@ export default function TripView({ route, navigation }) {
                     zoomTapEnabled={false}
                     zoomEnabled={false}
                     mapType={'mutedStandard'}
-                    // userInterfaceStyle={'dark'}                            
+                    userInterfaceStyle={'dark'}    
+                    // mapPadding={{
+                    //     bottom: Dimensions.get('window').height / 2,
+                    //     top: 100
+                    // }}                        
                     initialRegion={{
                         latitude: location.coordinates.lat,
                         longitude: location.coordinates.lng,
@@ -252,7 +179,7 @@ export default function TripView({ route, navigation }) {
 
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>                
                     <SearchBarInput location={location} handleSearch={handleSearch}/>
-                    <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => setCamera(!camera)}><Text>Button</Text></TouchableOpacity>
+                    <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => navigation.navigate('User')}><Text>Button</Text></TouchableOpacity>
                     <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => modalizeRef.current?.close('alwaysOpen')}><Text>Close</Text></TouchableOpacity>
 
                     <TripViewSettingsButton navigation={navigation} location={location}/>
@@ -275,15 +202,7 @@ export default function TripView({ route, navigation }) {
                                         flex: 1,
                                         position: 'absolute',
                                         bottom: 0                                    
-                                    },
-                                    {
-                                        transform: [
-                                           
-                                            {
-                                                translateY: panState.current
-                                            }
-                                        ]
-                                    }
+                                    },                                    
                                     ]
                                 }
                                 horizontal

@@ -1,40 +1,41 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button } from 'react-native';
+// import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
 
 export default function MapCard({ location, navigation }) {
-
+    const mapRef = React.useRef();
     return (
         <>
         <Text style={styles.text}>
         {location.cityName}
-        </Text>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Trip', {location: location})}>
-        <MapView 
-        style={styles.map}
-        scrollEnabled={false}
-        // userInterfaceSt yle={"dark"}
-        camera={{
-            center: {
-                latitude: location.coordinates.lat,
-                longitude: location.coordinates.lng,
-            },
-            pitch: 0,
-            heading: 0,
-            altitude: 100000,
-            zoom: 12
-        }}
-        // mapType={'mutedStandard'}
-        zoomTapEnabled={false}
-        zoomEnabled={false}
-        initialRegion={{
-            latitude: location.coordinates.lat,
-            longitude: location.coordinates.lng,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-        }}
-    />  
-        </TouchableWithoutFeedback>
+        </Text>     
+            <MapView 
+                ref={mapRef}
+                style={styles.map}
+                scrollEnabled={false}
+                userInterfaceStyle={"dark"}
+                onPress={() =>  navigation.navigate('Trip', {location: location})}
+                camera={{
+                    center: {
+                        latitude: location.coordinates.lat,
+                        longitude: location.coordinates.lng,
+                    },
+                    pitch: 0,
+                    heading: 0,
+                    altitude: 100000,
+                    zoom: 12
+                }}
+                // mapType={'mutedStandard'}
+                zoomTapEnabled={false}
+                zoomEnabled={false}
+                initialRegion={{
+                    latitude: location.coordinates.lat,
+                    longitude: location.coordinates.lng,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}
+            />  
         </>
     )
 }
