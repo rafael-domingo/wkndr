@@ -102,17 +102,15 @@ export default function TripCard({ location, handleDeleteLocation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
+    container: {                
         borderRadius: 20,
         overflow: 'hidden', // needed to show rounded corners for image
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'rgba(24,28,47,1)',
+        height: 600,
+        width: '100%',        
+        backgroundColor: 'rgba(24,28,47,1)',           
     },
     header: {
-        height: '33%'                    
+        height: '50%'                    
     },
     subHeader: {
         flex: 1,

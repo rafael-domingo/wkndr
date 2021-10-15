@@ -1,11 +1,46 @@
 import React from 'react';
-import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { Animated, View, StyleSheet, Pressable, Dimensions, Easing } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 
-export default function TripViewSettingsButton({ navigation, location }) {
+export default function TripViewSettingsButton({ navigation, location, show }) {
+    const translation = React.useRef(new Animated.Value(0)).current
 
+    React.useEffect(() => {
+        if (!show) {
+            Animated.timing(
+                translation,
+                {
+                    toValue: 0,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()            
+        } else {
+            Animated.timing(
+                translation,
+                {
+                    toValue: 100,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()
+        }
+    })
     return (
-        <View style={styles.container}>
+        <Animated.View style={[
+            styles.container,
+            {
+                transform: [{translateX: translation}],
+                // opacity: translation.interpolate({
+                //     inputRange: [0, 100],
+                //     outputRange: [0, 1]
+                // })
+            }
+            ]}>
             <Pressable
                 style={({ pressed }) => pressed ? styles.buttonPressed : styles.button }
                 onPress={() => {
@@ -22,7 +57,7 @@ export default function TripViewSettingsButton({ navigation, location }) {
             >
                 <Ionicons name="ios-list-sharp" size={30} color="white" />
             </Pressable>
-        </View>
+        </Animated.View>
     )
 }
 
@@ -31,7 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
         zIndex: 5,   
         position: 'relative',
-        bottom: 0,
+        bottom: 0,        
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         width: Dimensions.get('window').width - 40,                

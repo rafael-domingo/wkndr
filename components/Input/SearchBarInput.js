@@ -4,24 +4,38 @@ import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import { Yelp } from '../../util/Yelp';
 import Autocomplete from '../Misc/Autocomplete';
 
-export default function SearchBarInput({ location, handleSearch }) {
+export default function SearchBarInput({ location, handleSearch, show }) {
     const [value, setValue] = React.useState('');
     const [autocomplete, setAutocomplete] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const translation = React.useRef(new Animated.Value(0)).current
 
     React.useEffect(() => {
-        Animated.timing(
-            translation,
-            {
-                toValue: 100,
-                duration: 500,
-                delay: 500,
-                easing: Easing.inOut(Easing.exp),
-                useNativeDriver: true
-            }
-        ).start()
-    }, [translation])
+        if (!show)  {
+            Animated.timing(
+                translation,
+                {
+                    toValue: 100,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()
+        } else {
+            Animated.timing(
+                translation,
+                {
+                    toValue: -100,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()
+        }
+      
+    }, [show])
 
     const updateSearch = (search) => {
         handleSearch([])

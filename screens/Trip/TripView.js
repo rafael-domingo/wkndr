@@ -6,27 +6,26 @@ import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsBut
 import SearchBarInput from '../../components/Input/SearchBarInput';
 import { addDestination, deleteDestination } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
-import TripCarousel from './TripCarousel';
 import TripCard from '../../components/Cards/TripCard';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 import { Modalize } from 'react-native-modalize';
 
 export default function TripView({ route, navigation }) {
+
+    // state and value management
     const {location} = route.params
     const [searchResults, setSearchResults] = React.useState([])
     const [camera, setCamera] = React.useState(false)
-    let mapIndex = 0
-    let mapAnimation = new Animated.Value(0)
     const mapRef = React.useRef(null)
     const modalizeRef = React.useRef([])
+    const dispatch = useDispatch()
+    let mapIndex = 0
+    let mapAnimation = new Animated.Value(0)
     const findTrip = (trip) => {
         return trip.tripId === location.tripId
     }
     const locationState = useSelector(state => state.user.tripList.find(findTrip))
 
-    const dispatch = useDispatch()
-    console.log('logg')
-
+    // state methods
     const handleSearch = (searchResults) => {
         setSearchResults(searchResults)
     }
@@ -43,59 +42,42 @@ export default function TripView({ route, navigation }) {
             tripId: location.tripId,
             wkndrId: wkndrId
         }))
+        modalizeRef.current = []; // reset modal refs, will repopulate on render
     }
 
-    React.useEffect(() => {
-        if (camera) {
-            // mapRef.current.fitToCoordinates([{
-            //         longitude: destination[key].coordinates.longitude,
-            //         latitude: destination[key].coordinates.latitude
-            //     }], { edgePadding: {
-            //         bottom: 700
-            //     }}, { animated: true})   
-            mapRef.current.animateCamera({
-                pitch: 60,
-                heading: 0,
-                altitude: 1000
-            }, {duration: 1000})
-        }
-        else {
-            mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
-                for (var key in destination) {
-                    
-                    return destination[key].id
-                }
-            }))
-        }
-       
-    }, [camera])
+    // camera methods
+    const fitMarkers = () => {
+        mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
+            for (var key in destination) {
+                
+                return destination[key].id
+            }
+        }))
+    }
 
+    const cameraAnimation = (center) => {
+        mapRef.current.animateCamera({                
+            center: {
+                latitude: center.latitude * 0.99985,
+                longitude: center.longitude
+            },
+            pitch: 60,
+            heading: 0,
+            altitude: 800
+        }, {duration: 1000})        
+    }
+    
+    // useEffects
     React.useEffect(() => {
-        // fit mapview to markers
-        if (mapRef.current) {       
-            
-            mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
-                for (var key in destination) {
-                    return destination[key].id
-                }
-            }))
-          
-        }
-        
+        if (mapRef.current) {                   
+           fitMarkers()   
+        }        
     }, [locationState.destinations])
 
     React.useEffect(() => {
-   
         // listen for which card is being shown in carousel
         mapAnimation.addListener(({ value }) => {
-            console.log(Dimensions.get('window').width * 0.8)
-            console.log(value)
-            console.log(value / ((Dimensions.get('window').width * 0.8)) + 0.3)
-            console.log(Math.floor(value / ((Dimensions.get('window').width * 0.8)) + 0.3))
-
             let index = Math.floor(Math.floor(value / ((Dimensions.get('window').width * 0.8)) + 0.3))
-            console.log(`index: ${index}`)
-            console.log(locationState.destinations.length)
             if (index >= locationState.destinations.length) {
                 index = locationState.destinations.length - 1                
             }
@@ -111,9 +93,7 @@ export default function TripView({ route, navigation }) {
                     if (mapIndex !== index) {
                         mapIndex = index
                         const destination = locationState.destinations[mapIndex]
-                        for (var key in destination) {      
-                        
-                          
+                        for (var key in destination) {                                                          
                             mapRef.current.animateToRegion(
                                 {
                                     longitude: destination[key].coordinates.longitude,
@@ -122,23 +102,16 @@ export default function TripView({ route, navigation }) {
                                     longitudeDelta: 0.001,
                                 },
                                 350
-                            )
-                  
+                            )                                  
                         }
                     }
-                }
-                
-            }, 10);
-            // console.log(Math.floor(value/ (Dimensions.get('window').width * 0.8) + 0.3))
-            
+                }                
+            }, 10);            
         })
     })
 
     return (
-            <View 
-                style={styles.container}
-               
-            >            
+            <View style={styles.container}>            
                 <MapView
                     ref={mapRef}
                     style={styles.map}
@@ -147,10 +120,10 @@ export default function TripView({ route, navigation }) {
                     zoomEnabled={false}
                     mapType={'mutedStandard'}
                     userInterfaceStyle={'dark'}    
-                    // mapPadding={{
-                    //     bottom: Dimensions.get('window').height / 2,
-                    //     top: 100
-                    // }}                        
+                    mapPadding={{
+                        bottom: 300,
+                        top: 50                        
+                    }}
                     initialRegion={{
                         latitude: location.coordinates.lat,
                         longitude: location.coordinates.lng,
@@ -167,131 +140,118 @@ export default function TripView({ route, navigation }) {
                                         key={index}
                                         coordinate={destination[key].coordinates}
                                         title={destination[key].name}
-
-
                                     />
                                 )
-                            }
-                            
+                            }                            
                         })
                     }
                 </MapView>
 
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>                
-                    <SearchBarInput location={location} handleSearch={handleSearch}/>
+                    <SearchBarInput location={location} handleSearch={handleSearch} show={camera}/>
                     <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => navigation.navigate('User')}><Text>Button</Text></TouchableOpacity>
-                    <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => modalizeRef.current?.close('alwaysOpen')}><Text>Close</Text></TouchableOpacity>
-
-                    <TripViewSettingsButton navigation={navigation} location={location}/>
+                    <TripViewSettingsButton navigation={navigation} location={location} show={camera}/>
                     {
                         searchResults.length > 0 && (
                             <SearchCarousel searchResults={searchResults} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
                         )
-                    }
-                   
-
+                    }                   
                 </SafeAreaView>
-                {/* <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}> */}
                 {
-                        searchResults.length === 0 && (
-   
-                            <Animated.ScrollView
-                                style={
-                                    [
-                                    { 
-                                        flex: 1,
-                                        position: 'absolute',
-                                        bottom: 0                                    
-                                    },                                    
-                                    ]
-                                }
-                                horizontal
-                                // pagingEnabled
-                                decelerationRate="fast" // fix for paging enabled bug
-                                scrollEventThrottle={1}
-                                snapToInterval={Dimensions.get('window').width * 0.8 + 20}
-                                snapToAlignment="center"
-                                showsHorizontalScrollIndicator={false}    
-                                contentInset={{
-                                    top: 0,
-                                    left: Dimensions.get('window').width * 0.1 + 10,
-                                    bottom: 0,
-                                    right: Dimensions.get('window').width * 0.1 + 10
-                                  }} 
-                                  onScrollBeginDrag={() => {
-                                      setCamera(false)
-                                      console.log(modalizeRef.current?.length)
-                                      modalizeRef.current?.forEach(element => {
-                                          element.close('alwaysOpen')
-                                      });
-                                    //   modalizeRef.current[mapIndex]?.close('alwaysOpen')
-                                    //   modalizeRef.current[mapIndex+1]?.close('alwaysOpen')
-                                    //   modalizeRef.current[mapIndex-1]?.close('alwaysOpen')
-                                    }}                                
-                                onScroll={Animated.event(
-                                    [
-                                        {
-                                            nativeEvent: {
-                                                contentOffset: {
-                                                    x: mapAnimation
-                                                }
+                    searchResults.length === 0 && (
+                        <Animated.ScrollView
+                            style={
+                                [
+                                { 
+                                    flex: 1,
+                                    position: 'absolute',
+                                    bottom: 0                                    
+                                },                                    
+                                ]
+                            }
+                            horizontal
+                            // pagingEnabled
+                            decelerationRate="fast" // fix for paging enabled bug
+                            scrollEventThrottle={1}
+                            snapToInterval={Dimensions.get('window').width * 0.8 + 20}
+                            snapToAlignment="center"
+                            showsHorizontalScrollIndicator={false}    
+                            contentInset={{
+                                top: 0,
+                                left: Dimensions.get('window').width * 0.1 + 10,
+                                bottom: 0,
+                                right: Dimensions.get('window').width * 0.1 + 10
+                                }} 
+                                onScrollBeginDrag={() => {                                                                     
+                                    console.log(modalizeRef.current?.length)
+                                    modalizeRef.current?.forEach(element => {
+                                        element?.close('alwaysOpen')
+                                    });                     
+                                    fitMarkers()                                                                                               
+                                }}                                
+                            onScroll={Animated.event(
+                                [
+                                    {
+                                        nativeEvent: {
+                                            contentOffset: {
+                                                x: mapAnimation
                                             }
                                         }
-                                    ],
-                                    { useNativeDriver: true }
-                                )}
-                            >
-                                {
-                                    locationState.destinations.map((item, index) => {
+                                    }
+                                ],
+                                { useNativeDriver: true }
+                            )}
+                        >
+                            {
+                                locationState.destinations.map((item, index) => {
+                                    for (var key in item) {
                                         return (
                                             <View 
-                                                key={item.wkndrId} 
+                                                key={item[key].wkndrId} 
                                                 style={{
                                                     width: Dimensions.get('window').width * 0.8,
                                                     height: Dimensions.get('window').height,
-                                                    margin: 10,
-                                                    // bottom: -Dimensions.get('window').height / 2,
-                                                    // transform: [{translateY: -Dimensions.get('window').height / 2}]
+                                                    margin: 10,                                                               
                                                 }}
                                             >
                                                 <Modalize
-                                                    key={item.wkndrId}
+                                                    key={item[key].wkndrId}
                                                     ref={el => modalizeRef.current[index] = el}
                                                     style={{flex: 1}}
-                                                    alwaysOpen={150}
-                                                    modalHeight={600}
-                                               
-                                                    snapPoint={450}
-                                                    handlePosition={'inside'}
-                                                    overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}
-                                                    onPositionChange={(position) => {
-                                                        console.log(position)
-
-                                                        if (position === 'top') {
+                                                    alwaysOpen={300}
+                                                    modalHeight={600}                                            
+                                                    snapPoint={450}        
+                                                    scrollViewProps={{
+                                                        scrollEnabled: false
+                                                    }}                                            
+                                                    handlePosition={'inside'}                                                    
+                                                    overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}  
+                                                    modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0}}                                                                                                                                                    
+                                                    onPositionChange={(position) => {                                                  
+                                                        if (position === 'top') {                                                                                                                    
+                                                            cameraAnimation(item[key].coordinates)
                                                             setCamera(true)
-                                                        }
-                                                        else {
+                                                        } else if (camera) {
+                                                            fitMarkers()
                                                             setCamera(false)
-                                                        }
-                                                        
-                                                    }}
-                                                    
+                                                        } 
+                                               
+                                                      
+                                                                                          
+                                                    }}          
+                                                                        
                                                 >
-
                                                 <TripCard key={item.wkndrId} location={item} handleDeleteLocation={handleDeleteLocation}/>
                                                 </Modalize>
-                                            </View>
-                                            
+                                            </View>                                        
                                         )
-                                    })
-                                }
-                            </Animated.ScrollView>
-
-                            // <TripCarousel tripList={locationState.destinations} handleDeleteLocation={handleDeleteLocation}/>
-                        )
-                    }
-                {/* </PanGestureHandler> */}
-                    
+                                    }
+                                    
+                                })
+                            }
+                        </Animated.ScrollView>                        
+                    )
+                }                    
             </View>
     )
 }
