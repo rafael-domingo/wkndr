@@ -13,6 +13,7 @@ import { Provider, useSelector } from 'react-redux'
 import store from './redux/store';
 import { updateFirestore } from './util/Firestore';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Account from './screens/Account/Account';
 
 export default function App() {
 
@@ -28,9 +29,10 @@ export default function App() {
       
       <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
         <Stack.Group>
-          <Stack.Screen name="Home" component={Welcome}/>
+          <Stack.Screen name="Home" component={Welcome} />
           <Stack.Screen name='User' component={UserHome} options={{animation: 'fade'}}/>
           <Stack.Screen name="Trip" component={TripView} options={{presentation: 'fade'}}/>
+          <Stack.Screen name="Account" component={Account} options={{presentation: 'fade'}}/>
           <Stack.Screen name="Build" component={BuildTrip} options={{presentation: 'fullScreenModal'}}/>
           <Stack.Screen name="TripList" component={TripList} options={{presentation: 'transparentModal'}}/>
           <Stack.Screen name="TripConfigurator" component={TripConfigurator} options={{presentation: 'transparentModal'}}/>

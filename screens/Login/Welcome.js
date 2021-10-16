@@ -23,6 +23,7 @@ export default function Welcome({ navigation }) {
         setLogin(false);
     }
 
+    console.log(`welcome state: ${login}`)
     React.useEffect(() => {
         // Check if user is already authenticated with auth listener
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listener

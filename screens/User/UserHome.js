@@ -25,12 +25,7 @@ export default function UserHome({ navigation }) {
                     name="ios-settings-outline" 
                     size={24} 
                     color="white" 
-                    onPress={() => {
-                        console.log('pressed')
-                        dispatch(resetUserState())
-                        signOut()
-                        navigation.navigate('Home')
-                    }}
+                    onPress={() => navigation.navigate('Account')}
                 />
             </View>                   
             <View style={{flex: 1}}>
