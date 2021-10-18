@@ -5,10 +5,42 @@ import Price from '../Rating/Price';
 import Star from '../Rating/Star';
 import * as Linking from 'expo-linking';
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { Modalize } from 'react-native-modalize';
+import { Yelp } from '../../util/Yelp';
 
-export default function TripCard({ location, handleDeleteLocation }) {
+
+export default function TripCard({ location, handleDeleteLocation, modalizeRef, index, cameraAnimation, setCamera, fitMarkers, camera }) {
     for (var key in location) {
+        
         return (
+            <Modalize
+            key={location[key].wkndrId}
+            ref={el => modalizeRef.current[index] = el}
+            style={{flex: 1}}
+            alwaysOpen={300}
+            modalHeight={600}                                            
+            snapPoint={450}        
+            scrollViewProps={{
+                scrollEnabled: false
+            }}                                            
+            handlePosition={'inside'}                                                    
+            overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}  
+            modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0}}                                                                                                                                                    
+            onPositionChange={(position) => {                                                  
+                if (position === 'top') {                                                                                                                    
+                    cameraAnimation(location[key].coordinates)
+                    setCamera(true)
+                    Yelp.detail(location[key].id)
+                } else if (camera) {
+                    fitMarkers()
+                    setCamera(false)
+                } 
+       
+              
+                                                  
+            }}          
+                                
+        >
             <View style={styles.container}>
                 <View style={styles.header}>
                     <ImageBackground
@@ -96,6 +128,8 @@ export default function TripCard({ location, handleDeleteLocation }) {
                 </View>     
             
             </View>
+            </Modalize>
+
         )
     }
     

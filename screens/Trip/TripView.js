@@ -8,6 +8,7 @@ import { addDestination, deleteDestination } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
 import TripCard from '../../components/Cards/TripCard';
 import { Modalize } from 'react-native-modalize';
+import { Yelp } from '../../util/Yelp';
 
 export default function TripView({ route, navigation }) {
 
@@ -204,7 +205,7 @@ export default function TripView({ route, navigation }) {
                         >
                             {
                                 locationState.destinations.map((item, index) => {
-                                    for (var key in item) {
+                                    for (var key in item) {                                        
                                         return (
                                             <View 
                                                 key={item[key].wkndrId} 
@@ -213,36 +214,18 @@ export default function TripView({ route, navigation }) {
                                                     height: Dimensions.get('window').height,
                                                     margin: 10,                                                               
                                                 }}
-                                            >
-                                                <Modalize
-                                                    key={item[key].wkndrId}
-                                                    ref={el => modalizeRef.current[index] = el}
-                                                    style={{flex: 1}}
-                                                    alwaysOpen={300}
-                                                    modalHeight={600}                                            
-                                                    snapPoint={450}        
-                                                    scrollViewProps={{
-                                                        scrollEnabled: false
-                                                    }}                                            
-                                                    handlePosition={'inside'}                                                    
-                                                    overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}  
-                                                    modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0}}                                                                                                                                                    
-                                                    onPositionChange={(position) => {                                                  
-                                                        if (position === 'top') {                                                                                                                    
-                                                            cameraAnimation(item[key].coordinates)
-                                                            setCamera(true)
-                                                        } else if (camera) {
-                                                            fitMarkers()
-                                                            setCamera(false)
-                                                        } 
-                                               
-                                                      
-                                                                                          
-                                                    }}          
-                                                                        
-                                                >
-                                                <TripCard key={item.wkndrId} location={item} handleDeleteLocation={handleDeleteLocation}/>
-                                                </Modalize>
+                                            >                                              
+                                                <TripCard 
+                                                    key={item.wkndrId} 
+                                                    location={item} 
+                                                    modalizeRef={modalizeRef} 
+                                                    index={index} 
+                                                    handleDeleteLocation={handleDeleteLocation}
+                                                    cameraAnimation={cameraAnimation}
+                                                    setCamera={setCamera}
+                                                    fitMarkers={fitMarkers}
+                                                    camera={camera}
+                                                />                                              
                                             </View>                                        
                                         )
                                     }

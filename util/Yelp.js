@@ -79,5 +79,19 @@ export const Yelp = {
         .then(data => data)
         .catch(error => console.log(error))
 
+    },
+
+    detail(id) {
+        return fetch('https://us-central1-wkndr-326514.cloudfunctions.net/yelpDetail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id
+            })
+        }).then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error))
     }
 }
