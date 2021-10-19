@@ -91,7 +91,7 @@ export const Yelp = {
                 id: id
             })
         }).then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => data)
         .catch(error => console.log(error))
     }
 }
