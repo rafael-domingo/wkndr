@@ -8,6 +8,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
 import Hours from '../Misc/Hours';
+import Reviews from '../Misc/Reviews';
 
 
 export default function TripCard({ location, handleDeleteLocation, modalizeRef, index, cameraAnimation, setCamera, fitMarkers, camera }) {
@@ -22,7 +23,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
             ref={el => modalizeRef.current[index] = el}
             style={{flex: 1}}
             alwaysOpen={300}
-            modalHeight={600}                                            
+            modalHeight={700}                                            
             snapPoint={450}        
             scrollViewProps={{
                 scrollEnabled: false
@@ -91,7 +92,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                     </ImageBackground>
                 </View>
                 <View style={styles.subHeader}>
-                    <View style={styles.subCategory}>
+                    <View style={[styles.subCategory, {flex: 0.35}]}>
                         {/* {
                             location[key].categories !== undefined && (
                                 location[key].categories.map((category, index) => {
@@ -117,10 +118,27 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                                 }
                                 </View>                                                         
                             )
-                        }                               
+                        }      
+                                                 
                     </View>
-                    {/* <View style={[styles.subCategory, {alignItems: 'flex-end'}]}>
-                        <Text style={[styles.text, {fontSize: 18, marginBottom: 10}]}>49 reviews</Text>
+                    <View style={[styles.subCategory, {alignItems: 'flex-end', flex: 0.65}]}>
+                    {
+                            !loading && (
+                                <View style={styles.subCategory}>
+                                {
+                                    detailState.reviews !== undefined && (
+                                        <Reviews reviews={detailState.reviews} />
+                                    )
+                                }
+                                {
+                                    detailState.reviews === undefined && (
+                                        <Text style={[styles.text]}>No reviews available</Text>
+                                    )
+                                }
+                                </View>                                                         
+                            )
+                        }      
+                        {/* <Text style={[styles.text, {fontSize: 18, marginBottom: 10}]}>49 reviews</Text>
                         {
                             location[key].display_phone !== undefined && (
                                 <TouchableOpacity
@@ -132,19 +150,19 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                                 </TouchableOpacity>
                                 
                             )
-                        }                        
+                        }                         */}
                     </View>
-                    <View style={{position: 'absolute', bottom: 20, alignItems: 'center', width: '100%', justifyContent: 'center'}}>
+                    <View style={{position: 'absolute', bottom: 10, left: 10, alignItems: 'center', justifyContent: 'center', height: 50, width: 50}}>
                         <TouchableOpacity 
                             style={styles.deleteButton}
                             onPress={() => {
                                 handleDeleteLocation(location[key].wkndrId)
                             }}
                         >
-                            <FontAwesome5 name="trash" size={18} color="rgba(24,28,47,1)" style={{flex: 0.25}}/>
-                            <Text style={[styles.text, {color: 'rgba(24,28, 47, 1)', flex: 0.75, textAlign: 'center'}]}>Delete</Text>
+                            <FontAwesome5 name="trash" size={15} color="rgba(24,28,47,1)" style={{flex: 0.25}}/>
+                            {/* <Text style={[styles.text, {color: 'rgba(24,28, 47, 1)', flex: 0.75, textAlign: 'center'}]}>Delete</Text> */}
                         </TouchableOpacity>
-                    </View>  */}
+                    </View> 
                 </View>     
             
             </View>
@@ -159,12 +177,12 @@ const styles = StyleSheet.create({
     container: {                
         borderRadius: 20,
         overflow: 'hidden', // needed to show rounded corners for image
-        height: 600,
+        height: 700,
         width: '100%',        
         backgroundColor: 'rgba(24,28,47,1)',           
     },
     header: {
-        height: '50%'                    
+        height: 300                    
     },
     subHeader: {
         flex: 1,
@@ -174,9 +192,10 @@ const styles = StyleSheet.create({
         margin: 10,     
     },  
     subCategory: {
-        flex: 1,
+        // flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start',        
+        justifyContent: 'flex-start',     
+        // paddingBottom: 25,        
         
     },  
     image: {
@@ -207,9 +226,9 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 10,
-        width: '50%',
+        borderRadius: 25,
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',

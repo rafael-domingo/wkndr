@@ -102,7 +102,10 @@ export default function SearchBarInput({ location, handleSearch, show }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: Dimensions.get('window').width - 50,
+        // width: Dimensions.get('window').width - 50,
+        width: '100%',
+        paddingRight: 75,
+        paddingLeft: 25,
         borderRadius: 10,
         position: 'relative',
         top: -100,

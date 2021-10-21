@@ -9,6 +9,7 @@ import SearchCarousel from './SearchCarousel';
 import TripCard from '../../components/Cards/TripCard';
 import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
+import { Entypo } from '@expo/vector-icons';
 
 export default function TripView({ route, navigation }) {
 
@@ -18,6 +19,7 @@ export default function TripView({ route, navigation }) {
     const [camera, setCamera] = React.useState(false)
     const mapRef = React.useRef(null)
     const modalizeRef = React.useRef([])
+    const markerRef = React.useRef([])
     const dispatch = useDispatch()
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
@@ -44,6 +46,7 @@ export default function TripView({ route, navigation }) {
             wkndrId: wkndrId
         }))
         modalizeRef.current = []; // reset modal refs, will repopulate on render
+        markerRef.current = [];
     }
 
     // camera methods
@@ -65,7 +68,8 @@ export default function TripView({ route, navigation }) {
             pitch: 60,
             heading: 0,
             altitude: 800
-        }, {duration: 1000})        
+        }, {duration: 1000})                
+        markerRef.current[mapIndex].showCallout()  
     }
     
     // useEffects
@@ -85,16 +89,18 @@ export default function TripView({ route, navigation }) {
             if (index <= 0) {
                 index = 0
             } 
-            clearTimeout(regionTimeout)
-
+            clearTimeout(regionTimeout)         
+            
             const regionTimeout = setTimeout(() => {
                 console.log(`mapindex: ${mapIndex}`)
                 console.log(`index: ${index}`)
                 if (mapRef.current) {
                     if (mapIndex !== index) {
-                        mapIndex = index
+                        mapIndex = index                        
+                        markerRef.current[mapIndex].showCallout()   
                         const destination = locationState.destinations[mapIndex]
-                        for (var key in destination) {                                                          
+                        for (var key in destination) {         
+                                                                 
                             mapRef.current.animateToRegion(
                                 {
                                     longitude: destination[key].coordinates.longitude,
@@ -106,11 +112,11 @@ export default function TripView({ route, navigation }) {
                             )                                  
                         }
                     }
+                    
                 }                
             }, 10);            
         })
     })
-
     return (
             <View style={styles.container}>            
                 <MapView
@@ -120,7 +126,7 @@ export default function TripView({ route, navigation }) {
                     zoomTapEnabled={false}
                     zoomEnabled={false}
                     mapType={'mutedStandard'}
-                    userInterfaceStyle={'dark'}    
+                    // userInterfaceStyle={'dark'}    
                     mapPadding={{
                         bottom: 300,
                         top: 50                        
@@ -137,10 +143,14 @@ export default function TripView({ route, navigation }) {
                             for (var key in destination ) {
                                 return (
                                     <Marker
+                                        ref={el => markerRef.current[index] = el}
                                         identifier={destination[key].id}
                                         key={index}
                                         coordinate={destination[key].coordinates}
                                         title={destination[key].name}
+                                        onPress={() => {
+                                            console.log('marker pressed')
+                                        }}
                                     />
                                 )
                             }                            
@@ -149,8 +159,19 @@ export default function TripView({ route, navigation }) {
                 </MapView>
 
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>                
-                    <SearchBarInput location={location} handleSearch={handleSearch} show={camera}/>
-                    <TouchableOpacity style={{backgroundColor: 'white'}} onPress={() => navigation.navigate('User')}><Text>Button</Text></TouchableOpacity>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width}}>
+                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%'}}>
+                        <TouchableOpacity 
+                            style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25}}
+                            onPress={() => navigation.navigate('User')}
+                        >
+                            <Entypo name="arrow-left" size={30} color="white"/>                            
+                        </TouchableOpacity>
+                    </View> 
+                    <SearchBarInput location={location} handleSearch={handleSearch} show={camera}/>   
+                  
+                    </View>
+                             
                     <TripViewSettingsButton navigation={navigation} location={location} show={camera}/>
                     {
                         searchResults.length > 0 && (
@@ -224,7 +245,7 @@ export default function TripView({ route, navigation }) {
                                                     cameraAnimation={cameraAnimation}
                                                     setCamera={setCamera}
                                                     fitMarkers={fitMarkers}
-                                                    camera={camera}
+                                                    camera={camera} 
                                                 />                                              
                                             </View>                                        
                                         )

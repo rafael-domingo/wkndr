@@ -47,7 +47,7 @@ export default function Hours({ hours }) {
             businessHours.push(
                 <View style={styles.subContainer}>
                     <Text style={[styles.text, {width: '100%', fontWeight: 'bold'}]}>{key}</Text>   
-                    <View><Text style={styles.text}>Closed</Text></View>
+                    <View><Text style={[styles.text, {fontSize: 12}]}>Closed</Text></View>
                 </View>
             )
         } else {
@@ -81,7 +81,7 @@ export default function Hours({ hours }) {
                     endHour = endHour - 12
                 }
                 return (
-                    <Text style={styles.text}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
+                    <Text style={[styles.text, {fontSize: 12}]}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
                 )
             })
             businessHours.push(
@@ -95,7 +95,13 @@ export default function Hours({ hours }) {
     }
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <Text style={[styles.text, {fontWeight: 'bold'}]}>Hours</Text>
+            <ScrollView 
+                style={{marginTop: 10}}
+                contentInset={{
+                    bottom: 50
+                }}
+            >
                 {businessHours}             
             </ScrollView>
         </View>
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'center',                      
+        alignItems: 'flex-start',                      
     },
     subContainer: {        
         flexDirection: 'row',
@@ -116,7 +122,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexWrap: 'wrap',
         borderColor: 'white',
-        margin: 2,        
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginBottom: 10
+        // margin: 2,        
         // flex: 1,
         // borderWidth: 2
     },  
