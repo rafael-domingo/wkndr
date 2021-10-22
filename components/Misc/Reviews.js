@@ -7,7 +7,7 @@ import { EvilIcons } from '@expo/vector-icons';
 
 export default function Reviews({ reviews }) {
     var reviewsJSX = [];
-    reviews.forEach(element => {
+    reviews.forEach((element, index) => {
         var image;
         if (element.user.image_url === null) {
             image = <FontAwesome name="user-circle" size={45} color="white" />
@@ -15,7 +15,7 @@ export default function Reviews({ reviews }) {
             image = <Image style={styles.image} source={{uri: element.user.image_url}} resizeMode="cover"/>
         }
         reviewsJSX.push(
-            <View style={{marginBottom: 20, flex: 1}}>
+            <View key={index} style={{marginBottom: 20, flex: 1}}>
                 <View style={{flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', flex: 1}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View>

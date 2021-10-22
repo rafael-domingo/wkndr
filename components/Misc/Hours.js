@@ -51,7 +51,7 @@ export default function Hours({ hours }) {
                 </View>
             )
         } else {
-            var hours = days[key].map(item => {
+            var hours = days[key].map((item, index) => {
                 var startHour = parseInt(item.start.substring(0,2))
                 var startMin = item.start.substring(2,4)
                 var endHour = parseInt(item.end.substring(0,2))
@@ -81,7 +81,7 @@ export default function Hours({ hours }) {
                     endHour = endHour - 12
                 }
                 return (
-                    <Text style={[styles.text, {fontSize: 12}]}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
+                    <Text key={index} style={[styles.text, {fontSize: 12}]}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
                 )
             })
             businessHours.push(

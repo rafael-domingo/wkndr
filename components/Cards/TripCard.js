@@ -30,7 +30,12 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
             }}                                            
             handlePosition={'inside'}                                                    
             overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}  
-            modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0}}                                                                                                                                                    
+            modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0,  shadowOffset: {
+                width: 2,
+                height: 2,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 3 }}                                                                                                                                                    
             onPositionChange={(position) => {                                                  
                 if (position === 'top') {                                                                                                                    
                     cameraAnimation(location[key].coordinates)
@@ -53,7 +58,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                                 
         >
             <View style={styles.container}>
-                <View style={styles.header}>
+                <View style={[styles.header]}>
                     <ImageBackground
                         style={styles.image}
                         source={{uri: location[key].image_url}}
@@ -64,7 +69,31 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                             colors={['rgba(0,0,0,0)','rgba(0,0,0,0.25)','rgba(0,0,0,0.5)','rgba(0,0,0,0.9)']}  
                             style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
                         >
+                            <View style={{backgroundColor: 'rgba(0,0,0,0.5)', width: '100%'}}>
+
+                            {
+                                location[key].categories !== undefined && (
+                                    location[key].categories.map((category, index) => {
+                                        return <Text key={index} style={[styles.text]}>{category.title}</Text>
+                                })
+                                )
+                            }   
+                                     <Text style={[styles.text, {fontSize: 18, marginBottom: 10}]}>49 reviews</Text>
+                        {
+                            location[key].display_phone !== undefined && (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        Linking.openURL(`tel:${location[key].phone}`)
+                                    }}
+                                >
+                                    <Text style={[styles.text, {fontSize: 18}]}>{location[key].display_phone}</Text>
+                                </TouchableOpacity>
+                                
+                            )
+                        }                        
+                        </View>
                             <View style={{flexDirection: 'row', alignItems: 'flex-end', flex: 1}}>
+                                
                                 <View style={{margin: 15, paddingBottom: 25, justifyContent: 'flex-end', flex: 1}}>
                                     <Text style={[styles.text, styles.headerText]}>{location[key].name}</Text>
                                     <Text style={[styles.text, styles.addressText]}>{location[key].location.display_address[0]}</Text>
@@ -93,13 +122,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                 </View>
                 <View style={styles.subHeader}>
                     <View style={[styles.subCategory, {flex: 0.35}]}>
-                        {/* {
-                            location[key].categories !== undefined && (
-                                location[key].categories.map((category, index) => {
-                                    return <Text key={index} style={[styles.text]}>{category.title}</Text>
-                                })
-                            )
-                        } */}
+                     
                         {
                             loading && <ActivityIndicator/>
                         }
@@ -138,19 +161,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                                 </View>                                                         
                             )
                         }      
-                        {/* <Text style={[styles.text, {fontSize: 18, marginBottom: 10}]}>49 reviews</Text>
-                        {
-                            location[key].display_phone !== undefined && (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        Linking.openURL(`tel:${location[key].phone}`)
-                                    }}
-                                >
-                                    <Text style={[styles.text, {fontSize: 18}]}>{location[key].display_phone}</Text>
-                                </TouchableOpacity>
-                                
-                            )
-                        }                         */}
+               
                     </View>
                     <View style={{position: 'absolute', bottom: 10, left: 10, alignItems: 'center', justifyContent: 'center', height: 50, width: 50}}>
                         <TouchableOpacity 
@@ -179,7 +190,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden', // needed to show rounded corners for image
         height: 700,
         width: '100%',        
-        backgroundColor: 'rgba(24,28,47,1)',           
+        backgroundColor: 'rgba(24,28,47,1)',  
+       
+     
     },
     header: {
         height: 300                    
@@ -202,7 +215,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
-        width: '100%',                
+        width: '100%',        
     },  
     text: {
         color: 'white',

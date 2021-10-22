@@ -50,7 +50,7 @@ export default function TripView({ route, navigation }) {
     }
 
     // camera methods
-    const fitMarkers = () => {
+    const fitMarkers = () => {   
         mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
             for (var key in destination) {
                 
@@ -68,14 +68,20 @@ export default function TripView({ route, navigation }) {
             pitch: 60,
             heading: 0,
             altitude: 800
-        }, {duration: 1000})                
-        markerRef.current[mapIndex].showCallout()  
+        }, {duration: 1000})              
+        setTimeout(() => {
+            markerRef.current[mapIndex].showCallout()      
+        }, 500);  
+        
     }
     
     // useEffects
     React.useEffect(() => {
-        if (mapRef.current) {                   
-           fitMarkers()   
+        if (mapRef.current) {   
+            setTimeout(() => {
+                fitMarkers()        
+            }, 500);                
+           
         }        
     }, [locationState.destinations])
 
@@ -114,7 +120,7 @@ export default function TripView({ route, navigation }) {
                     }
                     
                 }                
-            }, 10);            
+            }, 100);            
         })
     })
     return (
@@ -162,7 +168,12 @@ export default function TripView({ route, navigation }) {
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width}}>
                     <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%'}}>
                         <TouchableOpacity 
-                            style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25}}
+                            style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25,   shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.2,
+                            shadowRadius: 2}}
                             onPress={() => navigation.navigate('User')}
                         >
                             <Entypo name="arrow-left" size={30} color="white"/>                            
@@ -208,7 +219,7 @@ export default function TripView({ route, navigation }) {
                                     console.log(modalizeRef.current?.length)
                                     modalizeRef.current?.forEach(element => {
                                         element?.close('alwaysOpen')
-                                    });                     
+                                    });                                     
                                     fitMarkers()                                                                                               
                                 }}                                
                             onScroll={Animated.event(

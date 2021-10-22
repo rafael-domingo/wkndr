@@ -110,6 +110,13 @@ const styles = StyleSheet.create({
         position: 'relative',
         top: -100,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
+        
     }
 })
