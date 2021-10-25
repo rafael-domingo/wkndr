@@ -1,20 +1,19 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { ImageBackground, StyleSheet, View, Text, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Price from '../Rating/Price';
-import Star from '../Rating/Star';
-import * as Linking from 'expo-linking';
+import { ImageBackground, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
 import Hours from '../Misc/Hours';
 import Reviews from '../Misc/Reviews';
+import CardHeader from '../Misc/CardHeader';
+import CardSubHeader from '../Misc/CardSubHeader';
 
 
 export default function TripCard({ location, handleDeleteLocation, modalizeRef, index, cameraAnimation, setCamera, fitMarkers, camera }) {
     const [loading, setLoading] = React.useState(true)
     const [detailState, setDetailState] = React.useState();
-
+    const [open, setOpen] = React.useState(false);
     for (var key in location) {
         
         return (
@@ -40,6 +39,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                 if (position === 'top') {                                                                                                                    
                     cameraAnimation(location[key].coordinates)
                     setCamera(true)
+                    setOpen(true)
                     Yelp.detail(location[key].id)
                     .then(response => {
                         console.log(response)
@@ -50,6 +50,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                 } else if (camera) {
                     fitMarkers()
                     setCamera(false)
+                    setOpen(false)
                 } 
        
               
@@ -69,54 +70,8 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                             colors={['rgba(0,0,0,0)','rgba(0,0,0,0.25)','rgba(0,0,0,0.5)','rgba(0,0,0,0.9)']}  
                             style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
                         >
-                            <View style={{backgroundColor: 'rgba(0,0,0,0.5)', width: '100%'}}>
-
-                            {
-                                location[key].categories !== undefined && (
-                                    location[key].categories.map((category, index) => {
-                                        return <Text key={index} style={[styles.text]}>{category.title}</Text>
-                                })
-                                )
-                            }   
-                                     <Text style={[styles.text, {fontSize: 18, marginBottom: 10}]}>49 reviews</Text>
-                        {
-                            location[key].display_phone !== undefined && (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        Linking.openURL(`tel:${location[key].phone}`)
-                                    }}
-                                >
-                                    <Text style={[styles.text, {fontSize: 18}]}>{location[key].display_phone}</Text>
-                                </TouchableOpacity>
-                                
-                            )
-                        }                        
-                        </View>
-                            <View style={{flexDirection: 'row', alignItems: 'flex-end', flex: 1}}>
-                                
-                                <View style={{margin: 15, paddingBottom: 25, justifyContent: 'flex-end', flex: 1}}>
-                                    <Text style={[styles.text, styles.headerText]}>{location[key].name}</Text>
-                                    <Text style={[styles.text, styles.addressText]}>{location[key].location.display_address[0]}</Text>
-                                </View>
-                                <View style={{justifyContent: 'flex-end', margin: 15, flex: 0.5}}>
-                                    <Text style={[styles.text, styles.timeText]}>10 min</Text>
-                                    {
-                                        location[key].rating !== undefined && (
-                                            <Star rating={location[key].rating} size={16}/>
-                                        )
-                                    }
-                                    {
-                                        location[key].price !== undefined && (
-                                            <Price rating={location[key].price} size={24}/>
-                                        )
-                                    }
-                                    {
-                                        location[key].price === undefined && (
-                                            <Text style={[styles.text, styles.pricingText]}>No pricing information</Text>
-                                        )
-                                    }
-                                </View>
-                            </View>
+                            <CardSubHeader location={location[key]} show={open}/>
+                            <CardHeader location={location[key]}/>                       
                         </LinearGradient>
                     </ImageBackground>
                 </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, View, Image, Text, ImageBackground, Pressable, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,13 +7,16 @@ import Star from '../Rating/Star';
 import Price from '../Rating/Price';
 
 
-export default function SearchCard({ location, handleAddLocation, handleDeleteLocation }) {
+export default function SearchCard({ location, handleAddLocation, handleDeleteLocation, handleModalContent }) {
     const [selected, setSelected] = React.useState(false)
     const [locationState, setLocationState] = React.useState(location) 
     const [wkndrId, setWkndrId] = React.useState(uuidv4())
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            {
+        <TouchableOpacity 
+            style={{height: '50%', width: '50%', justifyContent: 'center', alignItems: 'center', padding: 5}}
+            onPress={() => handleModalContent(location)}
+        >
+            {/* {
                 !selected && (
                 <Pressable 
                     style={styles.addButton}
@@ -42,7 +45,7 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                     </Pressable>
                     )
             }
-            
+             */}
             <View style={styles.container}>
                 
                 <View style={styles.header}>
@@ -54,23 +57,17 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                     >
                         <LinearGradient
                         // Background Linear Gradient
-                        colors={['rgba(0,0,0,0)','rgba(0,0,0,0.25)','rgba(0,0,0,0.5)','rgba(0,0,0,0.9)']}  
+                        colors={['rgba(0,0,0,0.2)','rgba(0,0,0,0.3)','rgba(0,0,0,0.5)','rgba(0,0,0,0.9)']}  
                         style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
                     >
-                    <View style={{margin: 25}}>
+                    <View style={{margin: 5, width: '100%', height: '50%', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <Text style={[styles.text, styles.headerText]}>{location.name}</Text>
                         <Text style={[styles.text, styles.addressText]}>{location.location.display_address[0]}</Text>
                     </View>
-                    </LinearGradient>
-
-                    </ImageBackground>
-
-                </View>
-                <View style={styles.subHeader}>
-                    <View style={{width: '50%'}}>
+                    <View style={{width: '100%', alignItems: 'flex-end', padding: 5}}>
                         {
                             location.rating !== undefined && (
-                                <Star rating={location.rating} size={24}/>
+                                <Star rating={location.rating} size={15}/>
                             )
                         }
                         {
@@ -80,7 +77,7 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                         }
                         {
                             location.price !== undefined && (
-                                <Price rating={location.price} size={30}/>
+                                <Price rating={location.price} size={15}/>
                             )
                         }
                         {
@@ -89,22 +86,29 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
                             )
                         }
                         
-                    </View>
-                    <View style={{width: '50%'}}>
+                     </View>
+                    </LinearGradient>
+
+                    </ImageBackground>
+
+                </View>
+                {/* <View style={styles.subHeader}> */}
+                    
+                    {/* <View style={{width: '50%'}}>
                         <Text style={[styles.text, styles.subHeaderText, {textAlign: 'right'}]}>{location.review_count} ratings</Text>
                         <Text style={[styles.text, styles.subHeaderText, {textAlign: 'right'}]}>{location.display_phone}</Text>
-                    </View>
+                    </View> */}
                     
-                </View>
+                {/* </View> */}
             </View>
-        </View>
+        </TouchableOpacity>
 
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: 'white',
         borderRadius: 20,
         overflow: 'hidden', // needed to show rounded corners for image
@@ -129,9 +133,9 @@ const styles = StyleSheet.create({
         padding: 5
     },
     header: {
-        flex: 0.8,
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',   
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',   
     },
     subHeader: {
         flex: 0.2,
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
+        // height: '100%',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
         width: '100%',        
@@ -154,13 +159,13 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 20
     },
     addressText: {
         fontWeight: '300',
-        fontSize: 18,
+        fontSize: 15,
     },
     subHeaderText: {
-        fontSize: 18,        
+        fontSize: 12,        
     }
 })

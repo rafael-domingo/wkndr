@@ -1,32 +1,46 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import { Dimensions, ScrollView, StyleSheet, View, Text } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import SearchCard from '../../components/Cards/SearchCard';
+import SearchCardContainer from '../../components/Misc/SearchCardContainer';
 
 export default function SearchCarousel({ searchResults, handleAddLocation, handleDeleteLocation }) {
-
-    const renderItem = ({ item, index}) => {
-        return (
-            <View style={{height: Dimensions.get('window').height/2}}>
-                <SearchCard location={item} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
-            </View>
-        )
+    const searchContainer = [];
+    
+    for (let index = 0; index < searchResults.length; index = index + 4) {
+        searchContainer.push(<SearchCardContainer results={searchResults.slice(index, index+4)}/>)        
     }
-    return (
-        <View style={styles.container}>
-            <Carousel
-                data={searchResults}
-                renderItem={renderItem}
-                layout={'default'}
-                sliderWidth={Dimensions.get('window').width}
-                itemWidth={Dimensions.get('window').width - 50}                
-            />
-        </View>
-    )
+    // if (modal) {
+    //     return (
+           
+    //     )
+    // } else {
+        return (
+            
+            <ScrollView 
+                pagingEnabled
+                horizontal
+                style={styles.container}
+            >
+                {searchContainer}
+             
+               {/* {
+                   searchResults.map((item, index) => {
+                       return (
+                        <SearchCard location={item} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
+                       )
+                   })
+               } */}
+            </ScrollView>
+        )
+    // }
+   
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        position: 'absolute',
+        bottom: 0
     }
 })

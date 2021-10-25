@@ -6,11 +6,10 @@ import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsBut
 import SearchBarInput from '../../components/Input/SearchBarInput';
 import { addDestination, deleteDestination } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
-import TripCard from '../../components/Cards/TripCard';
-import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
 import { Entypo } from '@expo/vector-icons';
-
+import TripCarousel from './TripCarousel';
+import { Modalize } from 'react-native-modalize';
 export default function TripView({ route, navigation }) {
 
     // state and value management
@@ -30,7 +29,11 @@ export default function TripView({ route, navigation }) {
 
     // state methods
     const handleSearch = (searchResults) => {
+        console.log(searchResults)
         setSearchResults(searchResults)
+        if (searchResults.length > 0) {
+            fitMarkers()
+        }
     }
 
     const handleAddLocation = (newLocation) => {        
@@ -51,12 +54,16 @@ export default function TripView({ route, navigation }) {
 
     // camera methods
     const fitMarkers = () => {   
-        mapRef.current.fitToSuppliedMarkers(locationState.destinations.map((destination, index) => {
+        const markersArray = []
+        locationState.destinations.map((destination, index) => {
             for (var key in destination) {
-                
-                return destination[key].id
+                markersArray.push(destination[key].id)
             }
-        }))
+        })
+        searchResults.map((destination, index) => {
+            markersArray.push(destination.id)
+        })        
+        mapRef.current.fitToSuppliedMarkers(markersArray)
     }
 
     const cameraAnimation = (center) => {
@@ -97,9 +104,7 @@ export default function TripView({ route, navigation }) {
             } 
             clearTimeout(regionTimeout)         
             
-            const regionTimeout = setTimeout(() => {
-                console.log(`mapindex: ${mapIndex}`)
-                console.log(`index: ${index}`)
+            const regionTimeout = setTimeout(() => {       
                 if (mapRef.current) {
                     if (mapIndex !== index) {
                         mapIndex = index                        
@@ -154,12 +159,26 @@ export default function TripView({ route, navigation }) {
                                         key={index}
                                         coordinate={destination[key].coordinates}
                                         title={destination[key].name}
+                                        pinColor={'tomato'}
                                         onPress={() => {
                                             console.log('marker pressed')
                                         }}
                                     />
                                 )
                             }                            
+                        })
+                    }
+                    {
+                        searchResults.map((destination, index) => {
+                            return (
+                                <Marker 
+                                    identifier={destination.id}
+                                    key={destination.id}
+                                    pinColor={'indigo'}
+                                    coordinate={destination.coordinates}
+                                    title={destination.name}                                    
+                                />
+                            )
                         })
                     }
                 </MapView>
@@ -184,87 +203,26 @@ export default function TripView({ route, navigation }) {
                     </View>
                              
                     <TripViewSettingsButton navigation={navigation} location={location} show={camera}/>
-                    {
-                        searchResults.length > 0 && (
-                            <SearchCarousel searchResults={searchResults} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
-                        )
-                    }                   
+                    
                 </SafeAreaView>
+         
+                {
+                    searchResults.length > 0 && (
+                        <SearchCarousel searchResults={searchResults} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
+                    )
+                }             
                 {
                     searchResults.length === 0 && (
-                        <Animated.ScrollView
-                            style={
-                                [
-                                { 
-                                    flex: 1,
-                                    position: 'absolute',
-                                    bottom: 0                                    
-                                },                                    
-                                ]
-                            }
-                            horizontal
-                            // pagingEnabled
-                            decelerationRate="fast" // fix for paging enabled bug
-                            scrollEventThrottle={1}
-                            snapToInterval={Dimensions.get('window').width * 0.8 + 20}
-                            snapToAlignment="center"
-                            showsHorizontalScrollIndicator={false}    
-                            contentInset={{
-                                top: 0,
-                                left: Dimensions.get('window').width * 0.1 + 10,
-                                bottom: 0,
-                                right: Dimensions.get('window').width * 0.1 + 10
-                                }} 
-                                onScrollBeginDrag={() => {                                                                     
-                                    console.log(modalizeRef.current?.length)
-                                    modalizeRef.current?.forEach(element => {
-                                        element?.close('alwaysOpen')
-                                    });                                     
-                                    fitMarkers()                                                                                               
-                                }}                                
-                            onScroll={Animated.event(
-                                [
-                                    {
-                                        nativeEvent: {
-                                            contentOffset: {
-                                                x: mapAnimation
-                                            }
-                                        }
-                                    }
-                                ],
-                                { useNativeDriver: true }
-                            )}
-                        >
-                            {
-                                locationState.destinations.map((item, index) => {
-                                    for (var key in item) {                                        
-                                        return (
-                                            <View 
-                                                key={item[key].wkndrId} 
-                                                style={{
-                                                    width: Dimensions.get('window').width * 0.8,
-                                                    height: Dimensions.get('window').height,
-                                                    margin: 10,                                                               
-                                                }}
-                                            >                                              
-                                                <TripCard 
-                                                    key={item.wkndrId} 
-                                                    location={item} 
-                                                    modalizeRef={modalizeRef} 
-                                                    index={index} 
-                                                    handleDeleteLocation={handleDeleteLocation}
-                                                    cameraAnimation={cameraAnimation}
-                                                    setCamera={setCamera}
-                                                    fitMarkers={fitMarkers}
-                                                    camera={camera} 
-                                                />                                              
-                                            </View>                                        
-                                        )
-                                    }
-                                    
-                                })
-                            }
-                        </Animated.ScrollView>                        
+                        <TripCarousel 
+                            locationState={locationState} 
+                            modalizeRef={modalizeRef} 
+                            fitMarkers={fitMarkers} 
+                            mapAnimation={mapAnimation} 
+                            handleDeleteLocation={handleDeleteLocation} 
+                            cameraAnimation={cameraAnimation} 
+                            setCamera={setCamera} 
+                            camera={camera}
+                        />                      
                     )
                 }                    
             </View>

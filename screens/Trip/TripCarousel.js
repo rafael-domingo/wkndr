@@ -1,64 +1,83 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Dimensions, Easing } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, Easing, ScrollView } from 'react-native';
 import TripCard from '../../components/Cards/TripCard';
 
-export default function TripCarousel({ tripList, handleDeleteLocation }) {
-    const translation = React.useRef(new Animated.Value(0)).current
-
-    React.useEffect(() => {
-        Animated.timing(
-            translation,
-            {
-                toValue: 1,
-                duration: 1000,
-                easing: Easing.inOut(Easing.exp),
-                useNativeDriver: true
-            }
-        ).start()
-    }, [translation])
-
-    const renderItem = ({ item, index}) => {
-        
-        return (
-            <View style={{height: Dimensions.get('window').height - 100, margin: 10}}>
-                <TripCard location={item} handleDeleteLocation={handleDeleteLocation}/>
-            </View>
-        )
-    }
+export default function TripCarousel({ locationState, modalizeRef, fitMarkers, mapAnimation, handleDeleteLocation, cameraAnimation, setCamera, camera }) {
 
     return (
-        <Animated.View 
-            style={[
-                styles.container,
-                {
-                    opacity: translation
-                }
-            ]}
+        <Animated.ScrollView
+            style={
+                [
+                { 
+                    flex: 1,
+                    position: 'absolute',
+                    bottom: 0                                    
+                },                                    
+                ]
+            }
+            horizontal
+            // pagingEnabled
+            decelerationRate="fast" // fix for paging enabled bug
+            scrollEventThrottle={1}
+            snapToInterval={Dimensions.get('window').width * 0.8 + 20}
+            snapToAlignment="center"
+            showsHorizontalScrollIndicator={false}    
+            contentInset={{
+                top: 0,
+                left: Dimensions.get('window').width * 0.1 + 10,
+                bottom: 0,
+                right: Dimensions.get('window').width * 0.1 + 10
+                }} 
+                onScrollBeginDrag={() => {                                                                     
+                    console.log(modalizeRef.current?.length)
+                    modalizeRef.current?.forEach(element => {
+                        element?.close('alwaysOpen')
+                    });                                     
+                    fitMarkers()                                                                                               
+                }}                                
+            onScroll={Animated.event(
+                [
+                    {
+                        nativeEvent: {
+                            contentOffset: {
+                                x: mapAnimation
+                            }
+                        }
+                    }
+                ],
+                { useNativeDriver: true }
+            )}
         >
-            <Animated.ScrollView
-                horizontal
-                // pagingEnabled
-                showsHorizontalScrollIndicator={false}
-            >
-                {
-                    tripList.map((item, index) => {
+            {
+                locationState.destinations.map((item, index) => {
+                    for (var key in item) {                                        
                         return (
-                            <View key={item.wkndrId} style={{height: Dimensions.get('window').height - 100, margin: 10}}>
-                                <TripCard location={item} handleDeleteLocation={handleDeleteLocation}/>
-                            </View>
+                            <View 
+                                key={item[key].wkndrId} 
+                                style={{
+                                    width: Dimensions.get('window').width * 0.8,
+                                    height: Dimensions.get('window').height,
+                                    margin: 10,                                                               
+                                }}
+                            >                                              
+                                <TripCard 
+                                    key={item.wkndrId} 
+                                    location={item} 
+                                    modalizeRef={modalizeRef} 
+                                    index={index} 
+                                    handleDeleteLocation={handleDeleteLocation}
+                                    cameraAnimation={cameraAnimation}
+                                    setCamera={setCamera}
+                                    fitMarkers={fitMarkers}
+                                    camera={camera} 
+                                />                                              
+                            </View>                                        
                         )
-                    })
-                }
-            </Animated.ScrollView>
-        </Animated.View>
+                    }
+                    
+                })
+            }
+        </Animated.ScrollView>    
+
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        position: 'absolute',
-        bottom: '-60%',
-        // bottom: 0
-    }
-})
