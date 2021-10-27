@@ -5,6 +5,7 @@ import StarRating from 'react-native-star-rating';
 import { v4 as uuidv4 } from 'uuid';
 import Star from '../Rating/Star';
 import Price from '../Rating/Price';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 export default function SearchCard({ location, handleAddLocation, handleDeleteLocation, handleModalContent }) {
@@ -47,7 +48,6 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
             }
              */}
             <View style={styles.container}>
-                
                 <View style={styles.header}>
                     
                     <ImageBackground

@@ -6,9 +6,12 @@ import SearchCardContainer from '../../components/Misc/SearchCardContainer';
 
 export default function SearchCarousel({ searchResults, handleAddLocation, handleDeleteLocation }) {
     const searchContainer = [];
-    
+    const [scrollEnabled, setScrollEnabled] = React.useState(true);
+    const handleScrollEnabled = (value) => {
+        setScrollEnabled(value)
+    }
     for (let index = 0; index < searchResults.length; index = index + 4) {
-        searchContainer.push(<SearchCardContainer results={searchResults.slice(index, index+4)}/>)        
+        searchContainer.push(<SearchCardContainer results={searchResults.slice(index, index+4)} handleScrollEnabled={handleScrollEnabled}/>)        
     }
     // if (modal) {
     //     return (
@@ -21,6 +24,7 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
                 pagingEnabled
                 horizontal
                 style={styles.container}
+                scrollEnabled={scrollEnabled}
             >
                 {searchContainer}
              
