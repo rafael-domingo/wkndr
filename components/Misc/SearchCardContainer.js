@@ -10,8 +10,9 @@ import Star from '../Rating/Star';
 import Price from '../Rating/Price';
 import Reviews from './Reviews';
 import Hours from './Hours';
+import AddToTripButton from '../Buttons/AddToTripButton';
 
-export default function SearchCardContainer({ results, handleScrollEnabled }) {
+export default function SearchCardContainer({ results, handleScrollEnabled, handleAddLocation }) {
     const [modal, setModal] = React.useState(false);
     const [modalContent, setModalContent] = React.useState(null);
     const [detailState, setDetailState] = React.useState();
@@ -19,8 +20,7 @@ export default function SearchCardContainer({ results, handleScrollEnabled }) {
     const [loading, setLoading] = React.useState(true);
     const handleModalContent = (content) => {
         
-        setModalContent(content)       
-        setModal(true)
+        setModalContent(content)               
         Yelp.detail(content.id)
         .then(response => {
             setDetailState(response)
@@ -30,8 +30,14 @@ export default function SearchCardContainer({ results, handleScrollEnabled }) {
         console.log('modal')
     }
 
+    const addLocation = () => {
+        handleAddLocation(modalContent)
+    }
+
     return (
         <View style={styles.container}>
+            <AddToTripButton show={modal} addLocation={addLocation}/>
+            <View style={{height: 500, flexWrap: 'wrap', width: Dimensions.get('window').width}}>
             {
                 results.map((item, index) => {
                     return (
@@ -39,24 +45,27 @@ export default function SearchCardContainer({ results, handleScrollEnabled }) {
                     )
                 })
             }
+            </View>
+          
                <Modalize                
-                ref={modalizeRef}
-                // alwaysOpen={300}
+                ref={modalizeRef}                
                 modalHeight={500}     
                 handlePosition={"inside"}
                 handleStyle={{top: 10, opacity: 1}}                   
                 scrollViewProps={{
                     scrollEnabled: false
-                }}                                     
-                overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}     
+                }}   
+                withOverlay={false}                                                      
                 modalStyle={{padding: 5, backgroundColor: 'rgba(0,0,0,0)'}}    
                 onOpen={() => {
                     handleScrollEnabled(false)
+                    setModal(true)
                 }}
                 onClosed={() => {
                     setLoading(true)
                     setDetailState(undefined)
                     handleScrollEnabled(true)
+                    setModal(false)
                 }}
                
             >                  
@@ -139,9 +148,11 @@ export default function SearchCardContainer({ results, handleScrollEnabled }) {
 
 const styles = StyleSheet.create({
     container: {
-        height: 500,
+        height: 600,
         width: Dimensions.get('window').width,
         flexWrap: 'wrap',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
         // position: 'absolute',
         // bottom: 0,
         // justifyContent: 'center',

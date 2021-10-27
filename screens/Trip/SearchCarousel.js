@@ -11,7 +11,7 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
         setScrollEnabled(value)
     }
     for (let index = 0; index < searchResults.length; index = index + 4) {
-        searchContainer.push(<SearchCardContainer results={searchResults.slice(index, index+4)} handleScrollEnabled={handleScrollEnabled}/>)        
+        searchContainer.push(<SearchCardContainer results={searchResults.slice(index, index+4)} handleScrollEnabled={handleScrollEnabled} handleAddLocation={handleAddLocation}/>)        
     }
     // if (modal) {
     //     return (
