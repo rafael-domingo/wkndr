@@ -8,14 +8,17 @@ import Price from '../Rating/Price';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
-export default function SearchCard({ location, handleAddLocation, handleDeleteLocation, handleModalContent }) {
+export default function SearchCard({ location, handleAddLocation, handleDeleteLocation, handleModalContent, handleCallout, index }) {
     const [selected, setSelected] = React.useState(false)
     const [locationState, setLocationState] = React.useState(location) 
     const [wkndrId, setWkndrId] = React.useState(uuidv4())
     return (
         <TouchableOpacity 
             style={{height: '50%', width: '50%', justifyContent: 'center', alignItems: 'center', padding: 5}}
-            onPress={() => handleModalContent(location)}
+            onPress={() => {
+                handleModalContent(location)
+                handleCallout(index)
+            }}
         >
             {/* {
                 !selected && (

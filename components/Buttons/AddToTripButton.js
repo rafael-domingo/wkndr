@@ -4,32 +4,20 @@ import { Animated, TouchableOpacity, Text, StyleSheet, Easing, View } from 'reac
 
 
 export default function AddToTripButton({ show, addLocation }) {
-    const translation = React.useRef(new Animated.Value(0)).current
+    const opacity = React.useRef(new Animated.Value(0)).current
     const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
-    React.useEffect(() => {
-        if (!show) {
-            Animated.timing(
-                translation,
-                {
-                    toValue: 300,
-                    duration: 500,
-                    delay: 0,
-                    easing: Easing.inOut(Easing.exp),
-                    useNativeDriver: true
-                }
-            ).start()
-        } else {
-            Animated.timing(
-                translation,
-                {
-                    toValue: 0,
-                    duration: 500,
-                    delay: 100,
-                    easing: Easing.inOut(Easing.exp),
-                    useNativeDriver: true
-                }
-            ).start()
-        }
+    React.useEffect(() => {    
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1,
+                duration: 500,
+                delay: 100,
+                easing: Easing.inOut(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+        
     })
 
     return (        
@@ -37,11 +25,8 @@ export default function AddToTripButton({ show, addLocation }) {
             style={[
                 styles.container,
                 {
-                    transform: [{translateY: translation}],
-                    opacity: translation.interpolate({
-                        inputRange: [0, 300],
-                        outputRange: [1, 0]
-                    })
+                    // transform: [{translateY: translation}],
+                    opacity: opacity
                 }
             ]}
             onPress={() => addLocation()}
@@ -60,7 +45,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 5,  
         position: 'relative',
-        bottom: 10,         
+        bottom: 20,
+        zIndex: 10         
     },
     text: {
         color: 'white',

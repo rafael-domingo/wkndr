@@ -19,6 +19,7 @@ export default function TripView({ route, navigation }) {
     const mapRef = React.useRef(null)
     const modalizeRef = React.useRef([])
     const markerRef = React.useRef([])
+    const searchMarkerRef = React.useRef([])
     const dispatch = useDispatch()
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
@@ -75,11 +76,30 @@ export default function TripView({ route, navigation }) {
             pitch: 60,
             heading: 0,
             altitude: 800
-        }, {duration: 1000})              
-        setTimeout(() => {
-            markerRef.current[mapIndex].showCallout()      
-        }, 500);  
-        
+        }, {duration: 1000})                        
+    }
+
+    const animateToRegion = (center) => {
+        if (mapRef.current) {
+            mapRef.current.animateToRegion(
+                {
+                    longitude: center.longitude,
+                    latitude: center.latitude,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.001,
+                },
+                350
+            )
+        }
+    }
+
+    const showCallout = (type, index) => {
+        if (type === 'search') {
+            searchMarkerRef.current[index].showCallout()
+         
+        } else if (type === 'trip') {
+
+        }
     }
     
     // useEffects
@@ -111,16 +131,7 @@ export default function TripView({ route, navigation }) {
                         markerRef.current[mapIndex].showCallout()   
                         const destination = locationState.destinations[mapIndex]
                         for (var key in destination) {         
-                                                                 
-                            mapRef.current.animateToRegion(
-                                {
-                                    longitude: destination[key].coordinates.longitude,
-                                    latitude: destination[key].coordinates.latitude,
-                                    latitudeDelta: 0.01,
-                                    longitudeDelta: 0.001,
-                                },
-                                350
-                            )                                  
+                           animateToRegion(destination[key].coordinates)                                                             
                         }
                     }
                     
@@ -172,6 +183,7 @@ export default function TripView({ route, navigation }) {
                         searchResults.map((destination, index) => {
                             return (
                                 <Marker 
+                                    ref={el => searchMarkerRef.current[index] = el}
                                     identifier={destination.id}
                                     key={destination.id}
                                     pinColor={'indigo'}
@@ -208,7 +220,17 @@ export default function TripView({ route, navigation }) {
          
                 {
                     searchResults.length > 0 && (
-                        <SearchCarousel searchResults={searchResults} handleAddLocation={handleAddLocation} handleDeleteLocation={handleDeleteLocation}/>
+                        <SearchCarousel 
+                            searchResults={searchResults} 
+                            handleAddLocation={handleAddLocation} 
+                            handleDeleteLocation={handleDeleteLocation}
+                            cameraAnimation={cameraAnimation}
+                            setCamera={setCamera}
+                            camera={camera}
+                            fitMarkers={fitMarkers}
+                            showCallout={showCallout}
+                            animateToRegion={animateToRegion}
+                        />
                     )
                 }             
                 {
