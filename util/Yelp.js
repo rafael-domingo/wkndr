@@ -76,7 +76,14 @@ export const Yelp = {
                 lng: lng
             })
         }).then(response => response.json())
-        .then(data => data)
+        .then(data => {            
+            data.map(item => {
+                item.wkndrId = uuidv4()
+                item.selected = false
+                return item
+             })
+             return data
+        })
         .catch(error => console.log(error))
 
     },

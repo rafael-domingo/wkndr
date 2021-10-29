@@ -4,7 +4,7 @@ import { Modalize } from 'react-native-modalize';
 import SearchCard from '../../components/Cards/SearchCard';
 import SearchCardContainer from '../../components/Misc/SearchCardContainer';
 
-export default function SearchCarousel({ searchResults, handleAddLocation, handleDeleteLocation, cameraAnimation, setCamera, camera, fitMarkers, showCallout, animateToRegion }) {
+export default function SearchCarousel({ searchResults, handleAddLocation, handleDeleteLocation, cameraAnimation, setCamera, camera, fitMarkers, showCallout, animateToRegion, changeMarker, tripDestinations }) {
     const searchContainer = [];
     const [scrollEnabled, setScrollEnabled] = React.useState(true);
     const [scrollPage, setScrollPage] = React.useState(0);
@@ -13,6 +13,10 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
     const handleCallout = (index) => {
         showCallout('search', index + (scrollPage*4))
     } 
+
+    const handleChangeMarker = (type, index) => {
+        changeMarker(type, index + (scrollPage*4))
+    }
     React.useEffect(() => {
         scrollValue.addListener(({ value}) => {
             let index = Math.floor(value/(Dimensions.get('window').width))
@@ -40,6 +44,8 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
                 fitMarkers={fitMarkers}
                 handleCallout={handleCallout}
                 animateToRegion={animateToRegion}
+                handleChangeMarker={handleChangeMarker}
+                tripDestinations={tripDestinations}
             />
         )        
     }

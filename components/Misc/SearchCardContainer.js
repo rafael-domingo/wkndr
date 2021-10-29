@@ -12,16 +12,17 @@ import Reviews from './Reviews';
 import Hours from './Hours';
 import AddToTripButton from '../Buttons/AddToTripButton';
 
-export default function SearchCardContainer({ results, handleScrollEnabled, handleAddLocation, handleDeleteLocation, cameraAnimation, setCamera, camera, fitMarkers, handleCallout, animateToRegion }) {
+export default function SearchCardContainer({ results, handleScrollEnabled, handleAddLocation, handleDeleteLocation, cameraAnimation, setCamera, camera, fitMarkers, handleCallout, animateToRegion, handleChangeMarker, tripDestinations }) {
     const [modal, setModal] = React.useState(false);
     const [modalContent, setModalContent] = React.useState(null);
     const [detailState, setDetailState] = React.useState();
     const modalizeRef = React.useRef();
     const [loading, setLoading] = React.useState(true);
-
-    const handleModalContent = (content) => {     
+    const [index, setIndex] = React.useState();
+    const handleModalContent = (content, index) => {     
         animateToRegion(content.coordinates)
         setModalContent(content)               
+        setIndex(index)
         // cameraAnimation(content.coordinates)
         Yelp.detail(content.id)
         .then(response => {
@@ -32,7 +33,13 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
     }
 
     const addLocation = () => {
-        handleAddLocation(modalContent)
+        handleAddLocation(modalContent)       
+        handleChangeMarker('selected', index) 
+    }
+
+    const deleteLocation = (wkndrId) => {
+        handleDeleteLocation(wkndrId)
+        handleChangeMarker('unselected', index)
     }
 
     return (
@@ -76,7 +83,7 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
             {
                 modalContent !== null && (               
                     <View style={{height: 600, width: '100%',justifyContent: 'flex-end', alignItems: 'center'}}>
-                         <AddToTripButton show={modal} addLocation={addLocation}/>
+                         <AddToTripButton show={modal} addLocation={addLocation} deleteLocation={deleteLocation} modalContent={modalContent} tripDestinations={tripDestinations}/>
                         <ImageBackground
                             style={styles.image}
                             source={{uri: modalContent.image_url}}

@@ -16,7 +16,7 @@ export default function SearchCard({ location, handleAddLocation, handleDeleteLo
         <TouchableOpacity 
             style={{height: '50%', width: '50%', justifyContent: 'center', alignItems: 'center', padding: 5}}
             onPress={() => {
-                handleModalContent(location)
+                handleModalContent(location, index)
                 handleCallout(index)
             }}
         >

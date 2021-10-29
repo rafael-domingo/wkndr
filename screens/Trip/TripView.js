@@ -31,7 +31,32 @@ export default function TripView({ route, navigation }) {
     // state methods
     const handleSearch = (searchResults) => {
         console.log(searchResults)
-        setSearchResults(searchResults)
+
+        // parse through current trip to help check for existing destinations
+        var tripIds = [];
+        var wkndrIds = [];
+        locationState.destinations.map((destination, index) => {
+            for (var key in destination) {
+                tripIds.push(destination[key].id)
+                wkndrIds.push(destination[key].wkndrId)                                
+            }
+        })
+
+        // check if search result is already in the trip and adjust selected & wkndrId as needed
+        const updatedSearchResults = searchResults.map((item, index) => {
+            if (tripIds.includes(item.id)) {
+                const wkndrIdIndex = tripIds.indexOf(item.id)
+                return  ({
+                    ...item,
+                    selected: true,
+                    wkndrId: wkndrIds[wkndrIdIndex]
+                })
+            } else {
+                return item
+            }
+        })
+
+        setSearchResults(updatedSearchResults)
         if (searchResults.length > 0) {
             fitMarkers()
         }
@@ -99,6 +124,39 @@ export default function TripView({ route, navigation }) {
          
         } else if (type === 'trip') {
 
+        }
+    }
+
+    const changeMarker = (type, selectedIndex) => {
+        // change the marker color if it was selected/unselected in search
+        if (type === 'selected') {
+            const newSearchResults = searchResults.map((item, index) => {
+                if (index === selectedIndex) {                    
+                    return ({
+                        ...item,
+                        selected: true
+                    })
+                } else {
+                    return ({
+                        ...item,                        
+                    })
+                }                   
+            })            
+            setSearchResults(newSearchResults)      
+        } else if (type === 'unselected') {
+            const newSearchResults = searchResults.map((item, index) => {
+                if (index === selectedIndex) {                    
+                    return ({
+                        ...item,
+                        selected: false
+                    })
+                } else {
+                    return ({
+                        ...item,                        
+                    })
+                }                   
+            })            
+            setSearchResults(newSearchResults)      
         }
     }
     
@@ -186,7 +244,7 @@ export default function TripView({ route, navigation }) {
                                     ref={el => searchMarkerRef.current[index] = el}
                                     identifier={destination.id}
                                     key={destination.id}
-                                    pinColor={'indigo'}
+                                    pinColor={destination.selected ? 'tomato' : 'indigo'}
                                     coordinate={destination.coordinates}
                                     title={destination.name}                                    
                                 />
@@ -230,6 +288,8 @@ export default function TripView({ route, navigation }) {
                             fitMarkers={fitMarkers}
                             showCallout={showCallout}
                             animateToRegion={animateToRegion}
+                            changeMarker={changeMarker}
+                            tripDestinations={locationState.destinations}
                         />
                     )
                 }             
