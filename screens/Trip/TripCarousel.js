@@ -11,30 +11,34 @@ export default function TripCarousel({ locationState, modalizeRef, fitMarkers, m
                 { 
                     flex: 1,
                     position: 'absolute',
-                    bottom: 0                                    
+                    bottom: 0,      
+                    zIndex: camera ? 10 : 5             
                 },                                    
                 ]
             }
             horizontal
             // pagingEnabled
             decelerationRate="fast" // fix for paging enabled bug
-            scrollEventThrottle={1}
+            scrollEventThrottle={1}        
             snapToInterval={Dimensions.get('window').width * 0.8 + 20}
             snapToAlignment="center"
-            showsHorizontalScrollIndicator={false}    
+            showsHorizontalScrollIndicator={true}            
+            contentOffset={{
+                x: -Dimensions.get('window').width * 0.1 + 20
+            }}            
             contentInset={{
                 top: 0,
-                left: Dimensions.get('window').width * 0.1 + 10,
+                left: Dimensions.get('window').width * 0.1 + 20,
                 bottom: 0,
-                right: Dimensions.get('window').width * 0.1 + 10
-                }} 
-                onScrollBeginDrag={() => {                                                                     
-                    console.log(modalizeRef.current?.length)
-                    modalizeRef.current?.forEach(element => {
-                        element?.close('alwaysOpen')
-                    });                                     
-                    fitMarkers()                                                                                               
-                }}                                
+                right: Dimensions.get('window').width * 0.1 + 20
+            }} 
+            onScrollBeginDrag={() => {                                                                     
+                console.log(modalizeRef.current?.length)
+                modalizeRef.current?.forEach(element => {
+                    element?.close('alwaysOpen')
+                });                                     
+                fitMarkers()                                                                                               
+            }}                                
             onScroll={Animated.event(
                 [
                     {

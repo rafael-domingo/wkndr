@@ -206,7 +206,7 @@ export default function TripView({ route, navigation }) {
                     zoomTapEnabled={false}
                     zoomEnabled={false}
                     mapType={'mutedStandard'}
-                    // userInterfaceStyle={'dark'}    
+                    userInterfaceStyle={'dark'}    
                     mapPadding={{
                         bottom: 300,
                         top: 50                        
@@ -253,9 +253,9 @@ export default function TripView({ route, navigation }) {
                     }
                 </MapView>
 
-                <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', top: 0, flex: 1, zIndex: 10}}>                
+                <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', flex: 1, top: 0, zIndex: 10}}>                
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width}}>
-                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%'}}>
+                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%', zIndex: 10}}>
                         <TouchableOpacity 
                             style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25,   shadowOffset: {
                                 width: 0,
@@ -275,7 +275,7 @@ export default function TripView({ route, navigation }) {
                     <TripViewSettingsButton navigation={navigation} location={location} show={camera}/>
                     
                 </SafeAreaView>
-         
+                
                 {
                     searchResults.length > 0 && (
                         <SearchCarousel 

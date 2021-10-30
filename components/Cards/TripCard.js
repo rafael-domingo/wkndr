@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { ImageBackground, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ImageBackground, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
@@ -8,6 +8,7 @@ import Hours from '../Misc/Hours';
 import Reviews from '../Misc/Reviews';
 import CardHeader from '../Misc/CardHeader';
 import CardSubHeader from '../Misc/CardSubHeader';
+import { BlurView } from 'expo-blur';
 
 
 export default function TripCard({ location, handleDeleteLocation, modalizeRef, index, cameraAnimation, setCamera, fitMarkers, camera }) {
@@ -22,13 +23,14 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
             ref={el => modalizeRef.current[index] = el}
             style={{flex: 1}}
             alwaysOpen={300}
-            modalHeight={700}                                            
+            modalHeight={700}                     
+            withOverlay={false}    
+            tapGestureEnabled={false}                               
             snapPoint={450}        
             scrollViewProps={{
                 scrollEnabled: false
             }}                                            
-            handlePosition={'inside'}                                                    
-            overlayStyle={{backgroundColor: 'rgba(0,0,0,0)'}}  
+            handlePosition={'inside'}                                                                 
             modalStyle={{backgroundColor: 'rgba(0,0,0,0)', bottom: 0,  shadowOffset: {
                 width: 2,
                 height: 2,
@@ -59,6 +61,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                                 
         >
             <View style={styles.container}>
+            <BlurView intensity={90} style={{flex: 1}} tint={'default'}>
                 <View style={[styles.header]}>
                     <ImageBackground
                         style={styles.image}
@@ -69,12 +72,13 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                             // Background Linear Gradient
                             colors={['rgba(0,0,0,0)','rgba(0,0,0,0.25)','rgba(0,0,0,0.5)','rgba(0,0,0,0.9)']}  
                             style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
-                        >
+                        >        
                             <CardSubHeader location={location[key]} show={open}/>
                             <CardHeader location={location[key]}/>                       
                         </LinearGradient>
                     </ImageBackground>
                 </View>
+                
                 <View style={styles.subHeader}>
                     <View style={[styles.subCategory, {flex: 0.35}]}>
                      
@@ -130,6 +134,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                         </TouchableOpacity>
                     </View> 
                 </View>     
+                </BlurView>
             
             </View>
             </Modalize>
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden', // needed to show rounded corners for image
         height: 700,
         width: '100%',        
-        backgroundColor: 'rgba(24,28,47,1)',  
+        backgroundColor: 'rgba(24,28,47,0.5)',  
        
      
     },

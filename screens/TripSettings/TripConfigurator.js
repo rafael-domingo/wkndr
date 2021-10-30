@@ -7,6 +7,7 @@ import TripBuilder from './TripBuilder';
 import TripBuilderConfirm from './TripBuilderConfirm';
 import TripBuilderEnable from './TripBuilderEnable';
 import TripBuilderLoading from './TripBuilderLoading';
+import { BlurView } from 'expo-blur';
 
 export default function TripConfigurator({ route, navigation }) {
     const {location} = route.params
@@ -66,38 +67,40 @@ export default function TripConfigurator({ route, navigation }) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <CancelButton handleClick={handleCancelClick}/>
-            <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>
-                <Text style={styles.header}>Trip Configurator</Text>
-            </View>
-            <View style={{flex: 0.9}}>
-                {
-                    !trip.autoBuild && (
-                        <TripBuilderEnable handleClick={handleEnableClick}/>
-                    )
-                }
-                {
-                    trip.autoBuild && !confirmation && !loading && (
-                        <View>
-                            <TripBuilder trip={trip} handleActivity={handleActivity} handleTransport={handleTransport} handleTime={handleTime}/>
-                            <NextButton handleClick={() => handleNextClick()}/>
-                        </View>
+        <BlurView intensity={100} style={{flex: 1}} tint={'dark'}>
+            <SafeAreaView style={styles.container}>
+                <CancelButton handleClick={handleCancelClick}/>
+                <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>
+                    <Text style={styles.header}>Trip Configurator</Text>
+                </View>
+                <View style={{flex: 0.9}}>
+                    {
+                        !trip.autoBuild && (
+                            <TripBuilderEnable handleClick={handleEnableClick}/>
+                        )
+                    }
+                    {
+                        trip.autoBuild && !confirmation && !loading && (
+                            <View>
+                                <TripBuilder trip={trip} handleActivity={handleActivity} handleTransport={handleTransport} handleTime={handleTime}/>
+                                <NextButton handleClick={() => handleNextClick()}/>
+                            </View>
 
-                    )
-                }
-                {
-                    trip.autoBuild && confirmation && !loading && (
-                        <TripBuilderConfirm handleClick={() => handleConfirmClick()} handleCancel={() => handleCancelClick()}/>
-                    )
-                }
-                {
-                    trip.autoBuild && confirmation && loading && (
-                        <TripBuilderLoading tripState={trip} location={location}/>
-                    )
-                }
-            </View>
-        </SafeAreaView>
+                        )
+                    }
+                    {
+                        trip.autoBuild && confirmation && !loading && (
+                            <TripBuilderConfirm handleClick={() => handleConfirmClick()} handleCancel={() => handleCancelClick()}/>
+                        )
+                    }
+                    {
+                        trip.autoBuild && confirmation && loading && (
+                            <TripBuilderLoading tripState={trip} location={location}/>
+                        )
+                    }
+                </View>
+            </SafeAreaView>
+        </BlurView>
     )
 }
 
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         opacity: 0.8,
-        backgroundColor: 'black',
+        backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'center',
         alignItems: 'center'
     },

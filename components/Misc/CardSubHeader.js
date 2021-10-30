@@ -37,7 +37,8 @@ export default function CardSubHeader({ location, show }) {
         <Animated.View style={{
             width: '100%',
             height: '50%',
-            opacity: opacity
+            opacity: opacity,    
+            
         }}>
         <LinearGradient
             colors={['rgba(0,0,0,0.9)','rgba(0,0,0,0.5)','rgba(0,0,0,0.25)','rgba(0,0,0,0)']}          
@@ -56,12 +57,14 @@ export default function CardSubHeader({ location, show }) {
                     )
                 }   
                 </View>
-                <View style={{flex: 1, alignItems: 'flex-end'}}>
-                        <Text style={[styles.text, {fontSize: 18, marginBottom: 10, fontWeight: 'bold'}]}>{location.review_count} reviews</Text>
+                <View style={{flex: 1, alignItems: 'flex-end'}}>                    
+                    <Text style={[styles.text, {fontSize: 18, marginBottom: 10, fontWeight: 'bold'}]}>{location.review_count} reviews</Text>                                      
                 {
                     location.display_phone !== undefined && (
-                        <TouchableOpacity
+                        <TouchableOpacity                            
+                            disabled={show ? false : true}
                             onPress={() => {
+                                console.log('phone pressed')
                                 Linking.openURL(`tel:${location.phone}`)
                             }}
                         >

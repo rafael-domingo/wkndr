@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         position: 'absolute',
-        bottom: 0
+        bottom: 0,
+        zIndex: 5
     }
 })

@@ -1,10 +1,14 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Pressable, Dimensions, Easing } from 'react-native';
+import { Animated, View, StyleSheet, Pressable, Dimensions, Easing, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 export default function TripViewSettingsButton({ navigation, location, show }) {
     const translation = React.useRef(new Animated.Value(0)).current
-
+    const opacity = React.useRef(new Animated.Value(0)).current
+    const [expand, setExpand] = React.useState()
     React.useEffect(() => {
         if (!show) {
             Animated.timing(
@@ -29,7 +33,32 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                 }
             ).start()
         }
+        if (expand) {
+            Animated.timing(
+                opacity,
+                {
+                    toValue: 1,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()
+        } else {
+            Animated.timing(
+                opacity,
+                {
+                    toValue: 0,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start()
+        }
     })
+
+
     return (
         <Animated.View style={[
             styles.container,
@@ -41,22 +70,69 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                 // })
             }
             ]}>
-            <Pressable
-                style={({ pressed }) => pressed ? styles.buttonPressed : styles.button }
+            <TouchableOpacity
+                style={[
+                    styles.button,
+                    {
+                        backgroundColor: 'black',
+                        // width: 50,
+                        // height: 50,
+                        // borderRadius: 25,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }
+                ]}
                 onPress={() => {
-                    navigation.navigate('TripConfigurator', {location: location})
+                    setExpand(!expand)
                 }}
             >
-                <Ionicons name="ios-build-outline" size={30} color="white" />
-            </Pressable>
-            <Pressable 
-                style={({ pressed }) => pressed ? styles.buttonPressed : styles.button }
-                onPress={() => {
-                    navigation.navigate('TripList', {location: location})
-                }}
+                {
+                    !expand && (
+                        <Ionicons name="information-circle" size={30} color="white"/>
+                    )
+                }
+                {
+                    expand &&  (
+                        <MaterialIcons name="cancel" size={30} color="white" />
+                    )
+                }
+                
+            </TouchableOpacity>
+            <Animated.View
+                 style={
+                    {
+                        opacity: opacity
+                    }
+                }
             >
-                <Ionicons name="ios-list-sharp" size={30} color="white" />
-            </Pressable>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        navigation.navigate('TripConfigurator', {location: location})
+                        setExpand(false)
+                    }}
+                >                 
+                    <Ionicons name="ios-build-outline" size={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => {
+                        navigation.navigate('TripList', {location: location})
+                        setExpand(false)
+                    }}
+                >
+                    <Ionicons name="ios-list-sharp" size={30} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => {
+                        
+                        setExpand(false)
+                    }}
+                >
+                    <FontAwesome5 name="trash" size={25} color="white" />
+                </TouchableOpacity>
+            </Animated.View>
         </Animated.View>
     )
 }
@@ -73,9 +149,13 @@ const styles = StyleSheet.create({
     },  
     button : {
         margin: 5,
+        width: 50,
+        height: 50,
         backgroundColor: 'rgb(112,112,112)',
         borderRadius: 27.5,
         padding: 7.5,
+        justifyContent: 'center',
+        alignItems: 'center'
     
     },
     buttonPressed: {
