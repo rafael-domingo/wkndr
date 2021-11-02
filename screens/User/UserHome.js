@@ -5,11 +5,48 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetUserState } from '../../redux/user';
 import { signOut } from '../../util/Auth';
+import ListView from './ListView';
 
 export default function UserHome({ navigation }) {
     const userState = useSelector(state => state.user)
+    const [mapView, setMapView] = React.useState(false)
     const dispatch = useDispatch();
+    const [cityListState, setCityListState] = React.useState()
+    React.useEffect(() => {
+        extractData(userState.tripList)
+    }, [0])
 
+    const extractData = (tripList) => {            
+        const cityList = []
+        tripList.map((trip, index) => {
+            if (!cityList.some(item => item.title == trip.cityName)) {
+                const object = {
+                    'title': trip.cityName,
+                    'data': [{
+                        'tripName': trip.tripName,
+                        'tripId': trip.tripId,
+                        'coordinates': trip.coordinates,
+                        'trip': trip
+                    }]                 
+                }
+                cityList.push(object)                
+            } else {
+                const index = cityList.findIndex(item => item.title == trip.cityName)
+                console.log(index)
+                cityList[index].data.push({
+                    'tripName': trip.tripName,
+                    'tripId': trip.tripId,
+                    'coordinates': trip.coordinates,
+                    'trip': trip
+                })
+            }
+            
+        })
+        // alphabetize by title
+        cityList.sort((a, b) => (a.title > b.title ? 1 : -1))
+        console.log(cityList)
+        setCityListState(cityList)                
+    }
     return (
         <SafeAreaView style={styles.container}>   
             <View style={styles.header}>  
@@ -27,9 +64,25 @@ export default function UserHome({ navigation }) {
                     color="white" 
                     onPress={() => navigation.navigate('Account')}
                 />
+                <Ionicons 
+                    name="ios-settings-outline" 
+                    size={24} 
+                    color="white" 
+                    onPress={() => setMapView(!mapView)}
+                />
             </View>                   
             <View style={{flex: 1}}>
-                <LargeMapList navigation={navigation} userTrips={userState.tripList}/>        
+                {
+                   mapView && (
+                    <LargeMapList navigation={navigation} userTrips={userState.tripList}/>        
+                   ) 
+                }
+                {
+                    !mapView && (
+                        <ListView navigation={navigation} userTrips={cityListState}/>
+                    )
+                }
+                
             </View>            
         </SafeAreaView>        
     )

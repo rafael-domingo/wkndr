@@ -24,6 +24,7 @@ export default function TripView({ route, navigation }) {
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
     const findTrip = (trip) => {
+        console.log(location)
         return trip.tripId === location.tripId
     }
     const locationState = useSelector(state => state.user.tripList.find(findTrip))
@@ -95,7 +96,7 @@ export default function TripView({ route, navigation }) {
     const cameraAnimation = (center) => {
         mapRef.current.animateCamera({                
             center: {
-                latitude: center.latitude * 0.99985,
+                latitude: center.latitude * 0.99989,
                 longitude: center.longitude
             },
             pitch: 60,

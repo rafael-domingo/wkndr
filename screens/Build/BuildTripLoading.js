@@ -37,6 +37,7 @@ export default function BuildTripLoading({ tripState }) {
                 cityName: tripState.cityName,
                 coordinates: tripState.coordinates,
                 destinations: response,
+                tripName: tripState.tripName,
                 tripBuilder: tripState
             }))
         })

@@ -22,7 +22,7 @@ export default function BackButton({handleClick, buttonText="Back", text}) {
 const styles = StyleSheet.create({
     button: {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',        
     },
     buttonText: {
         color: 'white',

@@ -10,6 +10,7 @@ import BackButton from '../../components/Buttons/BackButton';
 import CancelButton from '../../components/Buttons/CancelButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetTripBuilder } from '../../redux/tripBuilder';
+import BuildTripName from './BuildTripName';
 
 export default function BuildTrip({ navigation }) {
     const [step, setStep] = React.useState(0);
@@ -17,6 +18,13 @@ export default function BuildTrip({ navigation }) {
     const dispatch = useDispatch()
     const [trip, setTrip] = React.useState(tripBuilderState)
     
+    const handleTripName = (value) => {        
+        setTrip(prevState => ({
+            ...prevState,
+            tripName: value
+        }))
+    }
+
     const handleCity = (value) => {
         setTrip(prevState => ({
             ...prevState,
@@ -74,7 +82,7 @@ export default function BuildTrip({ navigation }) {
                 break;
             case 'skip':
                 handleAutoBuild(false) // turn off autobuild if skipping step
-                setStep(4);
+                setStep(5);
                 break;
             default:
                 break;
@@ -97,29 +105,43 @@ export default function BuildTrip({ navigation }) {
             <View style={{flex: 0.9}}>
                 {
                     step === 0 && (
-                        <View style={styles.subContainer}>
+                        <View style={styles.subContainer}>                            
                             <BuildTripSearch handleInput={handleCity} handleClick={handleStepClick}/>
                             <View style={styles.buttonContainer}>
                                 {/* <NextButton handleClick={() => handleStepClick('next')}/>                                                      */}
                             </View>
                         </View>
                     )
-                }
+                }               
                 {
                     step === 1 && (
+                        <View style={styles.subContainer}>
+                            <BuildTripName handleInput={handleTripName}/>
+                            <View style={styles.buttonContainer}>
+                                <View style={styles.nextButtonContainer}>
+                                    <NextButton handleClick={() => handleStepClick('next')}/>
+                                </View>
+                                <BackButton handleClick={() => handleStepClick('back')} text="Where do you want to go?"/>
+                            </View>
+                        </View>
+                    )
+                }
+                {
+                    step === 2 && (
                         <View style={styles.subContainer}>
                             <BuildTripTime trip={trip} handleClick={handleTime}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
                                     <NextButton handleClick={() => handleStepClick('next')}/>
-                                </View>
-                                <BackButton handleClick={() => handleStepClick('skip')} buttonText="Skip this step" text="I already have an itinerary in mind"/>
+                                </View>                                
+                                {/* <BackButton handleClick={() => handleStepClick('back')} text="Name this trip"/> */}
+                                <BackButton handleClick={() => handleStepClick('skip')} buttonText="Skip this step" text="I already have an itinerary in mind"/>                                
                             </View>
                         </View>
                     )
                 }                
                 {
-                    step === 2 && (
+                    step === 3 && (
                         <View style={styles.subContainer}>
                             <BuildTripTransport trip={trip} handleClick={handleTransport}/>
                             <View style={styles.buttonContainer}>
@@ -132,7 +154,7 @@ export default function BuildTrip({ navigation }) {
                     )
                 }
                 {
-                    step === 3 && (
+                    step === 4 && (
                         <View style={styles.subContainer}>
                             <BuildTripActivity trip={trip} handleClick={handleActivity}/>
                             <View style={styles.buttonContainer}>
@@ -145,7 +167,7 @@ export default function BuildTrip({ navigation }) {
                     )
                 }     
                 {
-                    step === 4 && (
+                    step === 5 && (
                         <View>
                             <BuildTripLoading tripState={trip}/>
                         </View>

@@ -21,9 +21,10 @@ export const userSlice = createSlice({
             state.tripList = action.payload
         },
         addTrip: (state, action) => {
-            const { tripId, cityName, coordinates, destinations, tripBuilder } = action.payload
+            const { tripId, cityName, coordinates, destinations, tripBuilder, tripName } = action.payload
             state.tripList.push({
                 tripId, tripId,
+                tripName: tripName,
                 cityName: cityName,
                 coordinates: coordinates,
                 destinations: destinations,
