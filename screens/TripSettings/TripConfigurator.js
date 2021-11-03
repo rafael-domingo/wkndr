@@ -11,6 +11,7 @@ import { BlurView } from 'expo-blur';
 
 export default function TripConfigurator({ route, navigation }) {
     const {location} = route.params
+    
     const [locationState, setLocationState] = React.useState(location)    
     const [confirmation, setConfirmation] = React.useState(false);
     const [loading, setLoading] = React.useState(false);

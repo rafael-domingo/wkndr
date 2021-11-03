@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, SectionList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, SectionList, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 export default function ListView({ navigation, userTrips }) {
-
+    console.log(userTrips)
     const renderItem = (item) => {
         return (
-            <View style={styles.item}>
+            <TouchableOpacity 
+                style={styles.item}
+                onPress={() => navigation.navigate('Trip', {location: item})}
+            >
                 {
                     item.tripName !== undefined && (
                         <Text style={[styles.text, {fontSize: 20}]}>{item.tripName}</Text>
@@ -17,7 +20,7 @@ export default function ListView({ navigation, userTrips }) {
                     )
                 }
                 
-            </View>
+            </TouchableOpacity>
         )
     }
 

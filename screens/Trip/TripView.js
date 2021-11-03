@@ -269,11 +269,11 @@ export default function TripView({ route, navigation }) {
                             <Entypo name="arrow-left" size={30} color="white"/>                            
                         </TouchableOpacity>
                     </View> 
-                    <SearchBarInput location={location} handleSearch={handleSearch} show={camera}/>   
+                    <SearchBarInput location={locationState} handleSearch={handleSearch} show={camera}/>   
                   
                     </View>
                              
-                    <TripViewSettingsButton navigation={navigation} location={location} show={camera}/>
+                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera}/>
                     
                 </SafeAreaView>
                 

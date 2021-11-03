@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetUserState } from '../../redux/user';
 import { signOut } from '../../util/Auth';
 import ListView from './ListView';
+import MapList from './MapList';
 
 export default function UserHome({ navigation }) {
     const userState = useSelector(state => state.user)
@@ -14,7 +15,7 @@ export default function UserHome({ navigation }) {
     const [cityListState, setCityListState] = React.useState()
     React.useEffect(() => {
         extractData(userState.tripList)
-    }, [0])
+    }, [userState])
 
     const extractData = (tripList) => {            
         const cityList = []
@@ -46,6 +47,7 @@ export default function UserHome({ navigation }) {
         cityList.sort((a, b) => (a.title > b.title ? 1 : -1))
         console.log(cityList)
         setCityListState(cityList)                
+        setMapView(true)
     }
     return (
         <SafeAreaView style={styles.container}>   
@@ -74,7 +76,7 @@ export default function UserHome({ navigation }) {
             <View style={{flex: 1}}>
                 {
                    mapView && (
-                    <LargeMapList navigation={navigation} userTrips={userState.tripList}/>        
+                    <MapList navigation={navigation} userTrips={cityListState}/>        
                    ) 
                 }
                 {

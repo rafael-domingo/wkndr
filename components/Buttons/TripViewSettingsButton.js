@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 export default function TripViewSettingsButton({ navigation, location, show }) {
+    console.log({location})
     const translation = React.useRef(new Animated.Value(0)).current
     const opacity = React.useRef(new Animated.Value(0)).current
     const [expand, setExpand] = React.useState()
@@ -70,7 +71,7 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                 // })
             }
             ]}>
-            <TouchableOpacity
+            <TouchableOpacity                
                 style={[
                     styles.button,
                     {
@@ -106,6 +107,7 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                 }
             >
                 <TouchableOpacity
+                    disabled={expand ? false : true}
                     style={styles.button}
                     onPress={() => {
                         navigation.navigate('TripConfigurator', {location: location})
@@ -115,6 +117,7 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                     <Ionicons name="ios-build-outline" size={30} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity 
+                    disabled={expand ? false : true}
                     style={styles.button}
                     onPress={() => {
                         navigation.navigate('TripList', {location: location})
@@ -124,9 +127,10 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                     <Ionicons name="ios-list-sharp" size={30} color="white" />
                 </TouchableOpacity>
                 <TouchableOpacity 
+                    disabled={expand ? false : true}
                     style={styles.button}
                     onPress={() => {
-                        
+                        console.log('trash')
                         setExpand(false)
                     }}
                 >
