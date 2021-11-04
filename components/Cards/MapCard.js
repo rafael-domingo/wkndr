@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback
 // import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
 
-export default function MapCard({ location, handleClick, index, activeSlide, navigation }) {
+export default function MapCard({ location, handleClick, index, activeSlide, navigation, deleteTrip }) {
     const mapRef = React.useRef();
     const [view, setView] = React.useState(true)
 

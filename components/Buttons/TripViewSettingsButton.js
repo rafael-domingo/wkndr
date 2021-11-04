@@ -4,12 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { useDispatch } from 'react-redux';
 
-export default function TripViewSettingsButton({ navigation, location, show }) {
-    console.log({location})
+export default function TripViewSettingsButton({ navigation, location, show, deleteTrip}) {    
     const translation = React.useRef(new Animated.Value(0)).current
     const opacity = React.useRef(new Animated.Value(0)).current
-    const [expand, setExpand] = React.useState()
+    const [expand, setExpand] = React.useState()    
     React.useEffect(() => {
         if (!show) {
             Animated.timing(
@@ -129,8 +129,8 @@ export default function TripViewSettingsButton({ navigation, location, show }) {
                 <TouchableOpacity 
                     disabled={expand ? false : true}
                     style={styles.button}
-                    onPress={() => {
-                        console.log('trash')
+                    onPress={() => {                        
+                        deleteTrip()                        
                         setExpand(false)
                     }}
                 >

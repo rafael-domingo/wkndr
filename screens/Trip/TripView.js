@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
 import SearchBarInput from '../../components/Input/SearchBarInput';
-import { addDestination, deleteDestination } from '../../redux/user';
+import { addDestination, deleteDestination, deleteTrip } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
 import { Yelp } from '../../util/Yelp';
 import { Entypo } from '@expo/vector-icons';
@@ -77,6 +77,11 @@ export default function TripView({ route, navigation }) {
         }))
         modalizeRef.current = []; // reset modal refs, will repopulate on render
         markerRef.current = [];
+    }
+
+    const handleDeleteTrip = () => {        
+        dispatch(deleteTrip({tripId: location.tripId}))
+        navigation.navigate('User')
     }
 
     // camera methods
@@ -273,7 +278,7 @@ export default function TripView({ route, navigation }) {
                   
                     </View>
                              
-                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera}/>
+                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip}/>
                     
                 </SafeAreaView>
                 

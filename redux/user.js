@@ -32,6 +32,21 @@ export const userSlice = createSlice({
             })
             updateFirestore(state.tripList, state.user.uid)
         },        
+        deleteTrip: (state, action) => {
+            const { tripId } = action.payload
+            const newTripList = []
+            state.tripList.map(trip => {
+                if (trip.tripId !== tripId) {
+                    newTripList.push(trip)
+                } 
+            })
+            
+            updateFirestore(newTripList, state.user.uid)
+            return {
+                ...state,
+                tripList: newTripList
+            }
+        },
         updateDestinationsList: (state, action) => {
             const { tripId, newList, tripBuilder } = action.payload
             const tripListArray = state.tripList.map(trip => {
@@ -114,7 +129,8 @@ export const {
     updateDestinationsList,
     deleteDestination,
     addDestination,
-    addTrip
+    addTrip,
+    deleteTrip
 } = userSlice.actions;
 
 export default userSlice.reducer

@@ -3,12 +3,13 @@ import LargeMapList from './LargeMapList';
 import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetUserState } from '../../redux/user';
+import { deleteTrip, resetUserState } from '../../redux/user';
 import { signOut } from '../../util/Auth';
 import ListView from './ListView';
 import MapList from './MapList';
 
-export default function UserHome({ navigation }) {
+export default function UserHome({ route, navigation }) {
+    
     const userState = useSelector(state => state.user)
     const [mapView, setMapView] = React.useState(false)
     const dispatch = useDispatch();
@@ -49,6 +50,8 @@ export default function UserHome({ navigation }) {
         setCityListState(cityList)                
         setMapView(true)
     }
+
+
     return (
         <SafeAreaView style={styles.container}>   
             <View style={styles.header}>  
@@ -76,7 +79,7 @@ export default function UserHome({ navigation }) {
             <View style={{flex: 1}}>
                 {
                    mapView && (
-                    <MapList navigation={navigation} userTrips={cityListState}/>        
+                    <MapList navigation={navigation} userTrips={cityListState} />        
                    ) 
                 }
                 {
