@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder, TouchableOpacity, Easing } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder, TouchableOpacity, Easing, LayoutAnimation } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
@@ -75,6 +75,7 @@ export default function TripView({ route, navigation }) {
             tripId: location.tripId,
             wkndrId: wkndrId
         }))
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         modalizeRef.current = []; // reset modal refs, will repopulate on render
         markerRef.current = [];
     }

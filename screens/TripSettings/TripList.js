@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, StyleSheet, Text, ScrollView } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, ScrollView, LayoutAnimation } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import CancelButton from '../../components/Buttons/CancelButton';
 import TripListCard from '../../components/Cards/TripListCard';
@@ -25,6 +25,7 @@ export default function TripList({ route, navigation }) {
             tripId: location.tripId, 
             wkndrId: wkndrId,
         }))
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
     }
 
     return (
