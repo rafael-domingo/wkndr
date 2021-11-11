@@ -1,21 +1,58 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button, TouchableOpacity, LayoutAnimation, Animated, Easing, requireNativeComponent, ActivityIndicator } from 'react-native';
 // import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import { useDispatch } from 'react-redux';
+import { deleteTrip } from '../../redux/user';
 
-export default function MapCard({ location, handleClick, index, activeSlide, navigation, deleteTrip }) {
+
+export default function MapCard({ location, handleClick, index, activeSlide, navigation }) {
     const mapRef = React.useRef();
     const [view, setView] = React.useState(true)
     const [show, setShow] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
+    const opacity = React.useRef(new Animated.Value(1)).current
+    const dispatch = useDispatch()
     React.useEffect(() => {
+        // Animated.timing(
+        //     opacity,
+        //     {
+        //         toValue: 1,
+        //         duration: 500,
+        //         delay: 0,
+        //         easing: Easing.inOut(Easing.exp),
+        //         useNativeDriver: true
+        //     }
+        // ).start()
         if (index !== activeSlide) {
             setView(true)
             setShow(false)
+            setLoading(false)
         }
     }, [activeSlide])
+
+    React.useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    })
+    const deleteTripId = (tripId) => {
+        setLoading(true)
+        setTimeout(() => {
+            setView(true)
+            setShow(false)
+            setLoading(false)
+            dispatch(deleteTrip({tripId: tripId}))
+        }, 2000);
+    }
     if (view) {
         return (
-            <>
+            <Animated.View 
+                style={{
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    opacity: opacity
+                }}
+            >
             <Text style={styles.text}>
             {location.title}
             </Text>     
@@ -48,11 +85,34 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
                         longitudeDelta: 0.0421,
                     }}
                 />  
-            </>
+            </Animated.View>
+        )
+    } else if (loading) {
+        return (
+            <Animated.View 
+            style={{
+                justifyContent: 'center', 
+                alignItems: 'center',
+                opacity: opacity
+            }}
+        >
+        <Text style={styles.text}>
+        {location.title}
+        </Text>          
+        <View style={[styles.map, {borderWidth: 1, borderColor: 'white', justifyContent: 'center', alignItems: 'center', zIndex: 10}]}>
+            <ActivityIndicator/>
+        </View>              
+        </Animated.View>
         )
     } else {
         return (
-            <>
+            <Animated.View 
+                style={{
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    opacity: opacity
+                }}
+            >
             <Text style={styles.text}>
             {location.title}
             </Text>          
@@ -67,12 +127,33 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             {
                 location.data.map((item, index) => {
                     return (
-                        <TouchableOpacity 
-                            style={{backgroundColor: 'white', width: 200, margin: 5, borderRadius: 10, height: 30, justifyContent: 'center', alignItems: 'center'}}
-                            onPress={() => navigation.navigate('Trip', {location: item})}
-                        >
-                            <Text style={[styles.text, {textAlign: 'center', color: 'black'}]}>{item.tripName}</Text>
-                        </TouchableOpacity>
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <TouchableOpacity 
+                                style={{backgroundColor: 'white', width: 200, margin: 5, borderRadius: 10, height: 30, justifyContent: 'center', alignItems: 'center'}}
+                                onPress={() => navigation.navigate('Trip', {location: item})}
+                            >
+                                <Text style={[styles.text, {textAlign: 'center', color: 'black'}]}>{item.tripName}</Text>
+                            </TouchableOpacity>                        
+                            <TouchableOpacity
+                                style={show ? {} : {display: 'none'} }
+                                onPress={() => {
+                                    // Animated.timing(
+                                    //     opacity,
+                                    //     {
+                                    //         toValue: 0,
+                                    //         duration: 500,
+                                    //         delay: 0,
+                                    //         easing: Easing.inOut(Easing.exp),
+                                    //         useNativeDriver: true
+                                    //     }
+                                    // ).start()
+                                    
+                                    deleteTripId(item.tripId)
+                                }}
+                            >
+                                <FontAwesome5 name='trash' size={25} color="white"/>
+                            </TouchableOpacity>
+                        </View>
                     )
                     
                 })
@@ -80,11 +161,11 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             <TouchableOpacity onPress={() => setView(true)} style={{bottom: 0, position: 'absolute', marginBottom: 20}}>
                 <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setView(true)} style={show ? {bottom: 0, position: 'absolute', marginBottom: 40, backgroundColor: 'red'} : {display: 'none'}}>
+            <TouchableOpacity onPress={() => setView(true)} style={show ? {bottom: 0, position: 'absolute', marginBottom: 40, backgroundColor: 'red', padding: 10, borderRadius: 20} : {display: 'none'}}>
                 <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Delete All</Text>
             </TouchableOpacity>
             </View>              
-            </>
+            </Animated.View>
         )
     }
     

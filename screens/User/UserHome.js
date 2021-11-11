@@ -1,6 +1,6 @@
 import React from 'react';
 import LargeMapList from './LargeMapList';
-import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Pressable, SafeAreaView, LayoutAnimation } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteTrip, resetUserState } from '../../redux/user';
@@ -15,8 +15,16 @@ export default function UserHome({ route, navigation }) {
     const dispatch = useDispatch();
     const [cityListState, setCityListState] = React.useState()
     React.useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         extractData(userState.tripList)
+        
     }, [userState])
+
+    const deleteTripId = (tripId) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        dispatch(deleteTrip({tripId: tripId}))
+        
+    }
 
     const extractData = (tripList) => {            
         const cityList = []
@@ -79,7 +87,7 @@ export default function UserHome({ route, navigation }) {
             <View style={{flex: 1}}>
                 {
                    mapView && (
-                    <MapList navigation={navigation} userTrips={cityListState} />        
+                    <MapList navigation={navigation} userTrips={cityListState} deleteTripId={deleteTripId}/>        
                    ) 
                 }
                 {

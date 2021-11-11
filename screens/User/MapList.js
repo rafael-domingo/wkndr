@@ -1,25 +1,26 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, Text, LayoutAnimation } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import { useDispatch } from 'react-redux';
 import MapCard from '../../components/Cards/MapCard';
-
-export default function MapList({ navigation, userTrips }) {
+import { deleteTrip } from '../../redux/user';
+export default function MapList({ navigation, userTrips, deleteTripId }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
-
+        
     const selectMap = (index) => {
         console.log(index)
         console.log(userTrips[index])
         navigation.navigate('Trip', {trip: userTrips[index]})
-    }
+    }  
 
     const renderItem = ({item, index}) => {
         return (
             <View style={styles.container}>
-                <MapCard location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation}/>
+                <MapCard location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} deleteTripId={deleteTripId}/>
             </View>
-
         )
     }
+
     return (
         <View style={styles.container}>
             <Carousel
@@ -30,7 +31,10 @@ export default function MapList({ navigation, userTrips }) {
                 itemWidth={Dimensions.get('window').width - 100}
                 sliderHeight={Dimensions.get('window').height - 350}
                 itemHeight={Dimensions.get('window').height - 350}
-                onSnapToItem={(index) => setActiveSlide(index)}       
+                onSnapToItem={(index) => setActiveSlide(index)}   
+                // useScrollView={true}
+                onLayout={() => console.log('on layout')}
+                 
             />
             <Pagination
                     dotsLength={userTrips.length}
