@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder, TouchableOpacity, Easing, LayoutAnimation } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, Text, Modal, SafeAreaView, TouchableWithoutFeedback, Keyboard, FlatList, PanResponder, TouchableOpacity, Easing, LayoutAnimation } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
@@ -10,6 +10,7 @@ import { Yelp } from '../../util/Yelp';
 import { Entypo } from '@expo/vector-icons';
 import TripCarousel from './TripCarousel';
 import { Modalize } from 'react-native-modalize';
+import { BlurView } from 'expo-blur';
 export default function TripView({ route, navigation }) {
 
     // state and value management
@@ -20,6 +21,8 @@ export default function TripView({ route, navigation }) {
     const modalizeRef = React.useRef([])
     const markerRef = React.useRef([])
     const searchMarkerRef = React.useRef([])
+    const [modal, setModal] = React.useState(false)    
+    const [modalConfirm, setModalConfirm] = React.useState(false)
     const dispatch = useDispatch()
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
@@ -81,9 +84,16 @@ export default function TripView({ route, navigation }) {
     }
 
     const handleDeleteTrip = () => {        
-        dispatch(deleteTrip({tripId: location.tripId}))
-        navigation.navigate('User')
+        setModal(true)        
     }
+
+    React.useEffect(() => {
+        if (modalConfirm) {
+            setModalConfirm(false)
+            dispatch(deleteTrip({tripId: location.tripId}))
+            navigation.navigate('User')
+        }
+    }, [modalConfirm])
 
     // camera methods
     const fitMarkers = () => {   
@@ -280,7 +290,33 @@ export default function TripView({ route, navigation }) {
                     </View>
                              
                     <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip}/>
-                    
+                    <Modal
+                        transparent={true}
+                        visible={modal}    
+                        animationType={'slide'}                      
+                        
+                    >
+                        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                        <BlurView intensity={100} tint={'default'} style={{overflow: 'hidden', borderRadius: 20, height: 200, width: Dimensions.get('window').width*0.8, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{fontSize: 30}}>Delete this trip?</Text>
+                            <View style={{flexDirection: 'row', bottom: 0, position: 'absolute', width: '100%', justifyContent: 'space-around', alignItems: 'center'}}>
+                                <View style={{width: '50%'}}>
+                                <TouchableOpacity onPress={() => setModal(false)} style={{padding: 10, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Cancel</Text>
+                                </TouchableOpacity>
+                                </View>
+                                <View style={{width: '50%'}}>
+                                <TouchableOpacity onPress={() => {
+                                    setModalConfirm(true)
+                                    setModal(false)
+                                }} style={{padding: 10, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>Delete</Text>
+                                </TouchableOpacity>
+                                </View>
+                            </View>
+                        </BlurView>
+                        </View>
+                    </Modal>    
                 </SafeAreaView>
                 
                 {

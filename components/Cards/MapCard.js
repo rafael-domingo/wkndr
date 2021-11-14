@@ -7,10 +7,12 @@ import { useDispatch } from 'react-redux';
 import { deleteTrip } from '../../redux/user';
 
 
-export default function MapCard({ location, handleClick, index, activeSlide, navigation }) {
+export default function MapCard({ location, handleClick, index, activeSlide, navigation, setModal, setModalAll, modalConfirm, setModalConfirm }) {
     const mapRef = React.useRef();
     const [view, setView] = React.useState(true)
     const [show, setShow] = React.useState(false)
+    const [deleteId, setDeleteId] = React.useState()
+    const [deleteAllTrips, setDeleteAllTrips] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const opacity = React.useRef(new Animated.Value(1)).current
     const dispatch = useDispatch()
@@ -35,14 +37,51 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
     React.useEffect(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
     })
+
+    React.useEffect(() => {
+        if (modalConfirm) {
+            if (deleteAllTrips) {
+                deleteAll()
+                setDeleteAllTrips(false)
+            } else {
+                deleteTripId(deleteId)
+                setDeleteId(null)
+            }
+            setModalConfirm(false)  
+        }  
+        
+    },[modalConfirm])
+
     const deleteTripId = (tripId) => {
-        setLoading(true)
-        setTimeout(() => {
-            setView(true)
-            setShow(false)
-            setLoading(false)
+        console.log(location.data.length)
+        if (location.data.length === 1) {
+            setLoading(true)
+            setTimeout(() => {
+                setView(true)
+                setShow(false)
+                setLoading(false)
+                dispatch(deleteTrip({tripId: tripId}))
+            }, 2000);
+        } else {
             dispatch(deleteTrip({tripId: tripId}))
-        }, 2000);
+        }
+       
+    }
+
+    const deleteAll = () => {
+        setLoading(true)
+        location.data.map((item, index) => {                        
+            if (index === location.data.length - 1) {
+                setTimeout(() => {
+                    setView(true)
+                    setShow(false)
+                    setLoading(false)
+                    dispatch(deleteTrip({tripId: item.tripId}))
+                }, 2000);           
+            } else {
+                dispatch(deleteTrip({tripId: item.tripId}))
+            }
+        })
     }
     if (view) {
         return (
@@ -136,19 +175,9 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
                             </TouchableOpacity>                        
                             <TouchableOpacity
                                 style={show ? {} : {display: 'none'} }
-                                onPress={() => {
-                                    // Animated.timing(
-                                    //     opacity,
-                                    //     {
-                                    //         toValue: 0,
-                                    //         duration: 500,
-                                    //         delay: 0,
-                                    //         easing: Easing.inOut(Easing.exp),
-                                    //         useNativeDriver: true
-                                    //     }
-                                    // ).start()
-                                    
-                                    deleteTripId(item.tripId)
+                                onPress={() => {                                  
+                                    setModal(true)
+                                    setDeleteId(item.tripId)                                    
                                 }}
                             >
                                 <FontAwesome5 name='trash' size={25} color="white"/>
@@ -161,7 +190,13 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             <TouchableOpacity onPress={() => setView(true)} style={{bottom: 0, position: 'absolute', marginBottom: 20}}>
                 <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setView(true)} style={show ? {bottom: 0, position: 'absolute', marginBottom: 40, backgroundColor: 'red', padding: 10, borderRadius: 20} : {display: 'none'}}>
+            <TouchableOpacity 
+                onPress={() => {
+                    setModalAll(true)
+                    setDeleteAllTrips(true)
+                }} 
+                style={show ? {bottom: 0, position: 'absolute', marginBottom: 40, backgroundColor: 'red', padding: 10, borderRadius: 20} : {display: 'none'}}
+            >
                 <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Delete All</Text>
             </TouchableOpacity>
             </View>              
