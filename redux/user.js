@@ -66,6 +66,24 @@ export const userSlice = createSlice({
                 tripList: tripListArray
             }
         },
+        updateTripName: (state, action) => {
+            const { tripName, tripId } = action.payload
+            const tripListArray = state.tripList.map(trip => {
+                if (trip.tripId !== tripId) {
+                    return trip
+                } else {
+                    return {
+                        ...trip,
+                        tripName: tripName
+                    }
+                }
+            })
+            updateFirestore(tripListArray, state.user.uid)
+            return {
+                ...state,
+                tripList: tripListArray
+            }
+        },
         deleteDestination: (state, action) => {
             const { tripId, wkndrId } = action.payload             
             const tripListArray = state.tripList.map(trip => {
@@ -127,6 +145,7 @@ export const {
     setUser,
     setTripList,
     updateDestinationsList,
+    updateTripName,
     deleteDestination,
     addDestination,
     addTrip,

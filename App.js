@@ -23,6 +23,7 @@ export default function App() {
 
 
     <View style={styles.container}>
+      <StatusBar style={'light'}/>
     <GestureHandlerRootView style={{flex : 1}}>
   
     <NavigationContainer>

@@ -11,12 +11,14 @@ import { Entypo } from '@expo/vector-icons';
 import TripCarousel from './TripCarousel';
 import { Modalize } from 'react-native-modalize';
 import { BlurView } from 'expo-blur';
+import TripHeader from '../../components/Misc/TripHeader';
 export default function TripView({ route, navigation }) {
 
     // state and value management
     const {location} = route.params
     const [searchResults, setSearchResults] = React.useState([])
     const [camera, setCamera] = React.useState(false)
+    const [search, setSearch] = React.useState(false)
     const mapRef = React.useRef(null)
     const modalizeRef = React.useRef([])
     const markerRef = React.useRef([])
@@ -269,12 +271,14 @@ export default function TripView({ route, navigation }) {
                         })
                     }
                 </MapView>
-
+                <TripHeader location={locationState} show={camera} navigation={navigation}/>
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', flex: 1, top: 0, zIndex: 10}}>                
+                
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width}}>
-                    <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%', zIndex: 10}}>
+                    {/* <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%', zIndex: 10}}>
+                    
                         <TouchableOpacity 
-                            style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25,   shadowOffset: {
+                            style={{width: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: 25, shadowOffset: {
                                 width: 0,
                                 height: 2,
                             },
@@ -284,9 +288,10 @@ export default function TripView({ route, navigation }) {
                         >
                             <Entypo name="arrow-left" size={30} color="white"/>                            
                         </TouchableOpacity>
-                    </View> 
-                    <SearchBarInput location={locationState} handleSearch={handleSearch} show={camera}/>   
-                  
+                    </View>  */}
+                    
+                    {/* <SearchBarInput location={locationState} handleSearch={handleSearch} show={search}/>    */}
+                    
                     </View>
                              
                     <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip}/>

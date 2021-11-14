@@ -11,7 +11,7 @@ export default function SearchBarInput({ location, handleSearch, show }) {
     const translation = React.useRef(new Animated.Value(0)).current
 
     React.useEffect(() => {
-        if (!show)  {
+        if (show)  {
             Animated.timing(
                 translation,
                 {

@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { useDispatch } from 'react-redux';
+import { Entypo } from '@expo/vector-icons'; 
 
 export default function TripViewSettingsButton({ navigation, location, show, deleteTrip}) {    
     const translation = React.useRef(new Animated.Value(0)).current
@@ -106,6 +107,8 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                     }
                 }
             >
+                <View style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Trip Builder</Text>
                 <TouchableOpacity
                     disabled={expand ? false : true}
                     style={styles.button}
@@ -116,6 +119,9 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 >                 
                     <Ionicons name="ios-build-outline" size={30} color="white" />
                 </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Trip List</Text>
                 <TouchableOpacity 
                     disabled={expand ? false : true}
                     style={styles.button}
@@ -126,6 +132,9 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 >
                     <Ionicons name="ios-list-sharp" size={30} color="white" />
                 </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Delete Trip</Text>
                 <TouchableOpacity 
                     disabled={expand ? false : true}
                     style={styles.button}
@@ -136,6 +145,21 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 >
                     <FontAwesome5 name="trash" size={25} color="white" />
                 </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <Text style={styles.buttonText}>Edit Trip Name</Text>
+                    <TouchableOpacity 
+                        disabled={expand ? false : true}
+                        style={styles.button}
+                        onPress={() => {                        
+
+                            setExpand(false)
+                        }}
+                    >
+                        
+                        <Entypo name="edit" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>
             </Animated.View>
         </Animated.View>
     )
@@ -146,7 +170,7 @@ const styles = StyleSheet.create({
         flex: 1,
         zIndex: 5,   
         position: 'relative',
-        bottom: 0,        
+        bottom: -100,        
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         width: Dimensions.get('window').width - 40,                
@@ -167,5 +191,13 @@ const styles = StyleSheet.create({
         borderRadius: 27.5,
         padding: 7.5,
         backgroundColor: 'rgb(51,51,51)',
+    },
+    buttonText: {
+        color: 'white'
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end', 
+        alignItems: 'center'
     }
 })
