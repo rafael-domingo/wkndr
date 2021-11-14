@@ -4,7 +4,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
 import MapCard from '../../components/Cards/MapCard';
 import { deleteTrip } from '../../redux/user';
-export default function MapList({ navigation, userTrips, deleteTripId, setModal, setModalAll, modalConfirm, setModalConfirm }) {
+export default function MapList({ navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
         
     const selectMap = (index) => {
@@ -16,7 +16,7 @@ export default function MapList({ navigation, userTrips, deleteTripId, setModal,
     const renderItem = ({item, index}) => {
         return (
             <View style={styles.container}>
-                <MapCard location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} deleteTripId={deleteTripId} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
+                <MapCard location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
             </View>
         )
     }

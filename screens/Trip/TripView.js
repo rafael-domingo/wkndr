@@ -4,14 +4,17 @@ import MapView, { Marker } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
 import TripViewSettingsButton from '../../components/Buttons/TripViewSettingsButton';
 import SearchBarInput from '../../components/Input/SearchBarInput';
-import { addDestination, deleteDestination, deleteTrip } from '../../redux/user';
+import { addDestination, deleteDestination, deleteTrip, updateTripName } from '../../redux/user';
 import SearchCarousel from './SearchCarousel';
 import { Yelp } from '../../util/Yelp';
 import { Entypo } from '@expo/vector-icons';
 import TripCarousel from './TripCarousel';
 import { Modalize } from 'react-native-modalize';
 import { BlurView } from 'expo-blur';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import TripHeader from '../../components/Misc/TripHeader';
+import DeleteTripModal from '../../components/Modals/DeleteTripModal';
+import RenameTripModal from '../../components/Modals/RenameTripModal';
 export default function TripView({ route, navigation }) {
 
     // state and value management
@@ -23,9 +26,15 @@ export default function TripView({ route, navigation }) {
     const modalizeRef = React.useRef([])
     const markerRef = React.useRef([])
     const searchMarkerRef = React.useRef([])
+    const dispatch = useDispatch()
+
+    // modal states
     const [modal, setModal] = React.useState(false)    
     const [modalConfirm, setModalConfirm] = React.useState(false)
-    const dispatch = useDispatch()
+    const [renameModal, setRenameModal] = React.useState(false)
+    const [modalAction, setModalAction] = React.useState()
+    const [newTripName, setNewTripName] = React.useState()
+
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
     const findTrip = (trip) => {
@@ -87,13 +96,26 @@ export default function TripView({ route, navigation }) {
 
     const handleDeleteTrip = () => {        
         setModal(true)        
+        setModalAction('delete')
+    }
+
+    const handleRenameTrip = () => {
+        setRenameModal(true)
+        setModalAction('rename')
+        
     }
 
     React.useEffect(() => {
         if (modalConfirm) {
-            setModalConfirm(false)
-            dispatch(deleteTrip({tripId: location.tripId}))
-            navigation.navigate('User')
+            if (modalAction === 'delete') {
+                setModalConfirm(false)
+                dispatch(deleteTrip({tripId: location.tripId}))
+                navigation.navigate('User')
+            } else if (modalAction === 'rename') {
+                setModalConfirm(false)
+                dispatch(updateTripName({tripName: newTripName, tripId: location.tripId}))
+            }
+           
         }
     }, [modalConfirm])
 
@@ -294,34 +316,24 @@ export default function TripView({ route, navigation }) {
                     
                     </View>
                              
-                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip}/>
-                    <Modal
-                        transparent={true}
-                        visible={modal}    
-                        animationType={'slide'}                      
+                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip} renameTrip={handleRenameTrip}/>
+                    <TouchableOpacity 
                         
-                    >
-                        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                        <BlurView intensity={100} tint={'default'} style={{overflow: 'hidden', borderRadius: 20, height: 200, width: Dimensions.get('window').width*0.8, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{fontSize: 30}}>Delete this trip?</Text>
-                            <View style={{flexDirection: 'row', bottom: 0, position: 'absolute', width: '100%', justifyContent: 'space-around', alignItems: 'center'}}>
-                                <View style={{width: '50%'}}>
-                                <TouchableOpacity onPress={() => setModal(false)} style={{padding: 10, justifyContent: 'center', alignItems: 'center'}}>
-                                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Cancel</Text>
-                                </TouchableOpacity>
-                                </View>
-                                <View style={{width: '50%'}}>
-                                <TouchableOpacity onPress={() => {
-                                    setModalConfirm(true)
-                                    setModal(false)
-                                }} style={{padding: 10, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>Delete</Text>
-                                </TouchableOpacity>
-                                </View>
-                            </View>
-                        </BlurView>
-                        </View>
-                    </Modal>    
+                        style={{
+                            zIndex: 15,
+                            margin: 5,
+                            width: 50,
+                            height: 50,
+                            backgroundColor: 'rgb(112,112,112)',
+                            borderRadius: 27.5,
+                            padding: 7.5,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                        <FontAwesome5 name="search" size={24} color="white" />
+                    </TouchableOpacity>
+                    <DeleteTripModal setModal={setModal} setModalConfirm={setModalConfirm} modal={modal}/>
+                    <RenameTripModal location={locationState} setRenameModal={setRenameModal} renameModal={renameModal} setModalConfirm={setModalConfirm} setNewTripName={setNewTripName}/>
                 </SafeAreaView>
                 
                 {

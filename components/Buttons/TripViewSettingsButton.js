@@ -7,7 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { Entypo } from '@expo/vector-icons'; 
 
-export default function TripViewSettingsButton({ navigation, location, show, deleteTrip}) {    
+export default function TripViewSettingsButton({ navigation, location, show, deleteTrip, renameTrip}) {    
     const translation = React.useRef(new Animated.Value(0)).current
     const opacity = React.useRef(new Animated.Value(0)).current
     const [expand, setExpand] = React.useState()    
@@ -152,7 +152,7 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                         disabled={expand ? false : true}
                         style={styles.button}
                         onPress={() => {                        
-
+                            renameTrip()
                             setExpand(false)
                         }}
                     >
