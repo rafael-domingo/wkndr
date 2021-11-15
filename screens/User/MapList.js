@@ -19,8 +19,6 @@ export default function MapList({ city, navigation, userTrips, setModal, setModa
         }
     }, [city])
     const selectMap = (index) => {
-        console.log(index)
-        console.log(userTrips[index])
         navigation.navigate('Trip', {trip: userTrips[index]})
     }  
 
@@ -43,10 +41,7 @@ export default function MapList({ city, navigation, userTrips, setModal, setModa
                 sliderHeight={Dimensions.get('window').height - 350}
                 itemHeight={Dimensions.get('window').height - 350}
                 onSnapToItem={(index) => setActiveSlide(index)}   
-                firstItem={activeIndex}
-                // useScrollView={true}
-                onLayout={() => console.log('on layout')}
-                 
+                firstItem={activeIndex}                           
             />
             <Pagination
                     dotsLength={userTrips.length}
