@@ -34,6 +34,7 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
     for (let index = 0; index < searchResults.length; index = index + 4) {
         searchContainer.push(
             <SearchCardContainer 
+                key={index}
                 results={searchResults.slice(index, index+4)} 
                 handleScrollEnabled={handleScrollEnabled} 
                 handleAddLocation={handleAddLocation}
@@ -59,7 +60,12 @@ export default function SearchCarousel({ searchResults, handleAddLocation, handl
             <Animated.ScrollView 
                 pagingEnabled
                 horizontal
-                style={styles.container}
+                style={[
+                    styles.container,
+                    {
+                        zIndex: camera ? 15 : 5   
+                    }
+                ]}
                 scrollEnabled={scrollEnabled}
                 onScroll={Animated.event(
                     [
@@ -94,6 +100,6 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'absolute',
         bottom: 0,
-        zIndex: 5
+        // zIndex: 15
     }
 })

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View, ScrollView } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
 export default function Hours({ hours }) {
     const days = {
         'Monday': [],
@@ -40,12 +41,11 @@ export default function Hours({ hours }) {
     })
 
 
-    console.log(days)
     var businessHours = [];
     for (var key in days) {
         if (days[key].length === 0) {
             businessHours.push(
-                <View style={styles.subContainer}>
+                <View key={uuidv4()} style={styles.subContainer}>
                     <Text style={[styles.text, {width: '100%', fontWeight: 'bold'}]}>{key}</Text>   
                     <View><Text style={[styles.text, {fontSize: 12}]}>Closed</Text></View>
                 </View>
@@ -81,11 +81,11 @@ export default function Hours({ hours }) {
                     endHour = endHour - 12
                 }
                 return (
-                    <Text key={index} style={[styles.text, {fontSize: 12}]}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
+                    <Text key={uuidv4()} style={[styles.text, {fontSize: 12}]}>{startHour}:{startMin}{startDescription} - {endHour}:{endMin}{endDescription}</Text>
                 )
             })
             businessHours.push(
-                <View style={styles.subContainer}>                    
+                <View key={uuidv4()}  style={styles.subContainer}>                    
                     <Text style={[styles.text, {width: '100%', fontWeight: 'bold'}]}>{key}</Text>                    
                     <View style={{}}>{hours}</View>
                 </View>

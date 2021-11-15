@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 export const Yelp = {
@@ -67,7 +68,7 @@ export const Yelp = {
     search(term, lat, lng) {
         return fetch('https://us-central1-wkndr-326514.cloudfunctions.net/yelpSearch', {
             method: 'POST',
-            headers: {
+            headers: {                
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -81,7 +82,7 @@ export const Yelp = {
                 item.wkndrId = uuidv4()
                 item.selected = false
                 return item
-             })
+             })             
              return data
         })
         .catch(error => console.log(error))

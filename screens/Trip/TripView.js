@@ -38,14 +38,14 @@ export default function TripView({ route, navigation }) {
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
     const findTrip = (trip) => {
-        console.log(location)
+        
         return trip.tripId === location.tripId
     }
     const locationState = useSelector(state => state.user.tripList.find(findTrip))
 
     // state methods
     const handleSearch = (searchResults) => {
-        console.log(searchResults)
+        // console.log(searchResults)
 
         // parse through current trip to help check for existing destinations
         var tripIds = [];
@@ -70,8 +70,8 @@ export default function TripView({ route, navigation }) {
                 return item
             }
         })
-
-        setSearchResults(updatedSearchResults)
+        setSearchResults(updatedSearchResults)    
+  
         if (searchResults.length > 0) {
             fitMarkers()
         }
@@ -110,14 +110,21 @@ export default function TripView({ route, navigation }) {
             if (modalAction === 'delete') {
                 setModalConfirm(false)
                 dispatch(deleteTrip({tripId: location.tripId}))
+                setModalAction(null)
                 navigation.navigate('User')
             } else if (modalAction === 'rename') {
+                // console.log({newTripName})
                 setModalConfirm(false)
                 dispatch(updateTripName({tripName: newTripName, tripId: location.tripId}))
+                setModalAction(null)
             }
            
         }
     }, [modalConfirm])
+
+    React.useEffect(() => {
+        // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    })
 
     // camera methods
     const fitMarkers = () => {   
@@ -145,7 +152,7 @@ export default function TripView({ route, navigation }) {
         }, {duration: 1000})                        
     }
 
-    const animateToRegion = (center) => {
+    const animateToRegion = (center) => {        
         if (mapRef.current) {
             mapRef.current.animateToRegion(
                 {
@@ -271,7 +278,7 @@ export default function TripView({ route, navigation }) {
                                         title={destination[key].name}
                                         pinColor={'tomato'}
                                         onPress={() => {
-                                            console.log('marker pressed')
+                                            // console.log('marker pressed')
                                         }}
                                     />
                                 )
@@ -293,10 +300,10 @@ export default function TripView({ route, navigation }) {
                         })
                     }
                 </MapView>
-                <TripHeader location={locationState} show={camera} navigation={navigation}/>
+                <TripHeader location={locationState} show={camera} search={search} navigation={navigation}/>
                 <SafeAreaView style={{position: 'absolute', justifyContent: 'center', alignItems: 'center', flex: 1, top: 0, zIndex: 10}}>                
                 
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width}}>
                     {/* <View style={{justifyContent: 'flex-start', alignItems: 'flex-start', width: '10%', zIndex: 10}}>
                     
                         <TouchableOpacity 
@@ -312,13 +319,16 @@ export default function TripView({ route, navigation }) {
                         </TouchableOpacity>
                     </View>  */}
                     
-                    {/* <SearchBarInput location={locationState} handleSearch={handleSearch} show={search}/>    */}
+                    <SearchBarInput location={locationState} handleSearch={handleSearch} show={search}/>   
                     
                     </View>
                              
-                    <TripViewSettingsButton navigation={navigation} location={locationState} show={camera} deleteTrip={handleDeleteTrip} renameTrip={handleRenameTrip}/>
-                    <TouchableOpacity 
-                        
+                    <TripViewSettingsButton navigation={navigation} location={locationState} setSearch={setSearch} search={search} show={camera} deleteTrip={handleDeleteTrip} renameTrip={handleRenameTrip} setSearchResults={setSearchResults}/>
+                   
+                    <DeleteTripModal setModal={setModal} setModalConfirm={setModalConfirm} modal={modal}/>
+                    <RenameTripModal location={locationState} setRenameModal={setRenameModal} renameModal={renameModal} setModalConfirm={setModalConfirm} setNewTripName={setNewTripName}/>
+                    {/* <TouchableOpacity 
+                        onPress={() => setSearch(!search)}
                         style={{
                             zIndex: 15,
                             margin: 5,
@@ -327,13 +337,14 @@ export default function TripView({ route, navigation }) {
                             backgroundColor: 'rgb(112,112,112)',
                             borderRadius: 27.5,
                             padding: 7.5,
+                            bottom: 100,
+                            right:10,                            
+                            position: 'absolute',
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
                         <FontAwesome5 name="search" size={24} color="white" />
-                    </TouchableOpacity>
-                    <DeleteTripModal setModal={setModal} setModalConfirm={setModalConfirm} modal={modal}/>
-                    <RenameTripModal location={locationState} setRenameModal={setRenameModal} renameModal={renameModal} setModalConfirm={setModalConfirm} setNewTripName={setNewTripName}/>
+                    </TouchableOpacity> */}
                 </SafeAreaView>
                 
                 {

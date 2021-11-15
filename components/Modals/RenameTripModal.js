@@ -22,10 +22,10 @@ export default function RenameTripModal({location, setRenameModal, renameModal, 
         >
             <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
             <BlurView intensity={100} tint={'default'} style={{overflow: 'hidden', borderRadius: 20, height: 200, width: Dimensions.get('window').width*0.8, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 30}}>Rename this trip?</Text>
+                <Text style={{fontSize: 20}}>What would you like to rename this trip?</Text>
                 <TextInput
                     ref={ref}
-                    style={{width: '80%', height: 50, color: 'white', fontSize: 40, textAlign: 'center'}}
+                    style={{width: '100%', height: 50, color: 'white', fontSize: 40, textAlign: 'center'}}
                     onChangeText={setText}
                     value={text}
                     placeholder={location.tripName}

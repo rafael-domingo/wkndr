@@ -1,14 +1,15 @@
 import React from 'react';
 import { Text, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { setTripBuilder } from '../../redux/tripBuilder';
+import { resetTripBuilder, setTripBuilder } from '../../redux/tripBuilder';
 import { addTrip } from '../../redux/user';
 import { Yelp } from '../../util/Yelp';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function BuildTripLoading({ tripState }) {
+export default function BuildTripLoading({ tripState, navigation }) {
     const dispatch = useDispatch()
-
+    const [complete, setComplete] = React.useState(false)
     React.useEffect(() => {
         dispatch(setTripBuilder(tripState))
         Yelp.tripBuilder(tripState).then(response => {            
@@ -32,21 +33,36 @@ export default function BuildTripLoading({ tripState }) {
             //     return object
             // })
             console.log(response) 
-            dispatch(addTrip({
+            const trip = {
                 tripId: uuidv4(),
                 cityName: tripState.cityName,
                 coordinates: tripState.coordinates,
                 destinations: response,
                 tripName: tripState.tripName,
                 tripBuilder: tripState
-            }))
+            }
+            dispatch(addTrip(trip))
+            setComplete(true)
+            setTimeout(() => {
+                dispatch(resetTripBuilder())
+                navigation.replace('Trip', {location: trip})
+            }, 2000);
         })
     }, [])
     
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Building your trip</Text>
+            {
+                !complete && (
+                    <Text style={styles.text}>Building your trip</Text>
+                )
+            }
+            {
+                complete && (
+                    <Text style={styles.text}>Finishing up...</Text>
+                )
+            }
             <ActivityIndicator/>
         </View>
     )

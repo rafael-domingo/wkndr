@@ -14,6 +14,7 @@ import store from './redux/store';
 import { updateFirestore } from './util/Firestore';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Account from './screens/Account/Account';
+import * as Sentry from 'sentry-expo';
 
 export default function App() {
 
@@ -31,7 +32,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
         <Stack.Group>
           <Stack.Screen name="Home" component={Welcome} />
-          <Stack.Screen name='User' component={UserHome} options={{animation: 'fade'}}/>
+          <Stack.Screen name='User' component={UserHome} initialParams={{ city: null}} options={{animation: 'fade'}}/>
           <Stack.Screen name="Trip" component={TripView} options={{presentation: 'fade'}}/>
           <Stack.Screen name="Account" component={Account} options={{presentation: 'fade'}}/>
           <Stack.Screen name="Build" component={BuildTrip} options={{presentation: 'fullScreenModal'}}/>
@@ -46,6 +47,7 @@ export default function App() {
     </Provider>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -7,7 +7,7 @@ export default function CardSubHeader({ location, show }) {
     const opacity = React.useRef(new Animated.Value(0)).current
 
     React.useEffect(() => {
-        console.log(`camera: ${show}`)
+
         if (!show) {
             Animated.timing(
                 opacity,
@@ -49,7 +49,7 @@ export default function CardSubHeader({ location, show }) {
                     location.categories !== undefined && (
                         location.categories.map((category, index) => {
                             return (
-                                <View style={{backgroundColor: 'white', borderRadius: 10, marginBottom: 5}}>
+                                <View key={index} style={{backgroundColor: 'white', borderRadius: 10, marginBottom: 5}}>
                                     <Text key={index} style={[styles.text, { color: 'rgb(24,28,47)', margin: 5}]}>{category.title}</Text>
                                 </View>
                             )

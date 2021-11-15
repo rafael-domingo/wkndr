@@ -41,9 +41,9 @@ export default function Welcome({ navigation }) {
                     console.log(response)
                     if (response !== 'new user') {
                         dispatch(setTripList(response.tripList))
-                        navigation.navigate('User')
+                        navigation.navigate('User', {city: null})
                     } else {                        
-                        navigation.navigate('User')
+                        navigation.navigate('User', {city: null})
                     }                    
                     
                 }).catch(error => console.log(error))  

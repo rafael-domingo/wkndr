@@ -49,7 +49,7 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
             {
                 results.map((item, index) => {
                     return (
-                        <SearchCard location={item} handleModalContent={handleModalContent} handleCallout={handleCallout} index={index}/>
+                        <SearchCard key={index} location={item} handleModalContent={handleModalContent} handleCallout={handleCallout} index={index}/>
                     )
                 })
             }
@@ -67,7 +67,8 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
                 modalStyle={{padding: 5, backgroundColor: 'rgba(0,0,0,0)',}}    
                 onOpen={() => {
                     handleScrollEnabled(false)
-                    setModal(true)                    
+                    setModal(true)                   
+                    setCamera(true) 
                     // cameraAnimation(modalContent.coordinates)
                 }}
                 onClosed={() => {
@@ -159,10 +160,10 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container: {     
         height: 600,
         width: Dimensions.get('window').width,
-        flexWrap: 'wrap',
+        flexWrap: 'wrap',        
         justifyContent: 'flex-end',
         alignItems: 'center',
         // position: 'absolute',

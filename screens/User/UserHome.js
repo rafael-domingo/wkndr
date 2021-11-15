@@ -13,6 +13,7 @@ import { BlurView } from 'expo-blur';
 import DeleteTripModal from '../../components/Modals/DeleteTripModal';
 import DeleteAllTripsModal from '../../components/Modals/DeleteAllTripsModal';
 export default function UserHome({ route, navigation }) {
+    const {city} = route.params
     // user data states
     const userState = useSelector(state => state.user)
     const [mapView, setMapView] = React.useState(false)    
@@ -80,7 +81,7 @@ export default function UserHome({ route, navigation }) {
                     onPress={() => navigation.navigate('Account')}
                 />
                 <Ionicons 
-                    name="ios-settings-outline" 
+                    name="md-list" 
                     size={24} 
                     color="white" 
                     onPress={() => setMapView(!mapView)}
@@ -89,7 +90,7 @@ export default function UserHome({ route, navigation }) {
             <View style={{flex: 1}}>
                 {
                    mapView && (
-                    <MapList navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>        
+                    <MapList city={city} navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>        
                    ) 
                 }
                 {

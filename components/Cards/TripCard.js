@@ -44,7 +44,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                     setOpen(true)
                     Yelp.detail(location[key].id)
                     .then(response => {
-                        console.log(response)
+                        // console.log(response)
                         setDetailState(response)
                         setLoading(false)
                     })

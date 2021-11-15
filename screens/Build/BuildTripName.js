@@ -47,6 +47,7 @@ export default function BuildTripName({ handleInput }) {
                     suggestions.map((item, index) => {
                         return (
                             <TouchableOpacity 
+                                key={`${item}${index}`}
                                 style={value === item ? [styles.suggestions, {backgroundColor: 'rgba(24, 28, 47, 1)'}] : styles.suggestions}
                                 onPress={() => {
                                     handleTextInput(item)

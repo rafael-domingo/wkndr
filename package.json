@@ -37,7 +37,13 @@
     "react-native-web": "~0.13.12",
     "react-native-webview": "11.6.2",
     "react-redux": "^7.2.5",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "sentry-expo": "^4.0.0",
+    "expo-application": "~3.2.0",
+    "expo-constants": "~11.0.1",
+    "expo-device": "~3.3.0",
+    "expo-updates": "~0.8.2",
+    "react-native-get-random-values": "~1.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

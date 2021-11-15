@@ -5,6 +5,7 @@ import { Yelp } from '../../util/Yelp';
 import Autocomplete from '../Misc/Autocomplete';
 
 export default function SearchBarInput({ location, handleSearch, show }) {
+    const ref = React.useRef();
     const [value, setValue] = React.useState('');
     const [autocomplete, setAutocomplete] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
@@ -12,6 +13,7 @@ export default function SearchBarInput({ location, handleSearch, show }) {
 
     React.useEffect(() => {
         if (show)  {
+            
             Animated.timing(
                 translation,
                 {
@@ -21,8 +23,9 @@ export default function SearchBarInput({ location, handleSearch, show }) {
                     easing: Easing.inOut(Easing.exp),
                     useNativeDriver: true
                 }
-            ).start()
+            ).start(()=> ref.current?.focus())
         } else {
+            ref.current?.blur()
             Animated.timing(
                 translation,
                 {
@@ -38,6 +41,7 @@ export default function SearchBarInput({ location, handleSearch, show }) {
     }, [show])
 
     const updateSearch = (search) => {
+        ref.current?.focus()
         handleSearch([])
         setValue(search)
         if (search.length > 2) {
@@ -81,6 +85,7 @@ export default function SearchBarInput({ location, handleSearch, show }) {
             ]}
         >
             <SearchBar     
+                ref={ref}
                 inputContainerStyle={{height: 50, backgroundColor: 'white'}}         
                 placeholder="Search"
                 onChangeText={text => updateSearch(text)}
@@ -103,9 +108,9 @@ export default function SearchBarInput({ location, handleSearch, show }) {
 const styles = StyleSheet.create({
     container: {
         // width: Dimensions.get('window').width - 50,
-        width: '100%',
-        paddingRight: 75,
-        paddingLeft: 25,
+        width: '90%',
+        // paddingRight: 75,
+        // paddingLeft: 25,
         borderRadius: 10,
         position: 'relative',
         top: -100,

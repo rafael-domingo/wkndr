@@ -4,11 +4,11 @@ import { Entypo } from '@expo/vector-icons';
 import { StyleSheet, View, Animated, Text, Easing, TouchableOpacity } from 'react-native';
 import { fonts } from 'react-native-elements/dist/config';
 
-export default function TripHeader({location, show, navigation }) {
+export default function TripHeader({location, show, search, navigation }) {
     const translation = React.useRef(new Animated.Value(0)).current
 
     React.useEffect(() => {
-        if (!show) {
+        if (!show && !search) {            
             Animated.timing(
                 translation,
                 {
@@ -31,7 +31,7 @@ export default function TripHeader({location, show, navigation }) {
                 }
             ).start()
         }
-    }, [show])
+    }, [show, search])
 
     return (
         <Animated.View
@@ -47,7 +47,7 @@ export default function TripHeader({location, show, navigation }) {
             <View style={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', flexDirection: 'row', marginTop: 50}}>
                 <TouchableOpacity
                     style={{width: '20%', height: '100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 10}}
-                    onPress={() => navigation.navigate('User')}
+                    onPress={() => navigation.navigate('User', {city: location.cityName})}
                 >
                     <Entypo name="arrow-left" size={30} color="white"/>     
                 </TouchableOpacity>

@@ -34,9 +34,9 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
         }
     }, [activeSlide])
 
-    React.useEffect(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-    })
+    // React.useEffect(() => {
+    //     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    // })
 
     React.useEffect(() => {
         if (modalConfirm) {
@@ -166,7 +166,7 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             {
                 location.data.map((item, index) => {
                     return (
-                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <View key={index} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <TouchableOpacity 
                                 style={{backgroundColor: 'white', width: 200, margin: 5, borderRadius: 10, height: 30, justifyContent: 'center', alignItems: 'center'}}
                                 onPress={() => navigation.navigate('Trip', {location: item})}

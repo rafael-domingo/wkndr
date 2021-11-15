@@ -7,7 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { Entypo } from '@expo/vector-icons'; 
 
-export default function TripViewSettingsButton({ navigation, location, show, deleteTrip, renameTrip}) {    
+export default function TripViewSettingsButton({ navigation, location, show, deleteTrip, renameTrip, setSearch, search, setSearchResults}) {    
     const translation = React.useRef(new Animated.Value(0)).current
     const opacity = React.useRef(new Animated.Value(0)).current
     const [expand, setExpand] = React.useState()    
@@ -72,6 +72,7 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 // })
             }
             ]}>
+            <View style={{justifyContent: 'center', alignItems: 'flex-end'}}>
             <TouchableOpacity                
                 style={[
                     styles.button,
@@ -161,18 +162,54 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                     </TouchableOpacity>
                 </View>
             </Animated.View>
+            </View>
+            <TouchableOpacity 
+                onPress={() => {
+                    setSearch(!search)
+                    if (search) {
+                        setSearchResults([])
+                    }
+                }}
+                style={{
+                    zIndex: 10,
+                    margin: 5,
+                    width: 50,
+                    height: 50,
+                    backgroundColor: 'rgb(112,112,112)',
+                    borderRadius: 27.5,
+                    padding: 7.5,
+                    // bottom: 100,
+                    // right:10,                            
+                    // position: 'absolute',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    {
+                        !search && (
+                            <FontAwesome5 name="search" size={24} color="white" />
+                        )
+                    }
+                    {
+                        search && (
+                            <MaterialIcons name="cancel" size={24} color="white" />
+                        )
+                    }
+                
+            </TouchableOpacity>
         </Animated.View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container: {        
         flex: 1,
         zIndex: 5,   
         position: 'relative',
-        bottom: -100,        
+        bottom: 0,        
+        height: 400,
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        marginTop: 50,
+        justifyContent: 'space-between',                
         width: Dimensions.get('window').width - 40,                
     },  
     button : {

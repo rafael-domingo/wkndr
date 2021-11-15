@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "RN-client",
-    "slug": "RN-client",
+    "name": "Wkndr",
+    "slug": "wkndr",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "",
+    "plugins": [
+      "sentry-expo"
+    ]
   }
 }

@@ -4,9 +4,20 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
 import MapCard from '../../components/Cards/MapCard';
 import { deleteTrip } from '../../redux/user';
-export default function MapList({ navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
+export default function MapList({ city, navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
-        
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    React.useEffect(() => {
+    
+        if (city !== null) {
+            userTrips.map((item, index) => {
+                if (city === item.title) {
+                    setActiveSlide(index.toString())
+                    setActiveIndex(index)
+                }
+            })
+        }
+    }, [city])
     const selectMap = (index) => {
         console.log(index)
         console.log(userTrips[index])
@@ -16,7 +27,7 @@ export default function MapList({ navigation, userTrips, setModal, setModalAll, 
     const renderItem = ({item, index}) => {
         return (
             <View style={styles.container}>
-                <MapCard location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
+                <MapCard key={index} location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
             </View>
         )
     }
@@ -32,6 +43,7 @@ export default function MapList({ navigation, userTrips, setModal, setModalAll, 
                 sliderHeight={Dimensions.get('window').height - 350}
                 itemHeight={Dimensions.get('window').height - 350}
                 onSnapToItem={(index) => setActiveSlide(index)}   
+                firstItem={activeIndex}
                 // useScrollView={true}
                 onLayout={() => console.log('on layout')}
                  

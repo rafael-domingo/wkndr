@@ -12,7 +12,7 @@ export default function TripCarousel({ locationState, modalizeRef, fitMarkers, m
                     flex: 1,
                     position: 'absolute',
                     bottom: 0,      
-                    zIndex: camera ? 10 : 5             
+                    zIndex: camera ? 15 : 5             
                 },                                    
                 ]
             }
@@ -33,7 +33,7 @@ export default function TripCarousel({ locationState, modalizeRef, fitMarkers, m
                 right: Dimensions.get('window').width * 0.1 + 20
             }} 
             onScrollBeginDrag={() => {                                                                     
-                console.log(modalizeRef.current?.length)
+                // console.log(modalizeRef.current?.length)
                 modalizeRef.current?.forEach(element => {
                     element?.close('alwaysOpen')
                 });                                     

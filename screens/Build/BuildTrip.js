@@ -169,7 +169,7 @@ export default function BuildTrip({ navigation }) {
                 {
                     step === 5 && (
                         <View>
-                            <BuildTripLoading tripState={trip}/>
+                            <BuildTripLoading tripState={trip} navigation={navigation}/>
                         </View>
                     )
                 }           
