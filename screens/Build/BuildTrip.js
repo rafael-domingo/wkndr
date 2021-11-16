@@ -182,6 +182,7 @@ export default function BuildTrip({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: '100%',
         backgroundColor: 'rgba(24, 28, 47, 1)',
         justifyContent: 'center',
         alignItems: 'center'
@@ -193,13 +194,14 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     subContainer: {
-        flex: 1,
+        // flex: 1,
+        height: '90%',
         justifyContent: 'space-around',
         marginTop: 50
     },  
     buttonContainer:{
         justifyContent: 'space-between', 
-        flex: 1
+        // flex: 1
     },  
     nextButtonContainer: {
         marginTop: 40,

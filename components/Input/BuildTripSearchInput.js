@@ -3,6 +3,8 @@ import { Dimensions, View, StyleSheet, Text, Pressable } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Feather } from '@expo/vector-icons'; 
 import { Entypo } from '@expo/vector-icons'; 
+import FlagSelector from '../Misc/FlagSelector';
+
 
 export default function BuildTripSearchInput({ handleInput, handleClick }) {
     const ref = React.useRef();
@@ -31,7 +33,8 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
 
     return (
         <View style={styles.container}>
-              <GooglePlacesAutocomplete
+            <FlagSelector />
+              {/* <GooglePlacesAutocomplete
                 ref={ref}
                 placeholder='Search for a city'                
                 minLength={2}
@@ -115,7 +118,9 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
                         display: 'none'
                     },           
                 }}
-                />
+                />                 */}
+                                
+                
         </View>
     )
 }
@@ -125,7 +130,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 50,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: Dimensions.get('window').height
+        
+        // height: Dimensions.get('window').height
     },
 
 })
