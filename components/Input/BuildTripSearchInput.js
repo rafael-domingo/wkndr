@@ -41,7 +41,9 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
                 enablePoweredByContainer={false}
                 isRowScrollable={false}   
                 listUnderlayColor={'rgba(255,255,255,0)'}
+                renderDescription={() => console.log('row')}
                 renderRow={(data, index) => {
+                    // console.log(data)
                     return (
                         <View key={index} style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
                             <Text style={{

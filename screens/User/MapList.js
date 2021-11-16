@@ -4,25 +4,31 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
 import MapCard from '../../components/Cards/MapCard';
 import { deleteTrip } from '../../redux/user';
-export default function MapList({ city, navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
+export default function MapList({ mapView, city, navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
     const [activeIndex, setActiveIndex] = React.useState(0);
+
     React.useEffect(() => {
-    
+        console.log(city)
         if (city !== null) {
             userTrips.map((item, index) => {
                 if (city === item.title) {
+                    console.log(index)
                     setActiveSlide(index.toString())
                     setActiveIndex(index)
                 }
             })
+        } else if (activeIndex >= userTrips.length) {
+            setActiveIndex(userTrips.length - 1)
+            setActiveSlide((userTrips.length - 1).toString())
         }
-    }, [city])
+    }, [city, userTrips])
     const selectMap = (index) => {
         navigation.navigate('Trip', {trip: userTrips[index]})
     }  
 
     const renderItem = ({item, index}) => {
+
         return (
             <View style={styles.container}>
                 <MapCard key={index} location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
@@ -40,8 +46,15 @@ export default function MapList({ city, navigation, userTrips, setModal, setModa
                 itemWidth={Dimensions.get('window').width - 100}
                 sliderHeight={Dimensions.get('window').height - 350}
                 itemHeight={Dimensions.get('window').height - 350}
-                onSnapToItem={(index) => setActiveSlide(index)}   
-                firstItem={activeIndex}                           
+                onSnapToItem={(index) => {
+                    setActiveSlide(index)
+                    setActiveIndex(index)
+                }}         
+                getItemLayout={(userTrips, index) => (
+                    {length: Dimensions.get('window').height - 350, offset: Dimensions.get('window').height - 350 * index, index}
+                  )}
+                firstItem={activeIndex}
+                initialScrollIndex={activeIndex}                    
             />
             <Pagination
                     dotsLength={userTrips.length}
@@ -60,7 +73,7 @@ export default function MapList({ city, navigation, userTrips, setModal, setModa
                     inactiveDotOpacity={0.4}
                     inactiveDotScale={0.6}
                     renderDots={ 
-                        userTrips.length > 7 ? (activeIndex, total, context) => {                        
+                        userTrips.length > 10 ? (activeIndex, total, context) => {                        
                         return (
                             <Text style={styles.paginationText}>
                                 {activeIndex  + 1} / {total}
@@ -95,6 +108,6 @@ const styles = StyleSheet.create({
     },
     paginationText: {
         color: 'white',
-        flex: 1
+        // flex: 1
     }
 })

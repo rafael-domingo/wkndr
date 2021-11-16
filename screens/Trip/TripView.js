@@ -45,7 +45,7 @@ export default function TripView({ route, navigation }) {
 
     // state methods
     const handleSearch = (searchResults) => {
-        // console.log(searchResults)
+        console.log(searchResults)
 
         // parse through current trip to help check for existing destinations
         var tripIds = [];

@@ -73,24 +73,15 @@ export default function UserHome({ route, navigation }) {
                     <Ionicons name="ios-add-circle-outline" size={24} color="white" />
                     <Text style={styles.text}>New Trip</Text>
                 </Pressable>              
-               
-                <Ionicons 
-                    name="ios-settings-outline" 
-                    size={24} 
-                    color="white" 
-                    onPress={() => navigation.navigate('Account')}
-                />
-                <Ionicons 
-                    name="md-list" 
-                    size={24} 
-                    color="white" 
-                    onPress={() => setMapView(!mapView)}
-                />
+               <Text style={{fontSize: 30, fontWeight: 'bold', color: 'white'}}>
+                   wkndr
+               </Text>
+           
             </View>                   
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, margin: 10}}>
                 {
                    mapView && (
-                    <MapList city={city} navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>        
+                    <MapList mapView={mapView} city={city} navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>        
                    ) 
                 }
                 {
@@ -102,8 +93,45 @@ export default function UserHome({ route, navigation }) {
             <DeleteTripModal setModal={setModal} setModalConfirm={setModalConfirm} modal={modal}/>
             <DeleteAllTripsModal setModalAll={setModalAll} setModalConfirm={setModalConfirm} modalAll={modalAll}/>
             </View>       
-            
-            
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '80%'}}>
+                <Ionicons 
+                    name="ios-settings-outline" 
+                    size={24} 
+                    color="white" 
+                    onPress={() => navigation.navigate('Account')}
+                />
+                {
+                    mapView && (
+                        <Ionicons 
+                        name="md-list" 
+                        size={24} 
+                        color="white" 
+                        onPress={() => {
+                            setMapView(!mapView)
+                            navigation.setParams({
+                                city: null
+                            })
+                        }}
+                    />
+                    )
+                }
+                {
+                    !mapView && (
+                        <Ionicons 
+                        name="md-map-outline" 
+                        size={24} 
+                        color="white" 
+                        onPress={() => {
+                            setMapView(!mapView)
+                            navigation.setParams({
+                                city: null
+                            })
+                        }}
+                    />
+                    )
+                }
+              
+            </View>
             
         </SafeAreaView>        
     )

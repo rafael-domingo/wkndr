@@ -62,6 +62,9 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
                 setLoading(false)
                 dispatch(deleteTrip({tripId: tripId}))
             }, 2000);
+            navigation.setParams({
+                city: null
+            })
         } else {
             dispatch(deleteTrip({tripId: tripId}))
         }
@@ -81,6 +84,9 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             } else {
                 dispatch(deleteTrip({tripId: item.tripId}))
             }
+        })
+        navigation.setParams({
+            city: null
         })
     }
     if (view) {
