@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, View, StyleSheet, Dimensions, Text, LayoutAnimation } from 'react-native';
+import { Animated, View, StyleSheet, Dimensions, Text, LayoutAnimation, Easing } from 'react-native';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import { useDispatch } from 'react-redux';
 import MapCard from '../../components/Cards/MapCard';
@@ -7,7 +7,7 @@ import { deleteTrip } from '../../redux/user';
 export default function MapList({ mapView, city, navigation, userTrips, setModal, setModalAll, modalConfirm, setModalConfirm }) {
     const [activeSlide, setActiveSlide] = React.useState('0');
     const [activeIndex, setActiveIndex] = React.useState(0);
-
+    const opacity = React.useRef(new Animated.Value(0)).current
     React.useEffect(() => {
         console.log(city)
         if (city !== null) {
@@ -23,6 +23,19 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
             setActiveSlide((userTrips.length - 1).toString())
         }
     }, [city, userTrips])
+
+    React.useEffect(() => {
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1,
+                duration: 500,
+                delay: 0,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+    }, [mapView])
     const selectMap = (index) => {
         navigation.navigate('Trip', {trip: userTrips[index]})
     }  
@@ -37,7 +50,18 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
     }
 
     return (
-        <View style={styles.container}>
+        <Animated.View 
+            style={[
+                styles.container, 
+                {
+                    opacity: opacity,
+                    transform: [{translateX: opacity.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [200, 0]
+                    })}]
+                }
+            ]}
+        >
             <Carousel
                 data={userTrips}
                 renderItem={renderItem}
@@ -72,16 +96,16 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
                     }}
                     inactiveDotOpacity={0.4}
                     inactiveDotScale={0.6}
-                    renderDots={ 
-                        userTrips.length > 10 ? (activeIndex, total, context) => {                        
-                        return (
-                            <Text style={styles.paginationText}>
-                                {activeIndex  + 1} / {total}
-                            </Text>
-                        )    
-                    } : undefined }
+                    // renderDots={ 
+                    //     userTrips.length > 10 ? (activeIndex, total, context) => {                        
+                    //     return (
+                    //         <Text style={styles.paginationText}>
+                    //             {activeIndex  + 1} / {total}
+                    //         </Text>
+                    //     )    
+                    // } : undefined }
                 />          
-        </View>
+        </Animated.View>
     )
 }
 

@@ -1,7 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, SectionList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, SectionList, ActivityIndicator, TouchableOpacity, Animated, Easing } from 'react-native';
 
 export default function ListView({ navigation, userTrips }) {    
+    const translation = React.useRef(new Animated.Value(-200)).current
+    
+    React.useEffect(() => {
+        Animated.timing(
+            translation,
+            {
+                toValue: 0,
+                duration: 1000,
+                delay: 0,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+    })
+
     const renderItem = (item) => {
         return (
             
@@ -35,7 +50,18 @@ export default function ListView({ navigation, userTrips }) {
     }
 
     return (
-        <View style={styles.container}>
+        <Animated.View 
+            style={[
+                styles.container, 
+                {
+                    opacity: translation.interpolate({
+                        inputRange: [-200, 0],
+                        outputRange: [0, 1]
+                    }),
+                    transform: [{translateX: translation}]
+                }
+            ]}
+        >
           
 
             
@@ -47,7 +73,7 @@ export default function ListView({ navigation, userTrips }) {
             renderSectionHeader={({ section: { title }}) => renderHeader(title)}
             />           
             
-        </View>
+        </Animated.View>
     )
 }
 
@@ -56,7 +82,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,     
         // width: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
     text: {
         fontFamily: 'System',

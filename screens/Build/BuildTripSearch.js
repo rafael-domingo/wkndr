@@ -13,10 +13,10 @@ export default function BuildTripSearch({ handleInput, handleClick }) {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         width: Dimensions.get('window').width - 50,
-        flex: 1
+        flex: 1,
     },
     text: {
         color: 'white',

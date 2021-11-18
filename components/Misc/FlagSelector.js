@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import CountryFlag from "react-native-country-flag";
 
-export default function FlagSelector() {
+export default function FlagSelector({ handleSelectCountry }) {
     const flagCodes = [
         {
             code: 'cz',
@@ -134,7 +134,11 @@ export default function FlagSelector() {
         searchContainer.push
             (
             <View key={index} style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-                <TouchableOpacity key={flagCodes[index].code} style={{flexDirection: 'row', margin: 10, width: '100%', justifyContent: 'flex-start', alignItems: 'center'}}>
+                <TouchableOpacity 
+                    key={flagCodes[index].code} 
+                    style={{flexDirection: 'row', margin: 10, width: '100%', justifyContent: 'flex-start', alignItems: 'center'}}
+                    onPress={() => handleSelectCountry(flagCodes[index])}
+                > 
                     <CountryFlag style={{borderRadius: 25, width: 50}} isoCode={flagCodes[index].code} size={50} />
                     <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', marginLeft: 15}}>{flagCodes[index].name}</Text>
                 </TouchableOpacity>
@@ -151,7 +155,7 @@ export default function FlagSelector() {
             )
     }
     return (
-        <ScrollView style={{height: '100%', width: '100%'}} >
+        <ScrollView style={{height: '100%', width: '90%'}} >
             {searchContainer}
         </ScrollView>
     )

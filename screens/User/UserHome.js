@@ -22,13 +22,12 @@ export default function UserHome({ route, navigation }) {
     const [modal, setModal] = React.useState(false)
     const [modalAll, setModalAll] = React.useState(false)
     const [modalConfirm, setModalConfirm] = React.useState(false)
-    
+
     React.useEffect(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         extractData(userState.tripList)
         
     }, [userState])
-
     const extractData = (tripList) => {            
         const cityList = []
         tripList.map((trip, index) => {
@@ -80,8 +79,8 @@ export default function UserHome({ route, navigation }) {
             </View>                   
             <View style={{flex: 1, margin: 10}}>
                 {
-                   mapView && (
-                    <MapList mapView={mapView} city={city} navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>        
+                   mapView && (                    
+                    <MapList mapView={mapView} city={city} navigation={navigation} userTrips={cityListState} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>                            
                    ) 
                 }
                 {
