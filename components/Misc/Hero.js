@@ -2,12 +2,14 @@ import React from 'react';
 import { Dimensions, StyleSheet, View, Text, Animated, Easing } from 'react-native';
 import LottieView from 'lottie-react-native';
 
-export default function Hero({ login, setLogin, loggedIn, navigation}) {
+export default function Hero({ login, setLogin, loggedIn, navigation, loading}) {
     const opacity = React.useRef(new Animated.Value(1)).current
     const textOpacity = React.useRef(new Animated.Value(1)).current
     const welcomeOpacity = React.useRef(new Animated.Value(0)).current
     React.useEffect(() => {
-        if (loggedIn === false) {
+        if (loading) {
+
+        } else if (loggedIn === false) {
             Animated.timing(
                 textOpacity,
                 {
@@ -55,7 +57,7 @@ export default function Hero({ login, setLogin, loggedIn, navigation}) {
             }) 
         }
        
-    })
+    }, [loggedIn, loading])
 
 
     return (

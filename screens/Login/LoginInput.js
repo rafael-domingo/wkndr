@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import SignupButton from '../../components/Buttons/SignupButton';
 import EmailInput from '../../components/Input/EmailInput';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
-// import PhoneInput from '../../components/Input/PhoneInput';
+import LoginPhone from '../../components/Input/LoginPhone';
 import VerificationInput from '../../components/Input/VerificationInput';
 import LoginLoading from '../../components/Misc/LoginLoading';
 import { setTripList, setUser } from '../../redux/user';
 import { phoneSignIn, phoneVerificationCode } from '../../util/Auth';
 import { getFirestore } from '../../util/Firestore';
-import PhoneInput from "react-native-phone-number-input";
+
 
 
 export default function LoginInput({ navigation }) {
@@ -19,11 +19,7 @@ export default function LoginInput({ navigation }) {
     const [verificationId, setVerificationId] = React.useState();
     const [verificationError, setVerificationError] = React.useState(false)
     const recaptchaVerifier = React.useRef(null);
-    const [value, setValue] = React.useState("");
-    const [formattedValue, setFormattedValue] = React.useState("");
-    const [valid, setValid] = React.useState(false);
-    const [showMessage, setShowMessage] = React.useState(false);
-    const phoneInput = React.useRef(null);
+
     const dispatch = useDispatch();
     const opacity = React.useRef(new Animated.Value(1)).current
     const verificationOpacity = React.useRef(new Animated.Value(0)).current
@@ -47,12 +43,36 @@ export default function LoginInput({ navigation }) {
 
 
     const firebaseConfig = {
-        //firebaseConfig
+      //firebaseConfig
       };
       
 
     const handleToggle = (inputType) => {
-        setInputType(inputType)
+        
+        if(inputType==='phone') {
+            Animated.timing(
+                verificationOpacity,
+                {
+                    toValue: 0,
+                    duration: 500,
+                    delay: 0,
+                    easing: Easing.inOut(Easing.exp),
+                    useNativeDriver: true
+                }
+            ).start(() => {
+                setInputType(inputType)
+                Animated.timing(
+                    opacity,
+                    {
+                        toValue: 1,
+                        duration: 500,
+                        delay: 0,
+                        easing: Easing.out(Easing.exp),
+                        useNativeDriver: true
+                    }
+                ).start()
+            })
+        }
     }
 
 
@@ -129,11 +149,7 @@ export default function LoginInput({ navigation }) {
         .catch(error => console.log(error))
     }
 
-    React.useEffect(() => {
-        const isValid = phoneInput.current?.isValidNumber(value)
-        setValid(isValid ? isValid : false)
-    }, [value])
-
+  
     return (
         <Animated.View style={styles.container}>            
             {
@@ -155,50 +171,18 @@ export default function LoginInput({ navigation }) {
                             firebaseConfig={firebaseConfig}
                             attemptInvisibleVerification={true}
                         />   
-                        <Text style={{textAlign: 'left', width: Dimensions.get('window').width*0.8, color: 'white', fontWeight: 'bold', fontSize: 20}}>Enter your phone number</Text>                  
-                         <PhoneInput
-                            ref={phoneInput}
-                            defaultValue={value}
-                            disableArrowIcon={true}                            
-                            defaultCode="US"
-                            layout="second"
-                            onChangeText={(text) => {
-                            setValue(text);
-                            }}
-                            onChangeFormattedText={(text) => {
-                            setFormattedValue(text);
-                            console.log(formattedValue)
-                            }} 
-                            containerStyle={{backgroundColor:'rgba(255,255,255,0)', borderRadius: 20}}                                                       
-                            textContainerStyle={{backgroundColor: 'rgba(0,0,0,0)'}}
-                            codeTextStyle={{color: 'white', fontSize: 36, fontWeight: '200'}}
-                            textInputStyle={{color: 'white', fontSize: 36, fontWeight: 'bold'}}
-                            countryPickerButtonStyle={{color:'white'}}
-                            autoFocus
-                        />
-                       
-                        {
-                            valid && (
-                                <Button
-                                title="next"
-                                color="white"
-                                disabled={valid ? false : true}
-                                onPress={() => handlePhoneInput(formattedValue, recaptchaVerifier.current)}
+                        <Text style={{textAlign: 'left', width: Dimensions.get('window').width*0.8, color: 'white', fontWeight: 'bold', fontSize: 20}}>Enter your phone number</Text>                                                      
+                            <LoginPhone 
+                                toggleInput={handleToggle} 
+                                toggleLoading={handleLoading}
+                                handlePhoneInput={handlePhoneInput}
                             />
-                            )
-                        }
-                      
-                    {/* <PhoneInput 
-                        toggleInput={handleToggle} 
-                        toggleLoading={handleLoading}
-                        handlePhoneInput={handlePhoneInput}
-                    /> */}
                     </Animated.View>
                 )
             }
             {
                 (!loading && inputType === 'verification') && (
-                    <Animated.View style={{opacity: verificationOpacity, transform: [{
+                    <Animated.View style={{opacity: verificationOpacity, width: '100%', transform: [{
                         translateX: verificationOpacity.interpolate({
                             inputRange: [0,1],
                             outputRange: [200, 0]
@@ -233,6 +217,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
+        width: Dimensions.get('window').width*0.9
  
     }
 })

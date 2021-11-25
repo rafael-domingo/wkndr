@@ -38,7 +38,10 @@ export default function Account({ route, navigation }) {
                     onPress={() => {
                         dispatch(resetUserState())
                         signOut()
-                        navigation.reset({ index: 0, routes: [{name: 'Home'}]})
+                        setTimeout(() => {
+                            navigation.reset({ index: 0, routes: [{name: 'Home'}]})    
+                        }, 2000);
+                        
                     }}
                 >
                     <Text style={styles.logoutText}>Logout</Text>

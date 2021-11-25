@@ -11,14 +11,19 @@ import firebase from '../../util/Firebase';
 
 export default function Welcome({ navigation }) {
     const [login, setLogin] = React.useState(false);
-    const [loggedIn, setLoggedIn] = React.useState(null);
+    const [loggedIn, setLoggedIn] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const dispatch = useDispatch()
  
     React.useEffect(() => {
+        
+        
         // Check if user is already authenticated with auth listener
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listener
             if (user) {                             
+                
                 setLoggedIn(true)   
+                setLoading(false)
                 const userObject = {
                     displayName: user.displayName,
                     email: user.email,
@@ -45,6 +50,7 @@ export default function Welcome({ navigation }) {
                 }).catch(error => console.log(error))  
             } else {
                 setLoggedIn(false)
+                setLoading(false)                
                 // setTimeout(() => {
                 //     setLoading(false)    
                 // }, 2000);
@@ -53,6 +59,7 @@ export default function Welcome({ navigation }) {
             }
         });
         return () => unsubscribe(); // unsubscribing from the listener when the component is unmounting. 
+        
     })
 
     return (
@@ -60,7 +67,7 @@ export default function Welcome({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.header}>    
                             
-                    <Hero login={login} setLogin={setLogin} loggedIn={loggedIn} navigation={navigation}/>                        
+                    <Hero login={login} setLogin={setLogin} loggedIn={loggedIn} navigation={navigation} loading={loading}/>                        
                 </View>
                 
                 {
