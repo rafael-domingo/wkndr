@@ -16,7 +16,11 @@ const styles = StyleSheet.create({
         fontSize: 65,
         // marginTop: 50,
         letterSpacing: 10,
-        color: 'white',
-        fontWeight: '200'
+        color: 'rgb(24, 28, 47)',
+        height: 200,
+        width: 200,
+        fontWeight: '200',
+        zIndex: 10
+ 
     }
 })

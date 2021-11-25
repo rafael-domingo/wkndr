@@ -1,34 +1,24 @@
 import React from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, ActivityIndicator, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
-import LoginButton from '../../components/Buttons/LoginButton';
-import SignupButton from '../../components/Buttons/SignupButton';
 import Hero from '../../components/Misc/Hero';
-import Logo from '../../components/Misc/Logo';
 import { setTripList, setUser } from '../../redux/user';
-import { checkUser } from '../../util/Auth';
+import { Ionicons } from '@expo/vector-icons'; 
+
 import { getFirestore } from '../../util/Firestore';
 import LoginInput from './LoginInput';
 import firebase from '../../util/Firebase';
 
 export default function Welcome({ navigation }) {
     const [login, setLogin] = React.useState(false);
+    const [loggedIn, setLoggedIn] = React.useState(null);
     const dispatch = useDispatch()
-
-    const handleLogin = () => {
-        setLogin(true);
-    }
-
-    const handleSignup = () => {
-        setLogin(false);
-    }
-
-    console.log(`welcome state: ${login}`)
+ 
     React.useEffect(() => {
         // Check if user is already authenticated with auth listener
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listener
-            if (user) {
-                console.log(user)
+            if (user) {                             
+                setLoggedIn(true)   
                 const userObject = {
                     displayName: user.displayName,
                     email: user.email,
@@ -40,75 +30,55 @@ export default function Welcome({ navigation }) {
                 getFirestore(user.uid).then(response => {
                     console.log(response)
                     if (response !== 'new user') {
-                        dispatch(setTripList(response.tripList))
-                        navigation.navigate('User', {city: null})
-                    } else {                        
-                        navigation.navigate('User', {city: null})
+                        setTimeout(() => {
+                            dispatch(setTripList(response.tripList))
+                            // navigation.navigate('User', {city: null})
+                        }, 2000);
+                  
+                    } else {                     
+                        setTimeout(() => {
+                            // navigation.navigate('User', {city: null})    
+                        }, 2000);   
+                        
                     }                    
                     
                 }).catch(error => console.log(error))  
             } else {
+                setLoggedIn(false)
+                // setTimeout(() => {
+                //     setLoading(false)    
+                // }, 2000);
+                
                 // No user is signed in...code to handle unauthenticated users. 
             }
         });
         return () => unsubscribe(); // unsubscribing from the listener when the component is unmounting. 
-
-        // checkUser().then(response => {
-        //     console.log(response)
-        //     if (response != null) {
-        //         const userObject = {
-        //             displayName: response.displayName,
-        //             email: response.email,
-        //             phoneNumber: response.phoneNumber,
-        //             uid: response.uid,
-        //             photoURL: response.photoURL
-        //         }
-        //         dispatch(setUser(userObject))
-        //         getFirestore(response.uid).then(response => {
-        //             console.log(response)
-        //             if (response !== 'new user') {
-        //                 dispatch(setTripList(response.tripList))
-        //                 navigation.navigate('User')
-        //             } else {                        
-        //                 navigation.navigate('User')
-        //             }                    
-                    
-        //         }).catch(error => console.log(error))  
-        //     }
-        // })
-        // .catch(error => console.log(error))
-        
     })
 
     return (
-        // <KeyboardAvoidingView 
-        //     styles={{flex: 1}}
-        //     behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        // >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Hero login={login}/>
-                        <Logo />
-                    </View>
-                    {
-                        !login && (
-                            <View style={styles.login}>
-                                <LoginButton handleClick={handleLogin}/>
-                                <SignupButton handleClick={handleLogin} text={false}/>
-                            </View>  
-                        )
-                    }
-                    {
-                        login && (
-                            <View style={styles.input}>                   
-                                <LoginInput handleSignup={handleSignup} navigation={navigation}/>
-                            </View>
-                        )
-                    }
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <View style={styles.header}>    
+                            
+                    <Hero login={login} setLogin={setLogin} loggedIn={loggedIn} navigation={navigation}/>                        
                 </View>
-            </TouchableWithoutFeedback>
-        // </KeyboardAvoidingView>
+                
+                {
+                    login && (
+                        <View style={styles.input}>      
+                         {/* <TouchableOpacity                        
+                        onPress={() => handleVerificationInput(value)}
+                    >
+                        <Ionicons name="arrow-forward-circle-outline" size={36} color="white" />
+                    </TouchableOpacity>                               */}
+                            <LoginInput navigation={navigation}/>
+                        </View>
+                    )
+                }
+                
+            </View>
+        </TouchableWithoutFeedback>
+    
        
       
     )
@@ -122,17 +92,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(24, 28, 47)'     
     },
     header: {
-        flex: 0.5,
+        flex: 1,            
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     login: {
-        flex: 0.35,
+        flex: 0.5,
         alignItems: 'center',
         justifyContent: 'center'
     },
     input: {
-        flex: 0.5,
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start'
     }
