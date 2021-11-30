@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, SafeAreaView, Pressable, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView, Pressable, Dimensions, Animated, Easing } from 'react-native';
 import BuildTripActivity from './BuildTripActivity';
 import BuildTripSearch from './BuildTripSearch';
 import BuildTripTime from './BuildTripTime';
@@ -14,10 +14,10 @@ import BuildTripName from './BuildTripName';
 
 export default function BuildTrip({ navigation }) {
     const [step, setStep] = React.useState(0);
-    const tripBuilderState = useSelector(state => state.tripBuilder)
+    const tripBuilderState = useSelector(state => state.tripBuilder)    
     const dispatch = useDispatch()
-    const [trip, setTrip] = React.useState(tripBuilderState)
-    
+    const [trip, setTrip] = React.useState(tripBuilderState)    
+    const opacity = React.useRef(new Animated.Value(0)).current
     const handleTripName = (value) => {        
         setTrip(prevState => ({
             ...prevState,
@@ -72,50 +72,83 @@ export default function BuildTrip({ navigation }) {
         }))
     }
 
-    const handleStepClick = (operation) => {
-        switch (operation) {
-            case 'next':
-                setStep(step + 1);
-                break;
-            case 'back':
-                setStep(step - 1);
-                break;
-            case 'skip':
-                handleAutoBuild(false) // turn off autobuild if skipping step
-                setStep(5);
-                break;
-            default:
-                break;
-        }
+    const handleStepClick = (operation) => {        
+        Animated.timing(
+            opacity,
+            {
+                toValue: 0,
+                duration: 250,
+                delay: 0,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start(() => {            
+            setTimeout(() => {
+                switch (operation) {
+                    case 'next':                    
+                        setStep(step + 1);
+                        break;
+                    case 'back':
+                        setStep(step - 1);
+                        break;
+                    case 'skip':
+                        handleAutoBuild(false) // turn off autobuild if skipping step
+                        setStep(5);
+                        break;
+                    default:
+                        break;
+                }
+            }, 250);
+        })
+        
+      
+     
     
     }
 
+    React.useEffect(() => {
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1,
+                duration: 250,
+                delay: 0,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+    }, [step])
     const handleCancelClick = () => {
         navigation.navigate('User')
-        dispatch(resetTripBuilder())
+        dispatch(resetTripBuilder())        
 
     }
 
     return (
         <SafeAreaView style={styles.container}> 
-            <CancelButton handleClick={handleCancelClick}/>
+        {
+            step !== 5 && (
+                <CancelButton handleClick={handleCancelClick}/>
+            )
+        }
+        
             <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>           
                 <Text style={styles.header}>Create a Trip</Text>
             </View>
             <View style={{flex: 0.9}}>
                 {
                     step === 0 && (
-                        <View style={styles.subContainer}>                            
+                        <Animated.View style={[styles.subContainer, {opacity: opacity}]}>                         
                             <BuildTripSearch handleInput={handleCity} handleClick={handleStepClick}/>
                             <View style={styles.buttonContainer}>
                                 {/* <NextButton handleClick={() => handleStepClick('next')}/>                                                      */}
                             </View>
-                        </View>
+                        </Animated.View>
                     )
                 }               
                 {
                     step === 1 && (
-                        <View style={styles.subContainer}>
+                        <Animated.View style={[styles.subContainer, {opacity: opacity}]}>
                             <BuildTripName handleInput={handleTripName}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
@@ -123,12 +156,12 @@ export default function BuildTrip({ navigation }) {
                                 </View>
                                 <BackButton handleClick={() => handleStepClick('back')} text="Where do you want to go?"/>
                             </View>
-                        </View>
+                        </Animated.View>
                     )
                 }
                 {
                     step === 2 && (
-                        <View style={styles.subContainer}>
+                        <Animated.View style={[styles.subContainer, {opacity: opacity}]}>
                             <BuildTripTime trip={trip} handleClick={handleTime}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
@@ -137,12 +170,12 @@ export default function BuildTrip({ navigation }) {
                                 {/* <BackButton handleClick={() => handleStepClick('back')} text="Name this trip"/> */}
                                 <BackButton handleClick={() => handleStepClick('skip')} buttonText="Skip this step" text="I already have an itinerary in mind"/>                                
                             </View>
-                        </View>
+                        </Animated.View>
                     )
                 }                
                 {
                     step === 3 && (
-                        <View style={styles.subContainer}>
+                        <Animated.View style={[styles.subContainer, {opacity: opacity}]}>
                             <BuildTripTransport trip={trip} handleClick={handleTransport}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
@@ -150,12 +183,12 @@ export default function BuildTrip({ navigation }) {
                                 </View>
                                 <BackButton handleClick={() => handleStepClick('back')} text="When are you visiting?"/>
                             </View>
-                        </View>
+                        </Animated.View>
                     )
                 }
                 {
                     step === 4 && (
-                        <View style={styles.subContainer}>
+                        <Animated.View style={[styles.subContainer, {opacity: opacity}]}> 
                             <BuildTripActivity trip={trip} handleClick={handleActivity}/>
                             <View style={styles.buttonContainer}>
                                 <View style={styles.nextButtonContainer}>
@@ -163,14 +196,14 @@ export default function BuildTrip({ navigation }) {
                                 </View>
                                 <BackButton handleClick={() => handleStepClick('back')} text="How are you getting around?"/>
                             </View>
-                        </View>
+                        </Animated.View>
                     )
                 }     
                 {
                     step === 5 && (
-                        <View>
-                            <BuildTripLoading tripState={trip} navigation={navigation}/>
-                        </View>
+                        <Animated.View style={{opacity: opacity}}>
+                            <BuildTripLoading tripState={trip} navigation={navigation} handleCancelClick={handleCancelClick}/>
+                        </Animated.View>
                     )
                 }           
             </View>

@@ -7,7 +7,7 @@ import { Yelp } from '../../util/Yelp';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function BuildTripLoading({ tripState, navigation }) {
+export default function BuildTripLoading({ tripState, navigation, handleCancelClick }) {
     const dispatch = useDispatch()
     const [complete, setComplete] = React.useState(false)
     React.useEffect(() => {
@@ -32,6 +32,7 @@ export default function BuildTripLoading({ tripState, navigation }) {
             //     }
             //     return object
             // })
+            
             console.log(response) 
             const trip = {
                 tripId: uuidv4(),
@@ -47,6 +48,8 @@ export default function BuildTripLoading({ tripState, navigation }) {
                 dispatch(resetTripBuilder())
                 navigation.replace('Trip', {location: trip})
             }, 2000);
+            
+            
         })
     }, [])
     

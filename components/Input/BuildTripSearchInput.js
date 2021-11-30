@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View, StyleSheet, Text, Pressable, TouchableOpacity } from 'react-native';
+import { Dimensions, View, StyleSheet, Text, Pressable, TouchableOpacity, Animated, Easing } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Feather } from '@expo/vector-icons'; 
 import { Entypo } from '@expo/vector-icons'; 
@@ -8,14 +8,16 @@ import CountryFlag from 'react-native-country-flag';
 import BackButton from '../Buttons/BackButton';
 
 
+
 export default function BuildTripSearchInput({ handleInput, handleClick }) {
     const ref = React.useRef();
+    const opacity = React.useRef(new Animated.Value(1)).current
     const [country, setCountry] = React.useState(null)
 
     React.useEffect(() => {
         setTimeout(() => {
             ref.current?.focus()    
-        }, 500);        
+        }, 500);                
     }, [country])
 
     const handleClear = () => {
@@ -36,28 +38,78 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
 
     const handleSelectCountry = (country) => {
         setCountry(country)
+        Animated.timing(
+            opacity,
+            {
+                toValue: 0, 
+                duration: 500,
+                delay: 250,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
     }
 
     const handleDeleteCountry = () => {
         setCountry(null)
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1, 
+                duration: 500,
+                delay: 250,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
     }
 
     return (
         <View style={styles.container}>
             {
                 country === null && (
-                    <View style={{width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'center'}}>
-                    <Text style={{color: 'white', textAlign: 'left', width: '80%', fontSize: 20, fontWeight: 'bold'}}>Select a country</Text>
+                    <Animated.View 
+                        style={{
+                            width: '100%', 
+                            height: '100%', 
+                            justifyContent: 'flex-start', 
+                            alignItems: 'center', 
+                            opacity: opacity, 
+                            transform: [{
+                                translateX: opacity.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [-200, 0]
+                                })
+                            }]
+                        }}
+                    >                    
                     <FlagSelector handleSelectCountry={handleSelectCountry}/>
-                    </View>
+                    </Animated.View>
                 )
             }
             
             {
                 country !== null && (
-                    <View style={{width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'center'}}>
+                    <Animated.View 
+                        style={{
+                            width: '100%', 
+                            height: '100%', 
+                            justifyContent: 'flex-start', 
+                            alignItems: 'center', 
+                            opacity: opacity.interpolate({
+                                inputRange: [0,1],
+                                outputRange: [1,0]
+                            }),
+                            transform: [{
+                                translateX: opacity.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0, 200]
+                                })
+                            }]
+                        }}
+                    >
                     <View style={{justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'row', width: '100%', margin: 20}}>
-                        <TouchableOpacity style={{width: '25%', alignItems: 'center'}} onPress={() => setCountry(null)}>
+                        <TouchableOpacity style={{width: '25%', alignItems: 'center'}} onPress={() => handleDeleteCountry()}>
                             <Entypo name="arrow-left" size={24} color="white" />
                         </TouchableOpacity>
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: '75%'}}>
@@ -164,7 +216,7 @@ export default function BuildTripSearchInput({ handleInput, handleClick }) {
                          },           
                      }}
                      />                
-                     </View>
+                     </Animated.View>
                 )
             }
              
