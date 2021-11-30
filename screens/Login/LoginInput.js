@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Button, TouchableOpacity, Text, Dimensions, Animated, Easing } from 'react-native';
+import { View, StyleSheet, Button, TouchableOpacity, Text, Dimensions, Animated, Easing, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import SignupButton from '../../components/Buttons/SignupButton';
 import EmailInput from '../../components/Input/EmailInput';
@@ -23,27 +23,23 @@ export default function LoginInput({ navigation }) {
     const dispatch = useDispatch();
     const opacity = React.useRef(new Animated.Value(1)).current
     const verificationOpacity = React.useRef(new Animated.Value(0)).current
-    React.useEffect(() => {
-        if(inputType === 'verification') {
-        
-        } else {
-            Animated.timing(
-                opacity,
-                {
-                    toValue: 1,
-                    duration: 500,
-                    delay: 0,
-                    easing: Easing.inOut(Easing.exp),
-                    useNativeDriver: true
-                }
-            ).start()
-        }
-        
-    }, [inputType])
+    const loadingOpacity = React.useRef(new Animated.Value(0)).current
+    React.useEffect(() => {        
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1,
+                duration: 1000,
+                delay: 500,
+                easing: Easing.inOut(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()        
+    }, [0])
 
 
     const firebaseConfig = {
-      //firebaseConfig
+        //firebaseConfig
       };
       
 
@@ -136,11 +132,62 @@ export default function LoginInput({ navigation }) {
                 dispatch(setUser(userObject))              
                 getFirestore(response.user.uid).then(response => {
                     console.log(response)
-                    if (response !== 'new user') {
+                    setLoading(true)
+                    if (response !== 'new user') {                        
+                        setInputType('existing account')
                         dispatch(setTripList(response.tripList))
-                        navigation.navigate('User')
-                    } else {                        
-                        navigation.navigate('User')
+                        Animated.timing(
+                            verificationOpacity,
+                            {
+                                toValue: 0,
+                                duration: 500,
+                                delay: 0,
+                                easing: Easing.out(Easing.exp),
+                                useNativeDriver: true
+                            }
+                        ).start(() => {
+                            Animated.timing(
+                                loadingOpacity,
+                                {
+                                    toValue: 1,
+                                    duration: 500,
+                                    delay: 0,
+                                    easing: Easing.out(Easing.exp),
+                                    useNativeDriver: true
+                                }
+                            ).start()
+                        })
+                        setTimeout(() => {
+                            navigation.navigate('User')
+                        }, 2000);
+                       
+                    } else {                                           
+                        setInputType('new user')    
+                        Animated.timing(
+                            verificationOpacity,
+                            {
+                                toValue: 0,
+                                duration: 500,
+                                delay: 0,
+                                easing: Easing.out(Easing.exp),
+                                useNativeDriver: true
+                            }
+                        ).start(() => {
+                            Animated.timing(
+                                loadingOpacity,
+                                {
+                                    toValue: 1,
+                                    duration: 500,
+                                    delay: 0,
+                                    easing: Easing.out(Easing.exp),
+                                    useNativeDriver: true
+                                }
+                            ).start()
+                        })
+                        setTimeout(() => {
+                            navigation.navigate('User')    
+                        }, 2000); 
+                        
                     }                    
                     
                 }).catch(error => console.log(error))  
@@ -201,13 +248,37 @@ export default function LoginInput({ navigation }) {
                     />
                     </Animated.View>
                 )
-            }      
+            }                         
             {
-                loading && (
-                    <LoginLoading />
+                (loading && inputType === 'new user') && (
+                    <Animated.View style={{width: '100%', justifyContent: 'center', alignItems: 'center', opacity: loadingOpacity, transform:[{
+                        translateX: loadingOpacity.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [200, 0]
+                        })
+                    }]}}>
+                        <Text style={{textAlign: 'center', width: Dimensions.get('window').width*0.8, color: 'white', fontWeight: 'bold', fontSize: 20}}>
+                            Creating your account
+                        </Text>
+                        <ActivityIndicator/>
+                    </Animated.View>
                 )
-            }          
-
+            }        
+            {
+                (loading && inputType === 'existing account') && (
+                    <Animated.View style={{margin: 10, width: '100%', justifyContent: 'center', alignItems: 'center', opacity: loadingOpacity, transform:[{
+                        translateX: loadingOpacity.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [200, 0]
+                        })
+                    }]}}>
+                        <Text style={{margin: 10, textAlign: 'center', width: Dimensions.get('window').width*0.8, color: 'white', fontWeight: 'bold', fontSize: 20}}>
+                            Logging you in
+                        </Text>
+                        <ActivityIndicator/>
+                    </Animated.View>
+                )
+            }
         </Animated.View>
     )
 }

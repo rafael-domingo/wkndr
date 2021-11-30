@@ -55,7 +55,7 @@ export default function Hero({ login, setLogin, loggedIn, navigation, loading}) 
                     navigation.navigate('User', {city: null})
                 }, 1000))
             }) 
-        }
+        } 
        
     }, [loggedIn, loading])
 

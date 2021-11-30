@@ -15,9 +15,7 @@ export default function Welcome({ navigation }) {
     const [loading, setLoading] = React.useState(true);
     const dispatch = useDispatch()
  
-    React.useEffect(() => {
-        
-        
+    React.useEffect(() => {                
         // Check if user is already authenticated with auth listener
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => { // detaching the listener
             if (user) {                             
@@ -32,17 +30,14 @@ export default function Welcome({ navigation }) {
                     photoURL: user.photoURL
                 }
                 dispatch(setUser(userObject))
-                getFirestore(user.uid).then(response => {
+                getFirestore(user.uid).then(response => {                    
                     console.log(response)
                     if (response !== 'new user') {
                         setTimeout(() => {
-                            dispatch(setTripList(response.tripList))
-                            // navigation.navigate('User', {city: null})
-                        }, 2000);
-                  
+                            dispatch(setTripList(response.tripList))                            
+                        }, 2000);                  
                     } else {                     
-                        setTimeout(() => {
-                            // navigation.navigate('User', {city: null})    
+                        setTimeout(() => {                            
                         }, 2000);   
                         
                     }                    
@@ -50,11 +45,7 @@ export default function Welcome({ navigation }) {
                 }).catch(error => console.log(error))  
             } else {
                 setLoggedIn(false)
-                setLoading(false)                
-                // setTimeout(() => {
-                //     setLoading(false)    
-                // }, 2000);
-                
+                setLoading(false)                           
                 // No user is signed in...code to handle unauthenticated users. 
             }
         });
@@ -72,12 +63,7 @@ export default function Welcome({ navigation }) {
                 
                 {
                     login && (
-                        <View style={styles.input}>      
-                         {/* <TouchableOpacity                        
-                        onPress={() => handleVerificationInput(value)}
-                    >
-                        <Ionicons name="arrow-forward-circle-outline" size={36} color="white" />
-                    </TouchableOpacity>                               */}
+                        <View style={styles.input}>                                              
                             <LoginInput navigation={navigation}/>
                         </View>
                     )
@@ -85,9 +71,7 @@ export default function Welcome({ navigation }) {
                 
             </View>
         </TouchableWithoutFeedback>
-    
-       
-      
+
     )
 }
 
