@@ -143,7 +143,7 @@ export default function TripView({ route, navigation }) {
     const cameraAnimation = (center) => {
         mapRef.current.animateCamera({                
             center: {
-                latitude: center.latitude * 0.99989,
+                latitude: center.latitude -0.005,
                 longitude: center.longitude
             },
             pitch: 60,
