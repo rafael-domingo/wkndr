@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button, TouchableOpacity, LayoutAnimation, Animated, Easing, requireNativeComponent, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Pressable, TouchableWithoutFeedback, Button, TouchableOpacity, LayoutAnimation, Animated, Easing, requireNativeComponent, ActivityIndicator, ScrollView } from 'react-native';
 // import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
 import { FontAwesome5 } from '@expo/vector-icons'; 
@@ -15,28 +15,37 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
     const [deleteAllTrips, setDeleteAllTrips] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
     const opacity = React.useRef(new Animated.Value(1)).current
+    const editOpacity = React.useRef(new Animated.Value(0)).current
+    const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity)
     const dispatch = useDispatch()
     React.useEffect(() => {
-        // Animated.timing(
-        //     opacity,
-        //     {
-        //         toValue: 1,
-        //         duration: 500,
-        //         delay: 0,
-        //         easing: Easing.inOut(Easing.exp),
-        //         useNativeDriver: true
-        //     }
-        // ).start()
+        Animated.timing(
+            opacity,
+            {
+                toValue: 1,
+                duration: 500,
+                delay: 0,
+                easing: Easing.inOut(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
+        Animated.timing(
+            editOpacity,
+            {
+                toValue: 0,
+                duration: 250, 
+                delay: 100, 
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: false
+            }
+        ).start()
         if (index !== activeSlide) {
+            
             setView(true)
             setShow(false)
             setLoading(false)
         }
     }, [activeSlide])
-
-    // React.useEffect(() => {
-    //     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-    // })
 
     React.useEffect(() => {
         if (modalConfirm) {
@@ -89,6 +98,33 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             city: null
         })
     }
+
+    const handleEdit = (input) => {
+        if (input) {
+            Animated.timing(
+                editOpacity,
+                {
+                    toValue: 1,
+                    duration: 250, 
+                    delay: 100, 
+                    easing: Easing.out(Easing.exp),
+                    useNativeDriver: false
+                }
+            ).start(() => setShow(input))
+        } else {
+            Animated.timing(
+                editOpacity,
+                {
+                    toValue: 0,
+                    duration: 250, 
+                    delay: 100, 
+                    easing: Easing.out(Easing.exp),
+                    useNativeDriver: false
+                }
+            ).start(() => setShow(input))
+        }        
+    }
+
     if (view) {
         return (
             <Animated.View 
@@ -162,49 +198,151 @@ export default function MapCard({ location, handleClick, index, activeSlide, nav
             {location.title}
             </Text>          
             <View style={[styles.map, {borderWidth: 1, borderColor: 'white', justifyContent: 'center', alignItems: 'center', zIndex: 10}]}>
-            <TouchableOpacity onPress={() => setShow(true)} style={show ? {display: 'none'} : {top: 0, position: 'absolute', marginBottom: 20}}>
-                <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShow(false)} style={show ? {top: 0, position: 'absolute', marginBottom: 20} : {display: 'none'}}>
-                <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Done</Text>
-            </TouchableOpacity>
-            <Text style={[styles.text, {textAlign: 'center'}]}>Select a trip</Text>
-            {
-                location.data.map((item, index) => {
-                    return (
-                        <View key={index} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                            <TouchableOpacity 
-                                style={{backgroundColor: 'white', width: 200, margin: 5, borderRadius: 10, height: 30, justifyContent: 'center', alignItems: 'center'}}
-                                onPress={() => navigation.navigate('Trip', {location: item})}
-                            >
-                                <Text style={[styles.text, {textAlign: 'center', color: 'black'}]}>{item.tripName}</Text>
-                            </TouchableOpacity>                        
-                            <TouchableOpacity
-                                style={show ? {} : {display: 'none'} }
-                                onPress={() => {                                  
-                                    setModal(true)
-                                    setDeleteId(item.tripId)                                    
-                                }}
-                            >
-                                <FontAwesome5 name='trash' size={25} color="white"/>
-                            </TouchableOpacity>
-                        </View>
-                    )
-                    
-                })
-            }
-            <TouchableOpacity onPress={() => setView(true)} style={{bottom: 0, position: 'absolute', marginBottom: 20}}>
-                <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                onPress={() => {
-                    setModalAll(true)
-                    setDeleteAllTrips(true)
-                }} 
-                style={show ? {bottom: 0, position: 'absolute', marginBottom: 40, backgroundColor: 'red', padding: 10, borderRadius: 20} : {display: 'none'}}
-            >
-                <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Delete All</Text>
-            </TouchableOpacity>
+                
+                <Text style={[styles.text, {textAlign: 'center', marginTop: 10, fontWeight: 'bold', fontSize: 20}]}>Your Trips</Text>
+                <ScrollView style={{width: '100%', margin: 10}}>
+                {
+                    location.data.map((item, index) => {
+                        return (
+                            <View key={index} style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <Animated.View
+                                    style={{
+                                        transform: [{
+                                            translateX: editOpacity.interpolate({
+                                                inputRange: [0, 1],
+                                                outputRange: [10, -10]
+                                            })
+                                        }]
+                                    }}
+                                >
+                                <TouchableOpacity 
+                                    style={{backgroundColor: 'white', width: 200, margin: 5, borderRadius: 10, height: 50, justifyContent: 'center', alignItems: 'center'}}
+                                    onPress={() => navigation.navigate('Trip', {location: item})}
+                                    disabled={show ? true : false}
+                                >
+                                    <Text style={[styles.text, {textAlign: 'center', color: 'black', fontWeight: 'bold'}]}>{item.tripName}</Text>
+                                </TouchableOpacity>       
+                                </Animated.View>
+                                <Animated.View 
+                                    style={{
+                                        opacity: editOpacity,
+                                        transform: [{
+                                            translateX: editOpacity.interpolate({
+                                                inputRange: [0,1],
+                                                outputRange: [-10, 0]
+                                            })
+                                        }]
+                                    }}
+                                >
+
+                                    <TouchableOpacity                                    
+                                        onPress={() => {                                  
+                                            setModal(true)
+                                            setDeleteId(item.tripId)                                    
+                                        }}
+                                        disabled={show ? false : true}
+                                    >
+                                        <FontAwesome5 name='trash' size={25} color="white"/>
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            </View>
+                        )
+                        
+                    })
+                }
+                </ScrollView>
+                <View style={{position: 'absolute', bottom: 0, justifyContent: 'space-around', alignItems: 'center', width: '100%', flexDirection: 'row'}}>
+                    <Animated.View style={{
+                        width: '50%', 
+                        borderWidth: 0, 
+                        borderColor: 'white', 
+                        height: 50, 
+                        justifyContent: 'center',
+                        backgroundColor: editOpacity.interpolate({
+                            inputRange: [0,1],
+                            outputRange: ['white', 'red']
+                            })
+                        }}
+                    >
+                        {
+                            !show && (
+                                <TouchableOpacity 
+                                    style={{                                        
+                                        height: 50, 
+                                        width: '100%', 
+                                        justifyContent: 'center',                              
+                                    }} 
+                                    onPress={() => setView(true)}                                                        
+                                >
+                                    <Text style={[styles.text, {color: 'rgb(24, 28, 47)', fontWeight: 'bold', textAlign: 'center'}]}>Back</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                        {
+                            show && (
+                                <TouchableOpacity 
+                                    onPress={() => {
+                                        setModalAll(true)
+                                        setDeleteAllTrips(true)
+                                    }}                             
+                                    style={{                                                                                                   
+                                        height: 50, 
+                                        width: '100%', 
+                                        justifyContent: 'center'
+                                    }}                 
+                                >
+                                    <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Delete All</Text>
+                                </TouchableOpacity>
+                            )
+                        }                                            
+                    </Animated.View>
+                    <Animated.View style={{
+                        width: '50%', 
+                        borderWidth: 0, 
+                        borderColor: 'white', 
+                        height: 50, 
+                        justifyContent: 'center',
+                        backgroundColor: editOpacity.interpolate({
+                            inputRange: [0,1],
+                            outputRange: ['rgba(255,255,255,0)', 'white']
+                        })
+                        }}
+                    >
+                        {
+                            !show && (
+                                <TouchableOpacity 
+                                    onPress={() => handleEdit(true)} 
+                                    style={{                                        
+                                        height: 50, 
+                                        width: '100%', 
+                                        justifyContent: 'center',                                    
+                                    }}
+                                    
+                                >
+                                    <Text style={[styles.text, {fontWeight: 'bold', textAlign: 'center'}]}>Edit</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                        {
+                            show && (
+                                <TouchableOpacity 
+                                    onPress={() => handleEdit(false)} 
+                                    style={{
+                                        backgroundColor: 'white', 
+                                        height: 50,                                       
+                                        justifyContent: 'center',
+                                        width: '100%',                                         
+                                    }}
+                                >
+                                    <Text style={[styles.text, {color: 'rgb(24, 28, 47)', fontWeight: 'bold', textAlign: 'center'}]}>Done</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                      
+                     
+                    </Animated.View>
+                </View>                
+          
             </View>              
             </Animated.View>
         )
@@ -223,6 +361,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         borderRadius: 20,
+        overflow: 'hidden',
         // flex: 1,
         width: Dimensions.get('window').width - 100,
         height: Dimensions.get('window').height - 300,

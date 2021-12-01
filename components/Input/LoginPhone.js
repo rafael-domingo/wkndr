@@ -13,13 +13,7 @@ export default function LoginPhone({ toggleInput, toggleLoading, handlePhoneInpu
     const phoneInput = React.useRef(null);
     const opacity = React.useRef(new Animated.Value(0)).current
     const firebaseConfig = {
-        apiKey: "AIzaSyAxcJj0TolkzAhY0cT-a6ejr8dJs3QGKb8",
-        authDomain: "wkndr-326514.firebaseapp.com",
-        projectId: "wkndr-326514",
-        storageBucket: "wkndr-326514.appspot.com",
-        messagingSenderId: "428911834730",
-        appId: "1:428911834730:web:7118039ec38bec96f13c13",
-        measurementId: "G-3XYYPWL3W1"
+      //firebaseConfig
       };
     
     React.useEffect(() => {
