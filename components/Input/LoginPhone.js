@@ -13,7 +13,7 @@ export default function LoginPhone({ toggleInput, toggleLoading, handlePhoneInpu
     const phoneInput = React.useRef(null);
     const opacity = React.useRef(new Animated.Value(0)).current
     const firebaseConfig = {
-      //firebaseConfig
+        //firebaseConfig
       };
     
     React.useEffect(() => {

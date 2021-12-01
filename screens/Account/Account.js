@@ -2,13 +2,39 @@ import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Entypo } from '@expo/vector-icons';
-import { signOut } from '../../util/Auth';
+import { deleteAccount, signOut } from '../../util/Auth';
 import { resetUserState } from '../../redux/user';
 import Picture from '../../assets/account.png';
+import LogoutModal from '../../components/Modals/LogoutModal';
+import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
+import LottieView from 'lottie-react-native';
 
 export default function Account({ route, navigation }) {
     const userState = useSelector(state => state.user.user);
-    const dispatch = useDispatch();
+    const [showLogoutModal, setShowLogoutModal] = React.useState(false)
+    const [showDeleteAccountModal, setShowDeleteAccountModal] = React.useState(false)
+    const dispatch = useDispatch(); 
+
+    const handleLogout = () => {
+        signOut().then((result) => {
+            dispatch(resetUserState())
+            setTimeout(() => {
+                navigation.reset({ index: 0, routes: [{name: 'Home'}]})    
+            }, 2000);
+        })
+        .catch((error) => console.log(error))
+        
+    }
+
+    const handleDeleteAccount = () => {
+        deleteAccount().then((result) => {
+            // dispatch(resetUserState())
+            setTimeout(() => {
+                navigation.reset({ index: 0, routes: [{name: 'Home'}]})
+            }, 2000);
+        })
+        .catch((error) => console.log(error))
+    }
 
     return (
         <View style={styles.container}>
@@ -21,13 +47,18 @@ export default function Account({ route, navigation }) {
                     <Text style={{color: 'white', fontSize: 24, marginLeft: 5}}>back</Text>
                 </TouchableOpacity>
             </View>
-            <View>
+            <View style={{alignItems: 'center'}}>
                 <View style={styles.backgroundImage}>
-                    <Image source={Picture}/>      
+                    <LottieView              
+                        style={styles.lottie} 
+                        source={require('../../assets/lottie.json')} 
+                        resizeMode='cover'
+                        autoPlay 
+                        loop
+                    />            
                 </View>
-                <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 50}}>
-                    <Text style={[styles.accountText, {fontSize: 30, fontWeight: 'bold'}]}>John Doe</Text>  
-                    <Text style={[styles.accountText, {fontSize: 25, fontWeight: '200'}]}>{userState.phoneNumber}</Text>  
+                <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 50}}>                    
+                    <Text style={[styles.accountText, {fontSize: 40, fontWeight: 'bold'}]}>{userState.phoneNumber}</Text>  
                 </View>
 
                 
@@ -36,20 +67,23 @@ export default function Account({ route, navigation }) {
                 <TouchableOpacity 
                     style={styles.logoutButton}
                     onPress={() => {
-                        dispatch(resetUserState())
-                        signOut()
-                        setTimeout(() => {
-                            navigation.reset({ index: 0, routes: [{name: 'Home'}]})    
-                        }, 2000);
+                       setShowLogoutModal(true)
                         
                     }}
                 >
                     <Text style={styles.logoutText}>Logout</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{margin: 25}}>
+                <TouchableOpacity 
+                    style={{margin: 25}}
+                    onPress={() => {
+                        setShowDeleteAccountModal(true)
+                    }}
+                >
                     <Text style={[styles.logoutText, {color: 'white'}]}>Delete my account</Text>
                 </TouchableOpacity>
             </View>
+            <LogoutModal showModal={showLogoutModal} setModal={setShowLogoutModal} handleLogout={handleLogout}/>
+            <DeleteAccountModal showModal={showDeleteAccountModal} setModal={setShowDeleteAccountModal} handleDeleteAccount={handleDeleteAccount}/>
         </View>
     )
 }

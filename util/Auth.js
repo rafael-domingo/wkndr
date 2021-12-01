@@ -7,10 +7,21 @@ export const signOut = async () => {
         return result
     } catch (error) {
         console.log(error)
-        return 'error'
+        return error
     }
 }
 
+// Delete account
+export const deleteAccount = async () => {
+    try {
+        const result = await firebase.auth().currentUser.delete()
+        return result
+    } catch (error) {
+        console.log(error)
+        return error
+
+    }
+}
 
 // PHONE AUTH
 export const phoneSignIn = async (phoneNumber, recaptchaVerifier) => {
