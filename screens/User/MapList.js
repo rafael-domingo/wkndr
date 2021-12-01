@@ -80,31 +80,32 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
                 firstItem={activeIndex}
                 initialScrollIndex={activeIndex}                    
             />
+            
             <Pagination
-                    dotsLength={userTrips.length}
-                    activeDotIndex={parseInt(activeSlide)}
-                    containerStyle={styles.pagination}
+                    dotsLength={userTrips.length >= 2 ? userTrips.length : 2}
+                    activeDotIndex={parseInt(activeSlide)}                    
                     dotStyle={{
                         width: 10,
                         height: 10,
                         borderRadius: 5,
                         marginHorizontal: 0,
-                        backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                        backgroundColor: userTrips.length >= 2 ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255,255,255,0)'
                     }}
                     inactiveDotStyle={{
                         // Define styles for inactive dots here
                     }}
-                    inactiveDotOpacity={0.4}
+                    inactiveDotOpacity={userTrips.length >= 2 ? 0.4 : 0.0}
                     inactiveDotScale={0.6}
-                    // renderDots={ 
-                    //     userTrips.length > 10 ? (activeIndex, total, context) => {                        
-                    //     return (
-                    //         <Text style={styles.paginationText}>
-                    //             {activeIndex  + 1} / {total}
-                    //         </Text>
-                    //     )    
-                    // } : undefined }
+                    renderDots={ 
+                        userTrips.length > 10 ? (activeIndex, total, context) => {                        
+                        return (
+                            <Text style={styles.paginationText}>
+                                {activeIndex  + 1} / {total}
+                            </Text>
+                        )    
+                    } : undefined }
                 />          
+            
         </Animated.View>
     )
 }

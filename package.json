@@ -47,7 +47,8 @@
     "react-native-webview": "11.6.2",
     "react-redux": "^7.2.5",
     "sentry-expo": "^4.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "expo-web-browser": "~9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

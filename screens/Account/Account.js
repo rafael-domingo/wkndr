@@ -8,6 +8,7 @@ import Picture from '../../assets/account.png';
 import LogoutModal from '../../components/Modals/LogoutModal';
 import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
 import LottieView from 'lottie-react-native';
+import { deleteFirestore } from '../../util/Firestore';
 
 export default function Account({ route, navigation }) {
     const userState = useSelector(state => state.user.user);
@@ -28,7 +29,7 @@ export default function Account({ route, navigation }) {
 
     const handleDeleteAccount = () => {
         deleteAccount().then((result) => {
-            // dispatch(resetUserState())
+            deleteFirestore(userState.uid)
             setTimeout(() => {
                 navigation.reset({ index: 0, routes: [{name: 'Home'}]})
             }, 2000);

@@ -36,3 +36,15 @@ export const getFirestore = async (uid) => {
         return
     }
 }
+
+export const deleteFirestore = async (uid) => {
+    try {
+        const dbh = firebase.firestore()
+        dbh.collection('tripList').doc(uid).delete(() => {
+            return 'User data deleted'
+        })
+    } catch (error) {
+        console.log(error)
+        return 'Error in deleting user data'
+    }
+}

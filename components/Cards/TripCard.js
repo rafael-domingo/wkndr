@@ -15,8 +15,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
     const [loading, setLoading] = React.useState(true)
     const [detailState, setDetailState] = React.useState();
     const [open, setOpen] = React.useState(false);
-    for (var key in location) {
-        
+    for (var key in location) {        
         return (
             <Modalize
             key={location[key].wkndrId}
@@ -44,7 +43,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                     setOpen(true)
                     Yelp.detail(location[key].id)
                     .then(response => {
-                        // console.log(response)
+                        console.log(response)
                         setDetailState(response)
                         setLoading(false)
                     })
