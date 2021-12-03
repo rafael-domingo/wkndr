@@ -41,8 +41,8 @@ export default function RenameTripModal({location, setRenameModal, renameModal, 
                         setModalConfirm(true)
                         setRenameModal(false)
                         setNewTripName(text)
-                    }} style={{padding: 10, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>Save</Text>
+                    }} style={{padding: 10, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'rgb(28,28,47)'}}>Save</Text>
                     </TouchableOpacity>
                     </View>
                 </View>

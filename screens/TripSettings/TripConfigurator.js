@@ -70,7 +70,11 @@ export default function TripConfigurator({ route, navigation }) {
     return (
         <BlurView intensity={100} style={{flex: 1}} tint={'dark'}>
             <SafeAreaView style={styles.container}>
-                <CancelButton handleClick={handleCancelClick}/>
+                {
+                    !loading && (
+                        <CancelButton handleClick={handleCancelClick}/>
+                    )
+                }                
                 <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>
                     <Text style={styles.header}>Trip Configurator</Text>
                 </View>
@@ -96,7 +100,7 @@ export default function TripConfigurator({ route, navigation }) {
                     }
                     {
                         trip.autoBuild && confirmation && loading && (
-                            <TripBuilderLoading tripState={trip} location={location}/>
+                            <TripBuilderLoading tripState={trip} location={location} handleCancelClick={handleCancelClick}/>
                         )
                     }
                 </View>

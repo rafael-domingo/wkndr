@@ -15,6 +15,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import TripHeader from '../../components/Misc/TripHeader';
 import DeleteTripModal from '../../components/Modals/DeleteTripModal';
 import RenameTripModal from '../../components/Modals/RenameTripModal';
+import DeleteDestinationModal from '../../components/Modals/DeleteDestinationModal';
 export default function TripView({ route, navigation }) {
 
     // state and value management
@@ -34,7 +35,9 @@ export default function TripView({ route, navigation }) {
     const [renameModal, setRenameModal] = React.useState(false)
     const [modalAction, setModalAction] = React.useState()
     const [newTripName, setNewTripName] = React.useState()
+    const [modalDelete, setModalDelete] = React.useState(false)
 
+    const [deleteId, setDeleteId] = React.useState()
     let mapIndex = 0
     let mapAnimation = new Animated.Value(0)
     const findTrip = (trip) => {
@@ -85,6 +88,18 @@ export default function TripView({ route, navigation }) {
     }
 
     const handleDeleteLocation = (wkndrId) => {
+        setModalDelete(true)
+        setDeleteId(wkndrId)
+        // dispatch(deleteDestination({
+        //     tripId: location.tripId,
+        //     wkndrId: wkndrId
+        // }))
+        // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        // modalizeRef.current = []; // reset modal refs, will repopulate on render
+        // markerRef.current = [];
+    }
+
+    const handleDeleteSearch = (wkndrId) => {
         dispatch(deleteDestination({
             tripId: location.tripId,
             wkndrId: wkndrId
@@ -352,7 +367,7 @@ export default function TripView({ route, navigation }) {
                         <SearchCarousel 
                             searchResults={searchResults} 
                             handleAddLocation={handleAddLocation} 
-                            handleDeleteLocation={handleDeleteLocation}
+                            handleDeleteLocation={handleDeleteSearch}
                             cameraAnimation={cameraAnimation}
                             setCamera={setCamera}
                             camera={camera}
@@ -377,7 +392,17 @@ export default function TripView({ route, navigation }) {
                             camera={camera}
                         />                      
                     )
-                }                    
+                }                 
+                <DeleteDestinationModal 
+                    showModal={modalDelete} 
+                    setModal={setModalDelete} 
+                    location={locationState.destinations[mapIndex]} 
+                    wkndrId={deleteId}
+                    tripId={location.tripId}
+                    modalizeRef={modalizeRef}
+                    markerRef={markerRef}
+                    setCamera={setCamera}
+                />   
             </View>
     )
 }

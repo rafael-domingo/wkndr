@@ -5,7 +5,10 @@ import CancelButton from '../../components/Buttons/CancelButton';
 import TripListCard from '../../components/Cards/TripListCard';
 import { deleteDestination } from '../../redux/user';
 import { BlurView } from 'expo-blur';
+import DeleteDestinationModal from '../../components/Modals/DeleteDestinationModal';
 export default function TripList({ route, navigation }) {
+    const [modal, setModal] = React.useState(false)
+    const [wkndrId, setWkndrId] = React.useState()
     // figure out what the tripId is to pull from state
     const {location} = route.params
     const findTrip = (trip) => {
@@ -21,10 +24,12 @@ export default function TripList({ route, navigation }) {
     }
 
     const handleDelete = (wkndrId) => {
-        dispatch(deleteDestination({
-            tripId: location.tripId, 
-            wkndrId: wkndrId,
-        }))
+        setModal(true)
+        setWkndrId(wkndrId)
+        // dispatch(deleteDestination({
+        //     tripId: location.tripId, 
+        //     wkndrId: wkndrId,
+        // }))
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
     }
 
@@ -42,6 +47,14 @@ export default function TripList({ route, navigation }) {
                     }
                 </ScrollView>
             </SafeAreaView>
+            <DeleteDestinationModal 
+                showModal={modal} 
+                setModal={setModal} 
+                location={locationState} 
+                wkndrId={wkndrId}
+                tripId={location.tripId}
+                
+            />
         </BlurView>
 
     )
