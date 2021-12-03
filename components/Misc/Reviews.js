@@ -1,16 +1,17 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View, Text, Image } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import Star from '../Rating/Star';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { EvilIcons } from '@expo/vector-icons'; 
 import * as WebBrowser from 'expo-web-browser';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 export default function Reviews({ reviews }) {
     var reviewsJSX = [];
 
-    reviews.forEach((element, index) => {        
+    reviews.forEach((element, index) => {    
+        console.log({element})    
         var image;
         if (element.user.image_url === null) {
             image = <FontAwesome name="user-circle" size={45} color="white" />
@@ -21,7 +22,10 @@ export default function Reviews({ reviews }) {
             <TouchableOpacity 
                 key={index} 
                 style={{marginBottom: 20, flex: 1}}
-                onPress={() => WebBrowser.openBrowserAsync(element.url)}
+                onPress={() => {
+                    console.log(element.url)
+                    WebBrowser.openBrowserAsync(element.url)
+                }}
             >
                 <View style={{flexDirection: 'row', flex: 1, alignItems: 'center', justifyContent: 'space-between', flex: 1}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     text: {
         color: 'white',

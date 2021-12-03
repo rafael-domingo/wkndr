@@ -9,13 +9,26 @@ import Reviews from '../Misc/Reviews';
 import CardHeader from '../Misc/CardHeader';
 import CardSubHeader from '../Misc/CardSubHeader';
 import { BlurView } from 'expo-blur';
+import { showLocation } from 'react-native-map-link'
 
 
 export default function TripCard({ location, handleDeleteLocation, modalizeRef, index, cameraAnimation, setCamera, fitMarkers, camera }) {
     const [loading, setLoading] = React.useState(true)
     const [detailState, setDetailState] = React.useState();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);    
+    
     for (var key in location) {        
+        const options = {
+            latitude: location[key].coordinates.latitude,
+            longitude: location[key].coordinates.longitude,
+            title: location[key].name,
+            directionsMode: 'walk',
+        }
+        
+        const openMap = () => {
+            showLocation(options)
+        }
+        
         return (
             <Modalize
             key={location[key].wkndrId}
@@ -73,7 +86,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                             style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
                         >        
                             <CardSubHeader location={location[key]} show={open}/>
-                            <CardHeader location={location[key]}/>                       
+                            <CardHeader location={location[key]} openMap={openMap}/>                       
                         </LinearGradient>
                     </ImageBackground>
                 </View>

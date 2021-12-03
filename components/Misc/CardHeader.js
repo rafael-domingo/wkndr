@@ -1,15 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Price from '../Rating/Price';
 import Star from '../Rating/Star';
 
-export default function CardHeader({ location }) {
+export default function CardHeader({ location, openMap }) {
 
     return (
         <View style={{flexDirection: 'row', alignItems: 'flex-end', flex: 1}}>            
             <View style={{margin: 15, paddingBottom: 25, justifyContent: 'flex-end', flex: 1}}>
                 <Text style={[styles.text, styles.headerText]}>{location.name}</Text>
+                <TouchableOpacity onPress={() => openMap()}>
                 <Text style={[styles.text, styles.addressText]}>{location.location.display_address[0]}</Text>
+                </TouchableOpacity>
             </View>
             <View style={{justifyContent: 'flex-end', margin: 15, flex: 0.5}}>
                 <Text style={[styles.text, styles.timeText]}>10 min</Text>

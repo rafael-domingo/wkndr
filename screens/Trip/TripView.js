@@ -45,7 +45,7 @@ export default function TripView({ route, navigation }) {
         return trip.tripId === location.tripId
     }
     const locationState = useSelector(state => state.user.tripList.find(findTrip))
-
+  
     // state methods
     const handleSearch = (searchResults) => {
         console.log(searchResults)
@@ -153,6 +153,8 @@ export default function TripView({ route, navigation }) {
             markersArray.push(destination.id)
         })        
         mapRef.current.fitToSuppliedMarkers(markersArray)
+     
+        
     }
 
     const cameraAnimation = (center) => {
@@ -229,8 +231,11 @@ export default function TripView({ route, navigation }) {
             setTimeout(() => {
                 fitMarkers()        
             }, 500);                
-           
+            setTimeout(() => {
+                markerRef?.current[0]?.showCallout()    
+            }, 1000);
         }        
+        
     }, [locationState.destinations])
 
     React.useEffect(() => {
@@ -260,6 +265,7 @@ export default function TripView({ route, navigation }) {
             }, 100);            
         })
     })
+    
     return (
             <View style={styles.container}>            
                 <MapView

@@ -1,16 +1,9 @@
 import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, View, Text, ImageBackground, ActivityIndicator } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import SearchCard from '../Cards/SearchCard';
 import { Modalize } from 'react-native-modalize';
 import { Yelp } from '../../util/Yelp';
-import { LinearGradient } from 'expo-linear-gradient';
-import CardSubHeader from './CardSubHeader';
-import CardHeader from './CardHeader';
-import Star from '../Rating/Star';
-import Price from '../Rating/Price';
-import Reviews from './Reviews';
-import Hours from './Hours';
-import AddToTripButton from '../Buttons/AddToTripButton';
+import SearchDetailCard from '../Cards/SearchDetailCard';
 
 export default function SearchCardContainer({ results, handleScrollEnabled, handleAddLocation, handleDeleteLocation, cameraAnimation, setCamera, camera, fitMarkers, handleCallout, animateToRegion, handleChangeMarker, tripDestinations }) {
     const [modal, setModal] = React.useState(false);
@@ -82,75 +75,16 @@ export default function SearchCardContainer({ results, handleScrollEnabled, hand
                
             >                  
             {
-                modalContent !== null && (               
-                    <View style={{height: 600, width: '100%',justifyContent: 'flex-end', alignItems: 'center'}}>
-                         <AddToTripButton show={modal} addLocation={addLocation} deleteLocation={deleteLocation} modalContent={modalContent} tripDestinations={tripDestinations}/>
-                        <ImageBackground
-                            style={styles.image}
-                            source={{uri: modalContent.image_url}}
-                            resizeMode="cover"
-                        >
-                            <LinearGradient
-                                // Background Linear Gradient
-                                colors={['rgba(0,0,0,0.4)','rgba(0,0,0,0.6)','rgba(0,0,0,0.7)','rgba(0,0,0,1)']}  
-                                style={{flex: 1, width: '100%', justifyContent: 'flex-end', alignItems: 'flex-start'}}
-                            >
-                                <View style={{flex: 1, padding: 20}}>
-                                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-
-                                    <View style={{width: '50%', height: '100%',}}>
-                                        <Text style={[styles.text, styles.headerText]}>{modalContent.name}</Text>       
-                                        <Text style={[styles.text, styles.addressText]}>{modalContent.location.display_address[0]}</Text>
-                                    </View>
-                                    <View style={{width: '50%', height: '100%'}}>
-                                    {
-                                        modalContent.rating !== undefined && (
-                                            <Star rating={modalContent.rating} size={16}/>
-                                        )
-                                    }
-                                    {
-                                        modalContent.price !== undefined && (
-                                            <Price rating={modalContent.price} size={16}/>
-                                        )
-                                    }
-                                    {
-                                        modalContent.price === undefined && (
-                                            <Text style={[styles.text, styles.pricingText]}>No pricing information</Text>
-                                        )
-                                    }
-                                <CardSubHeader location={modalContent} show={true}/>
-                                    </View>
-                                   </View>
-                                </View>
-                                <View style={{height: '80%', width: '100%', padding: 5, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                                    {
-                                        loading && <ActivityIndicator/>
-                                    }
-                                    {
-                                        !loading && (
-                                            <>
-                                            <View style={{width: '35%'}}>
-                                            {
-                                                    detailState.detail.hours !== undefined && (
-                                                        <Hours hours={detailState.detail.hours[0].open}/>
-                                                    )
-                                                }
-                                                </View>
-                                                <View style={{width: '65%'}}>
-                                                {
-                                                    detailState.reviews !== undefined && (
-                                                        <Reviews reviews={detailState.reviews}/>
-                                                    )
-                                                }
-                                                </View>
-                                                </>
-                                        )
-                                    }
-                         
-                                    </View>
-                            </LinearGradient>
-                        </ImageBackground>
-                    </View>                    
+                modalContent !== null && (  
+                    <SearchDetailCard 
+                        addLocation={addLocation}
+                        deleteLocation={deleteLocation}
+                        modal={modal}
+                        modalContent={modalContent}
+                        loading={loading}
+                        detailState={detailState}
+                        tripDestinations={tripDestinations}
+                    />                                 
                 )
             }
                 
