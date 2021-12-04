@@ -38,12 +38,12 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
     }, [mapView])
     const selectMap = (index) => {
         navigation.navigate('Trip', {trip: userTrips[index]})
-    }  
+    }      
 
     const renderItem = ({item, index}) => {
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container} key={index}>
                 <MapCard key={index} location={item} handleClick={selectMap} index={index} activeSlide={activeSlide} navigation={navigation} setModal={setModal} setModalAll={setModalAll} modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
             </View>
         )
@@ -63,7 +63,7 @@ export default function MapList({ mapView, city, navigation, userTrips, setModal
             ]}
         >
             <Carousel
-                data={userTrips}
+                data={userTrips}                
                 renderItem={renderItem}
                 layout={'default'}
                 sliderWidth={600}

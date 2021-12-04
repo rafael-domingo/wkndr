@@ -1,29 +1,42 @@
 import React from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableHighlight, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableHighlight, Keyboard, Animated, Easing } from 'react-native';
 
 export default function Autocomplete({ autocomplete, setValue, setAutocomplete, autoCompleteSearch }) {
+    const opacity = React.useRef(new Animated.Value(0)).current
 
     const renderItem = ({ item, index, separators }) => {
+        Animated.timing(
+            opacity,{
+                toValue: 1,
+                duration: 250,
+                delay: 500,
+                easing: Easing.inOut(Easing.exp),
+                useNativeDriver: true
+            }
+        ).start()
         return (
-            <TouchableHighlight
-                key={index}
-                style={styles.button}
-                activeOpacity={0.65}
-                underlayColor={'gray'}
-                onPress={() => {
-                    console.log('pressed')
-                    Keyboard.dismiss()
-                    setValue(item.text)
-                    autoCompleteSearch(item.text)
-                    setTimeout(() => {
-                        setAutocomplete([])
-                    }, 250);                    
-                }}
-            >
-                <Text style={styles.text}>
-                    {item.text}
-                </Text>
-            </TouchableHighlight>               
+            <Animated.View style={{opacity: opacity}}>
+                <TouchableHighlight
+                    key={index}
+                    style={styles.button}
+                    activeOpacity={0.65}
+                    underlayColor={'gray'}
+                    onPress={() => {
+                        console.log('pressed')
+                        Keyboard.dismiss()
+                        setValue(item.text)
+                        autoCompleteSearch(item.text)
+                        setTimeout(() => {
+                            setAutocomplete([])
+                        }, 250);                    
+                    }}
+                >
+                    <Text style={styles.text}>
+                        {item.text}
+                    </Text>
+                </TouchableHighlight>  
+            </Animated.View>
+                         
         )
     }
 
@@ -42,15 +55,17 @@ export default function Autocomplete({ autocomplete, setValue, setAutocomplete, 
       }
 
     return (
+     
         <FlatList
         keyboardShouldPersistTaps={'handled'} // allow for autocomplete to be tapped while keyboard is visible
-        style={{backgroundColor: 'white', borderRadius: 10, width: '95%'}}
+        style={{backgroundColor: 'white',borderRadius: 10, width: '95%'}}
         data={autocomplete}
         renderItem={renderItem}
         keyExtractor={item => item.text}
         ItemSeparatorComponent={renderSeparator}
         scrollEnabled={false}
-        />        
+        />       
+             
     )
 }
 

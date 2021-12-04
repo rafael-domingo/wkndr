@@ -13,8 +13,7 @@ export default function CardHeader({ location, openMap }) {
                 <Text style={[styles.text, styles.addressText]}>{location.location.display_address[0]}</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{justifyContent: 'flex-end', margin: 15, flex: 0.5}}>
-                <Text style={[styles.text, styles.timeText]}>10 min</Text>
+            <View style={{justifyContent: 'flex-end', margin: 15, flex: 0.5}}>                
                 {
                     location.rating !== undefined && (
                         <Star rating={location.rating} size={16}/>

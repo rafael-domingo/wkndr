@@ -65,6 +65,7 @@ export default function TripViewSettingsButton({ navigation, location, show, del
         <Animated.View style={[
             styles.container,
             {
+                zIndex: search ? -1 : 5,
                 transform: [{translateX: translation}],
                 // opacity: translation.interpolate({
                 //     inputRange: [0, 100],
@@ -202,10 +203,9 @@ export default function TripViewSettingsButton({ navigation, location, show, del
 
 const styles = StyleSheet.create({
     container: {        
-        flex: 1,
-        zIndex: 5,   
-        position: 'relative',
-        bottom: 0,        
+        flex: 1,         
+        position: 'absolute',
+        top: 125,        
         height: 400,
         alignItems: 'flex-end',
         marginTop: 50,
