@@ -13,7 +13,7 @@ export default function LoginPhone({ toggleInput, toggleLoading, handlePhoneInpu
     const phoneInput = React.useRef(null);
     const opacity = React.useRef(new Animated.Value(0)).current
     const firebaseConfig = {
-      //firebaseConfig
+        //firebaseConfig
       };
     
     React.useEffect(() => {
@@ -68,8 +68,8 @@ export default function LoginPhone({ toggleInput, toggleLoading, handlePhoneInpu
                 }} 
                 containerStyle={{backgroundColor:'rgba(255,255,255,0)', borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}                                                       
                 textContainerStyle={{backgroundColor: 'rgba(0,0,0,0)'}}
-                codeTextStyle={{color: 'white', fontSize: 36, fontWeight: '200'}}
-                textInputStyle={{color: 'white', fontSize: 36, fontWeight: 'bold'}}
+                codeTextStyle={{color: 'white', fontSize: 24, fontWeight: '200'}}
+                textInputStyle={{color: 'white', fontSize: 24, fontWeight: 'bold'}}
                 countryPickerButtonStyle={{color:'white'}}
                 autoFocus
             />
