@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, TextInput } from 'react-native';
 import { Sae } from 'react-native-textinput-effects';
 
-export default function BuildTripName({ handleInput }) {
+export default function BuildTripName({ handleInput, setShowNext }) {
     const ref = React.useRef()
     const [value, setValue] = React.useState()
     const suggestions = [
@@ -27,6 +27,11 @@ export default function BuildTripName({ handleInput }) {
     const handleTextInput = (value) => {
         setValue(value)
         handleInput(value)
+        if (value.length > 1) {
+            setShowNext(true)
+        } else {
+            setShowNext(false)
+        }
     }
 
     return (

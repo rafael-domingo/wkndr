@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons'; 
 
-export default function NextButton({handleClick}) {
+export default function NextButton({handleClick, showNext}) {
 
     return (
         <Pressable
@@ -13,6 +13,7 @@ export default function NextButton({handleClick}) {
                 styles.nextButton
             ]}
             onPress={() => handleClick('next')}
+            disabled={showNext ? false : true}
         >
             <Text style={styles.nextButtonText}>Next</Text>
             <Entypo name="arrow-right" size={24} color="white" />

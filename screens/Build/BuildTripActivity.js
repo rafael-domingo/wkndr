@@ -2,8 +2,14 @@ import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import ActivityButton from '../../components/Buttons/ActivityButton';
 
-export default function BuildTripActivity({ trip, handleClick }) {
-
+export default function BuildTripActivity({ trip, handleClick, setShowNext }) {
+    React.useEffect(() => {
+        if (!trip.activities.coffee && !trip.activities.food && !trip.activities.shop && !trip.activities.drink && !trip.activities.thrifting && !trip.activities.landmarks && !trip.activities.zoos && !trip.activities.museums && !trip.activities.hiking) {
+            setShowNext(false)
+        } else {
+            setShowNext(true)
+        }
+    }, [trip.activities])
     return (
         <View style={styles.container}>
             <Text style={styles.text}>What are you interested in?</Text>
