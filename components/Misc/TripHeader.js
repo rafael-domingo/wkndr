@@ -52,8 +52,8 @@ export default function TripHeader({location, show, search, navigation }) {
                     <Entypo name="arrow-left" size={30} color="white"/>     
                 </TouchableOpacity>
                 <View style={{width: '80%', height: '100%', justifyContent: 'center'}}>
-                    <Text style={{width: '100%',color: 'white', fontSize: 35, fontWeight: 'bold'}}>{location.tripName}</Text>            
-                    <Text style={{width: '100%',color: 'white', fontSize: 15, fontWeight: '300'}}>{location.cityName}</Text>    
+                    <Text style={{width: '100%',color: 'white', fontSize: 24, fontWeight: 'bold'}}>{location.tripName}</Text>            
+                    <Text style={{width: '100%',color: 'white', fontSize: 16, fontWeight: '300'}}>{location.cityName}</Text>    
                 </View>
             </View>
         </BlurView>

@@ -29,7 +29,8 @@ export default function TransportButton({ icon, text, selected, handleClick}) {
                 />
                 <Text 
                     style={{
-                        fontSize: 17, 
+                        fontSize: 12,
+                        fontWeight: 'bold', 
                         color: selected ? 'black' : 'white',
                         marginTop: 10
                     }}

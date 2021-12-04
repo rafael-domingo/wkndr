@@ -43,7 +43,7 @@ export default function ListView({ navigation, userTrips }) {
         return (
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
             <View style={styles.header}>
-                <Text style={[styles.text, {fontSize: 25, color: 'rgba(24,28, 47, 1)'}]}>{header}</Text>
+                <Text style={[styles.text, {fontSize: 20, color: 'rgba(24,28, 47, 1)'}]}>{header}</Text>
             </View>
             </View>
         )

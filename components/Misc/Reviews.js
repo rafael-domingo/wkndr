@@ -32,7 +32,7 @@ export default function Reviews({ reviews }) {
                     <View>
                         {image}
                     </View>
-                    <Text style={[styles.text, {marginLeft: 5, fontWeight: 'bold', fontSize: 15}]}>{element.user.name}</Text>
+                    <Text style={[styles.text, {marginLeft: 5, fontWeight: 'bold', fontSize: 12}]}>{element.user.name}</Text>
 
                     </View>                  
                     <Star rating={element.rating} size={10}/>                    
@@ -45,7 +45,7 @@ export default function Reviews({ reviews }) {
     return (
         <View style={styles.container}>
             <Text style={[styles.text, {fontWeight: 'bold'}]}>Reviews</Text>
-            <ScrollView style={{marginTop: 10}}>
+            <ScrollView style={{marginTop: 10, width: '100%'}}>
                 {reviewsJSX}
             </ScrollView>
         </View>
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontFamily: 'System'
+        fontFamily: 'System',
+        fontSize: 12
     },
     image: {
         minWidth: 50,

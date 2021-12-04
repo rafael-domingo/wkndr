@@ -92,7 +92,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                 </View>
                 
                 <View style={styles.subHeader}>
-                    <View style={[styles.subCategory, {flex: 0.35}]}>
+                    <View style={[styles.subCategory, {flex: 0.4}]}>
                      
                         {
                             loading && <ActivityIndicator/>
@@ -115,7 +115,7 @@ export default function TripCard({ location, handleDeleteLocation, modalizeRef, 
                         }      
                                                  
                     </View>
-                    <View style={[styles.subCategory, {alignItems: 'flex-end', flex: 0.65}]}>
+                    <View style={[styles.subCategory, {alignItems: 'flex-end', flex: 0.6}]}>
                     {
                             !loading && (
                                 <View style={styles.subCategory}>

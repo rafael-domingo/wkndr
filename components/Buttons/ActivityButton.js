@@ -29,7 +29,8 @@ export default function ActivityButton({ icon, text, handleClick, state}) {
                 /> 
                 <Text
                 style={{
-                    fontSize: 17,
+                    fontSize: 12,
+                    fontWeight: 'bold',
                     color: state ? 'black' : 'white',
                     marginTop: 10
                 }}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons'; 
 
-export default function NextButton({handleClick, showNext}) {
+export default function NextButton({handleClick, showNext = true}) {
 
     return (
         <Pressable

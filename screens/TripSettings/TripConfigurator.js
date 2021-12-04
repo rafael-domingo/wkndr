@@ -87,8 +87,8 @@ export default function TripConfigurator({ route, navigation }) {
                     {
                         trip.autoBuild && !confirmation && !loading && (
                             <View>
-                                <TripBuilder trip={trip} handleActivity={handleActivity} handleTransport={handleTransport} handleTime={handleTime}/>
-                                <NextButton handleClick={() => handleNextClick()}/>
+                                <TripBuilder handleNextClick={handleNextClick} trip={trip} handleActivity={handleActivity} handleTransport={handleTransport} handleTime={handleTime}/>
+                                
                             </View>
 
                         )
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     header: {
-        fontSize: 36, 
+        fontSize: 24, 
         fontFamily: 'System',
         fontWeight: 'bold',
         color: 'white'

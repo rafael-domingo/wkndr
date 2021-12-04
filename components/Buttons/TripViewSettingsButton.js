@@ -73,6 +73,39 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 // })
             }
             ]}>
+                <TouchableOpacity 
+                onPress={() => {
+                    setSearch(!search)
+                    if (search) {
+                        setSearchResults([])
+                    }
+                }}
+                style={{
+                    zIndex: 10,
+                    margin: 5,
+                    width: 50,
+                    height: 50,
+                    backgroundColor: 'rgb(112,112,112)',
+                    borderRadius: 27.5,
+                    padding: 7.5,
+                    // bottom: 100,
+                    // right:10,                            
+                    // position: 'absolute',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    {
+                        !search && (
+                            <FontAwesome5 name="search" size={24} color="white" />
+                        )
+                    }
+                    {
+                        search && (
+                            <MaterialIcons name="cancel" size={24} color="white" />
+                        )
+                    }
+                
+            </TouchableOpacity>
             <View style={{justifyContent: 'center', alignItems: 'flex-end'}}>
             <TouchableOpacity                
                 style={[
@@ -164,39 +197,7 @@ export default function TripViewSettingsButton({ navigation, location, show, del
                 </View>
             </Animated.View>
             </View>
-            <TouchableOpacity 
-                onPress={() => {
-                    setSearch(!search)
-                    if (search) {
-                        setSearchResults([])
-                    }
-                }}
-                style={{
-                    zIndex: 10,
-                    margin: 5,
-                    width: 50,
-                    height: 50,
-                    backgroundColor: 'rgb(112,112,112)',
-                    borderRadius: 27.5,
-                    padding: 7.5,
-                    // bottom: 100,
-                    // right:10,                            
-                    // position: 'absolute',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    {
-                        !search && (
-                            <FontAwesome5 name="search" size={24} color="white" />
-                        )
-                    }
-                    {
-                        search && (
-                            <MaterialIcons name="cancel" size={24} color="white" />
-                        )
-                    }
-                
-            </TouchableOpacity>
+            
         </Animated.View>
     )
 }

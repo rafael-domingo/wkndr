@@ -36,18 +36,18 @@ export default function BuildTripName({ handleInput, setShowNext }) {
 
     return (
         <View style={styles.container}>
-            <Text style={[styles.text, {fontSize: 36}]}>What would you like to name this trip?</Text>
+            <Text style={[styles.text, {fontSize: 24}]}>What would you like to name this trip?</Text>
             <TextInput
                 ref={ref}
                 placeholder="Trip name"
                 value={value}
                 onChangeText={text => handleTextInput(text)}
-                style={[styles.inputText, {color: 'rgba(24,28,47,1)', fontSize: 30}]}
+                style={[styles.inputText, {color: 'rgba(24,28,47,1)', fontSize: 24}]}
                 placeholderTextColor={'rgba(24,28,47,0.5)'}
                 clearButtonMode={'while-editing'}
             />
             <View style={styles.suggestionsContainer}>          
-                <Text style={[styles.text, {fontSize: 25, fontWeight: '300'}]}>Here are some suggestions...</Text>            
+                <Text style={[styles.text, {fontSize: 24, textAlign: 'center', fontWeight: '300', width: '100%'}]}>Here are some suggestions...</Text>            
                 {
                     suggestions.map((item, index) => {
                         return (
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         margin: 5
     },
     suggestionsText: {
-        fontSize: 20, 
+        fontSize: 12, 
         fontWeight: 'bold', 
         padding: 5, 
         color: 'rgba(24, 28, 47, 1)'

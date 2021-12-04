@@ -20,8 +20,8 @@ export default function CancelButton({handleClick}) {
 
 const styles = StyleSheet.create({
     cancelButton: {
-        position: 'absolute', 
-        left: 36, 
-        top: 72
+        position: 'relative',    
+        left: 25,  
+        zIndex: 15
     }
 })

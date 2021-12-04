@@ -41,15 +41,15 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 24
     },
     addressText: {
         fontWeight: '300',
-        fontSize: 18,
+        fontSize: 16,
     },
     timeText: {
         textAlign: 'right',
-        fontSize: 18
+        fontSize: 12
     },
     pricingText: {
         textAlign: 'right',

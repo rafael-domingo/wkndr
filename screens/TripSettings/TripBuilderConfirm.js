@@ -14,7 +14,7 @@ export default function TripBuilderConfirm({ handleClick, handleCancel }) {
                 style={({ pressed }) => pressed ? styles.confirmationButtonPressed : styles.confirmationButton }
                 onPress={() => handleClick()}
             >
-                <Text style={{fontSize: 24, fontWeight: 'bold'}}>Yes</Text>
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>Yes</Text>
             </Pressable>
             <Pressable
                 style={({ pressed }) => pressed ? styles.noButtonPressed : styles.noButton }
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
     confirmationHeader: {
         color: 'white',
-        fontSize: 32,
+        fontSize: 24,
         textAlign: 'center',
         fontWeight: '400',
         fontFamily: 'System'
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     confirmationSubHeader: {
         color: 'white',
         fontFamily: 'System',
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: '200',
         marginTop: 50,
         marginBottom: 50
@@ -77,6 +77,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',   
-        fontSize: 24     
+        fontSize: 18     
     }
 })

@@ -58,7 +58,7 @@ export default function CardSubHeader({ location, show }) {
                 }   
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end'}}>                    
-                    <Text style={[styles.text, {fontSize: 18, marginBottom: 10, fontWeight: 'bold'}]}>{location.review_count} reviews</Text>                                      
+                    <Text style={[styles.text, {fontSize: 12, marginBottom: 10, fontWeight: 'bold'}]}>{location.review_count} reviews</Text>                                      
                 {
                     location.display_phone !== undefined && (
                         <TouchableOpacity                            
@@ -68,7 +68,7 @@ export default function CardSubHeader({ location, show }) {
                                 Linking.openURL(`tel:${location.phone}`)
                             }}
                         >
-                            <Text style={[styles.text, {fontSize: 18, fontWeight: 'bold', textAlign: 'right'}]}>{location.display_phone}</Text>
+                            <Text style={[styles.text, {fontSize: 12, fontWeight: 'bold', textAlign: 'right'}]}>{location.display_phone}</Text>
                         </TouchableOpacity>
                         
                     )
@@ -88,5 +88,6 @@ const styles = StyleSheet.create({
     text: {
         color: 'white',
         fontFamily: 'System',     
+        fontSize: 12
     },
 })

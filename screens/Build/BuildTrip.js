@@ -162,14 +162,15 @@ export default function BuildTrip({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}> 
-        {
-            step !== 5 && (
-                <CancelButton handleClick={handleCancelClick}/>
-            )
-        }
         
-            <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center'}}>           
-                <Text style={styles.header}>Create a Trip</Text>
+        
+            <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>           
+                {
+                step !== 5 && (
+                    <CancelButton handleClick={handleCancelClick}/>
+                    )
+                }
+                <Text style={[styles.header, {width: '75%'}]}>Create a Trip</Text>
             </View>
             <View style={{flex: 0.9}}>
                 {
@@ -257,19 +258,20 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     header: {
-        fontSize: 36,
+        fontSize: 24,
         fontFamily: 'System',
         fontWeight: 'bold',
         color: 'white'
     },
     subContainer: {
         // flex: 1,
-        height: '90%',
+        // height: '90%',
         justifyContent: 'space-around',
-        marginTop: 50
+        // marginTop: 50
     },  
     buttonContainer:{
         justifyContent: 'space-between', 
+        // height: '20%'
         // flex: 1
     },  
     nextButtonContainer: {

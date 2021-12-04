@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
-        fontSize: 36
+        fontSize: 24
     },
     subContainer: {
         justifyContent: 'center',
